@@ -75,6 +75,10 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="py-16 text-center text-sm text-black dark:text-white/70">
+            <span class="text-muted">Soubanty Saenephommachanh, 000089356 &copy; {{ date('Y') }}</span>
+        </footer>
     </div>
 </body>
 </html>
