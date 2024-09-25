@@ -50,11 +50,7 @@ return [
             'database' => env('DB_DATABASE', 'lootgoblin'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', 'z3jl0f9n2oawzbysb3u4'),
-<<<<<<< HEAD
-            'unix_socket' => env('DB_SOCKET', ''),
-=======
             'unix_socket' => env('DB_SOCKET', '/mnt/wsl/Ubuntu/home/sisaene/.ssh/id_ed25519'),
->>>>>>> 5df82a8 (updated db credentials)
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
             'prefix' => '',
