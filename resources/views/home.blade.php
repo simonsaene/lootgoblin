@@ -38,9 +38,50 @@
                     <p>Level: {{ $character->level }}</p>
                     <p>Class: {{ $character->class }}</p>
 
-                    <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
+                    <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
                         Edit
                     </button>
+
+                    <!-- Edit Character Modal -->
+                    <div class="modal fade" id="editCharacterModal{{ $character->id }}" tabindex="-1" aria-labelledby="editCharacterModalLabel{{ $character->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCharacterModalLabel{{ $character->id }}">Edit Character</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{{ route('characters.edit', $character->id) }}">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div class="mb-3">
+                                            <label for="characterName{{ $character->id }}" class="form-label">Character Name:</label>
+                                            <input type="text" class="form-control" id="characterName{{ $character->id }}" name="name" 
+                                                value="{{ $character->name }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="characterLevel{{ $character->id }}" class="form-label">Level:</label>
+                                            <input type="number" class="form-control" id="characterLevel{{ $character->id }}" name="level" 
+                                                value="{{ $character->level }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="characterClass{{ $character->id }}" class="form-label">Class:</label>
+                                            <select class="form-select" id="characterClass{{ $character->id }}" name="class" required>
+                                                <option value="" disabled>Select Class</option>
+                                                @foreach ($classes as $class)
+                                                    <option value="{{ $class }}" {{ $character->class == $class ? 'selected' : '' }}>
+                                                        {{ $class }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Edit Character</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Delete Button -->
                     <form method="POST" action="{{ route('characters.destroy', $character->id) }}" style="display:inline;">
@@ -54,44 +95,38 @@
     @endif
 </div>
 
-<!-- Add/Edit Character Modal -->
+<!-- Add Character Modal -->
 <div class="modal fade" id="addCharacterModal" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCharacterModalLabel">{{ isset($character) ? 'Edit Character' : 'Add Character' }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ isset($character) ? route('characters.edit', $character->id) : route('characters.create') }}">
-                    @csrf
-                    @if (isset($character))
-                        @method('PUT')
-                    @endif
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCharacterModalLabel">Add Character</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('characters.create') }}">
+                        @csrf
 
-                    <div class="mb-3">
-                        <label for="characterName" class="form-label">Character Name:</label>
-                        <input type="text" class="form-control" id="characterName" name="name" 
-                               value="{{ isset($character) ? $character->name : '' }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="characterLevel" class="form-label">Level:</label>
-                        <input type="number" class="form-control" id="characterLevel" name="level" 
-                               value="{{ isset($character) ? $character->level : '' }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="characterClass" class="form-label">Class:</label>
-                        <select class="form-select" id="characterClass" name="class" required>
-                            <option value="" disabled {{ !isset($character) ? 'selected' : '' }}>Select Class</option>
-                            @foreach ($classes as $class)
-                                <option value="{{ $class }}" {{ isset($character) && $character->class == $class ? 'selected' : '' }}>{{ $class }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        {{ isset($character) ? 'Edit Character' : 'Add Character' }}
-                    </button>
-                </form>
+                        <div class="mb-3">
+                            <label for="characterName" class="form-label">Character Name:</label>
+                            <input type="text" class="form-control" id="characterName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="characterLevel" class="form-label">Level:</label>
+                            <input type="number" class="form-control" id="characterLevel" name="level" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="characterClass" class="form-label">Class:</label>
+                            <select class="form-select" id="characterClass" name="class" required>
+                                <option value="" disabled selected>Select Class</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class }}">{{ $class }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Character</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
