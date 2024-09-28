@@ -103,7 +103,7 @@
                                         <div class="collapse" id="userSection">
                                             <ul class="nav flex-column ms-3"> <!-- Added margin start for indentation -->
                                                 <li class="nav-item">
-                                                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
+                                                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addCharacterModalSide">
                                                         Add Character
                                                     </a>
                                                 </li>
@@ -165,7 +165,7 @@
 
     <!-- Add Character Modal -->
     @auth
-    <div class="modal fade" id="addCharacterModal" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addCharacterModalSide" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

@@ -8,36 +8,90 @@ class CharacterController extends Controller
 {
     public function create(Request $request)
     {
-        // Validate the incoming request data
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'level' => 'required|integer',
             'class' => 'required|string|max:255',
         ]);
 
-        // Create a new character instance and fill it with the validated data
         $character = new Character();
         $character->name = $validatedData['name'];
         $character->level = $validatedData['level'];
         $character->class = $validatedData['class'];
-        $character->user_id = auth()->id(); // Assign the authenticated user ID
+        $character->user_id = auth()->id(); 
 
-        // Save the character to the database
         $character->save();
 
-        // Redirect back or to a specific page with a success message
         return redirect()->route('home')->with('status', 'Character added successfully!');
+    }
+
+    
+    public function edit($id, Request $request)
+    {
+        $character = Character::findOrFail($id);
+    
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'level' => 'required|integer',
+            'class' => 'required|string|max:255',
+        ]);
+
+        $character->name = $validatedData['name'];
+        $character->level = $validatedData['level'];
+        $character->class = $validatedData['class'];
+    
+        $character->save();
+    
+        return redirect()->route('home')->with('status', 'Character updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+
+        $character = Character::findOrFail($id);
+
+        if ($character->user_id != auth()->id()) {
+            return redirect()->route('home')->with('error', 'You are not authorized to delete this character.');
+        }
+
+        $character->delete();
+
+        return redirect()->route('home')->with('status', 'Character deleted successfully!');
     }
 
     public function choose_class()
     {
-        $classes = ['Warrior', 
-                    'Ninja', 
-                    'Kunoichi', 
-                    'Valkyrie',
-                ];
+        $classes = [
+            'Warrior',
+            'Ranger',
+            'Sorceress',
+            'Berserker',
+            'Tamer',
+            'Musa',
+            'Maehwa',
+            'Valkyrie',
+            'Kunoichi',
+            'Ninja',
+            'Witch',
+            'Wizard',
+            'Dark Knight',
+            'Striker',
+            'Mystic',
+            'Lahn',
+            'Archer',
+            'Shai',
+            'Guardian',
+            'Hashashin',
+            'Nova',
+            'Sage',
+            'Corsair',
+            'Drakania',
+            'Woosa',
+            'Maegu'
+        ];
 
-        return view('characters.choose_class', compact('classes'));
+        return $classes;
     }
 }
 

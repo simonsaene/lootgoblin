@@ -33,7 +33,6 @@ class HomeController extends Controller
 
         return view('home', compact('characters', 'classes', 'family_name'));
     }
-
     public function choose_class()
     {
         $classes = [

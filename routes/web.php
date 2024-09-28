@@ -13,7 +13,9 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-Route::post('/characters', [CharacterController::class, 'create'])->name('characters.create');
+Route::post('/characters/create', [CharacterController::class, 'create'])->name('characters.create');
+Route::put('/characters/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
+Route::delete('/characters/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
 
 Route::get('/test-users', function () {
     try {
