@@ -30,9 +30,11 @@ class HomeController extends Controller
         $characters = Character::where('user_id', $user_id)->get();
 
         $classes = $this->choose_class();
+        $char = session('char');
 
-        return view('home', compact('characters', 'classes', 'family_name'));
+        return view('home', compact('characters', 'classes', 'family_name', 'char'));
     }
+    
     public function choose_class()
     {
         $classes = [
