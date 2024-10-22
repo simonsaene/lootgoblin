@@ -78,15 +78,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/verify', [VerificationController::class, 'showVerificationNotice'])->name('verification.notice');
-Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
-Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+//Route::get('/verify', [VerificationController::class, 'showVerificationNotice'])->name('verification.notice');
+//Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
+//Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
-Auth::routes();
+Auth::routes([
+    'verify' => true
+]);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/summary', [SettingsController::class, 'index'])->name('summary');
+    Route::get('/gyfin-up', [SettingsController::class, 'index'])->name('gyfin.up');
+    Route::get('/jade-forest', [SettingsController::class, 'index'])->name('jade.forest');
+    Route::get('/summary', [SettingsController::class, 'index'])->name('summary');
     Route::post('/characters/create', [CharacterController::class, 'create'])->name('characters.create');
     Route::put('/characters/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
     Route::delete('/characters/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');

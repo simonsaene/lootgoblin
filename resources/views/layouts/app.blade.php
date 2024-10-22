@@ -127,6 +127,11 @@
                                         </a>
                                         <div class="collapse" id="grindSpots">
                                             <ul class="nav flex-column ms-3">
+                                            <li class="nav-item">
+                                                    <a class="nav-link" href="{{ route('summary') }}">
+                                                        Summary
+                                                    </a>
+                                                </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
                                                         Jade Forest

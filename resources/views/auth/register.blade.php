@@ -28,7 +28,7 @@
                         <div class="row mb-3">
                             <label for="family_name" class="col-md-4 col-form-label text-md-end">{{ __('Family Name') }}</label>
 
-                            <div class="col-md-6">
+                        <div class="col-md-6">
                                 <input id="family_name" type="text" class="form-control @error('family_name') is-invalid @enderror" name="family_name" value="{{ old('family_name') }}" required autocomplete="family_name" autofocus>
 
                                 @error('family_name')
