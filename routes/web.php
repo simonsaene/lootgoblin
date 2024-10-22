@@ -1,21 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HomeController;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-Route::post('/characters/create', [CharacterController::class, 'create'])->name('characters.create');
-Route::put('/characters/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
-Route::delete('/characters/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
+use App\Http\Controllers\Auth\VerificationController;
 
 Route::get('/test-users', function () {
     try {
@@ -71,4 +62,32 @@ Route::get('/test-spots', function () {
             'error' => 'Could not connect to the database: ' . $e->getMessage(),
         ], 500);
     }
+});
+
+Route::get('/test-email', function () {
+    $data = [
+        'verification_token' => 'fjdlskfjkl',
+        'user' => 'simon'
+        ];
+    Mail::to('support@lootgoblin.lol')->send(new VerifyEmail( $data));
+    echo "verification sent";
+});
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/verify', [VerificationController::class, 'showVerificationNotice'])->name('verification.notice');
+Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+Auth::routes();
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/characters/create', [CharacterController::class, 'create'])->name('characters.create');
+    Route::put('/characters/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
+    Route::delete('/characters/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
 });

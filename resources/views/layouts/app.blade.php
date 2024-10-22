@@ -101,7 +101,7 @@
                                             User
                                         </a>
                                         <div class="collapse" id="userSection">
-                                            <ul class="nav flex-column ms-3"> <!-- Added margin start for indentation -->
+                                            <ul class="nav flex-column ms-3">
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addCharacterModalSide">
                                                         Add Character
@@ -126,7 +126,7 @@
                                             Grind Spots
                                         </a>
                                         <div class="collapse" id="grindSpots">
-                                            <ul class="nav flex-column ms-3"> <!-- Added margin start for indentation -->
+                                            <ul class="nav flex-column ms-3">
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
                                                         Jade Forest
