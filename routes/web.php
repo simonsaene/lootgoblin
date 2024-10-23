@@ -6,7 +6,51 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\AdminController;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Auth::routes([
+    'verify' => true
+]);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
+        
+    // Admin routes
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/adminhome', [AdminController::class, 'index'])->name('adminhome');
+
+        // Tables
+        Route::prefix('/tables')->group(function () {
+            Route::get('/items', [AdminController::class, 'showItemsTable'])->name('admin.items');
+            Route::get('/grind-spot-items', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grinditems');
+            Route::get('/grind-spots', [AdminController::class, 'showGrindSpotTable'])->name('admin.grindspots');
+        });
+    });
+
+    // Settings routes
+    Route::prefix('/settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('settings');
+    });
+
+    // Grind routes
+    Route::prefix('/grind')->group(function () {
+        Route::get('/summary', [SettingsController::class, 'index'])->name('summary');
+        Route::get('/gyfin-up', [SettingsController::class, 'index'])->name('gyfin.up');
+        Route::get('/jade-forest', [SettingsController::class, 'index'])->name('jade.forest');
+        Route::get('/d-cres-shrine', [SettingsController::class, 'index'])->name('d.cres');
+    });
+    
+    // Character routes
+    Route::prefix('/characters')->group(function () {
+        Route::post('/create', [CharacterController::class, 'create'])->name('characters.create');
+        Route::put('/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
+        Route::delete('/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
+    });
+});
 
 Route::get('/test-users', function () {
     try {
@@ -71,29 +115,4 @@ Route::get('/test-email', function () {
         ];
     Mail::to('support@lootgoblin.lol')->send(new VerifyEmail( $data));
     echo "verification sent";
-});
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-//Route::get('/verify', [VerificationController::class, 'showVerificationNotice'])->name('verification.notice');
-//Route::post('/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
-//Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-
-Auth::routes([
-    'verify' => true
-]);
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
-    Route::get('/summary', [SettingsController::class, 'index'])->name('summary');
-    Route::get('/gyfin-up', [SettingsController::class, 'index'])->name('gyfin.up');
-    Route::get('/jade-forest', [SettingsController::class, 'index'])->name('jade.forest');
-    Route::get('/summary', [SettingsController::class, 'index'])->name('summary');
-    Route::post('/characters/create', [CharacterController::class, 'create'])->name('characters.create');
-    Route::put('/characters/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
-    Route::delete('/characters/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
 });

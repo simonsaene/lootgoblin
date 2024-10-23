@@ -57,24 +57,30 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
                                     <!-- Profile link -->
                                     <a class="dropdown-item" href="{{ route('home') }}">
                                         {{ __('Profile') }}
                                     </a>
-
+                                
                                     <!-- Settings link -->
                                     <a class="dropdown-item" href="{{ route('settings') }}">
                                         {{ __('Settings') }}
                                     </a>
-
+                                
+                                    <!-- Admin Dashboard link (only visible if user is admin) -->
+                                    @if(auth()->user() && auth()->user()->is_admin)
+                                        <a class="dropdown-item" href="{{ route('adminhome') }}">
+                                            {{ __('Admin Dashboard') }}
+                                        </a>
+                                    @endif
+                                
                                     <!-- Logout link -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                 document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
+                                
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
@@ -102,49 +108,61 @@
                                         </a>
                                         <div class="collapse" id="userSection">
                                             <ul class="nav flex-column ms-3">
+
+                                                {{-- 
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addCharacterModalSide">
-                                                        Add Character
+                                                        {{ __('Add Character') }}
                                                     </a>
                                                 </li>
+                                                --}}
+
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('home') }}">
-                                                        Profile
+                                                        {{ __('Profile') }}
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
-                                                        Settings
+                                                        {{ __('Settings') }}
                                                     </a>
                                                 </li>
+
+                                                @if(auth()->user() && auth()->user()->is_admin)
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{{ route('adminhome') }}">
+                                                            {{ __('Admin Dashboard') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </li>
 
                                     <li class="nav-item">
                                         <a class="nav-link collapsed" data-bs-toggle="collapse" href="#grindSpots" role="button" aria-expanded="false" aria-controls="grindSpots">
-                                            Grind Spots
+                                            {{ __('Grind') }}
                                         </a>
                                         <div class="collapse" id="grindSpots">
                                             <ul class="nav flex-column ms-3">
                                             <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('summary') }}">
-                                                        Summary
+                                                        {{ __('Summary') }}
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
-                                                        Jade Forest
+                                                        {{ __('Jade Forest') }}
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
-                                                        Gyfin Rhasia Underground
+                                                        {{ __('Gyfin Rhasia Temple: Underground') }}
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" href="{{ route('settings') }}">
-                                                        Dekia: Crescent Shrine
+                                                        {{ __('Dekia: Crescent Shrine') }}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -168,6 +186,7 @@
         </footer>
     </div>
 
+{{--
     <!-- Add Character Modal -->
     @auth
     <div class="modal fade" id="addCharacterModalSide" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
@@ -204,5 +223,6 @@
         </div>
     </div>
     @endauth
+    --}}
 </body>
 </html>

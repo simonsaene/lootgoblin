@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'family_name',
         'email',
         'password',
+        'is_admin',
     ];
 
     protected $casts = [
@@ -46,6 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 }
