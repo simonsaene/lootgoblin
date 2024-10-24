@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('status_type');
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_verified')->default(false);
+            //$table->boolean('is_verified')->default(false);
             $table->string('status_start_reason');
             $table->string('status_end_reason');
             $table->timestamp('date_start');

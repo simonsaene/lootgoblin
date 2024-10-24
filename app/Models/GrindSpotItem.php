@@ -11,7 +11,7 @@ class GrindSpotItem extends Model
 
     protected $fillable = [
         'item_id', 
-        'grindspot_id'
+        'grind_spot_id'
     ];
 
     public function grindSpot()

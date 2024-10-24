@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('grind_spot_items', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->foreignId('grind_spot_id')->constrained('grind_spots')->onDelete('cascade');
-            $table->primary(['item_id', 'grind_spot_id']);
         });
     }
 

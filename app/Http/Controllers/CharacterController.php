@@ -46,7 +46,7 @@ class CharacterController extends Controller
         return redirect()->route('home')->with('status', 'Character updated successfully!');
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
 
         $character = Character::findOrFail($id);

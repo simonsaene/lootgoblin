@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container">
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <!-- First row (mb-4 adds margin bottom) -->
         <div class="row mb-4">
 
@@ -42,9 +48,9 @@
             <!-- Fourth card -->
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">{{ __('Tables') }}</div>
+                    <div class="card-header">{{ __('Test') }}</div>
                     <div class="card-body">
-                        {{ __('Empty') }}
+                    
                     </div>
                 </div>
             </div>
@@ -77,6 +83,12 @@
                     <div id="itemsTable" class="table-responsive" style="display: none;">
                         <table class="table">
                             <thead>
+                                <!-- add/update/delete buttons -->
+                                <tr>
+                                    <th colspan="4" class="text-center">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">+</button>
+                                    </th>
+                                </tr>
                                 <tr>
                                     <th>Item Name</th>
                                     <th>Description</th>
@@ -93,9 +105,15 @@
                     <div id="grindSpotItemsTable" class="table-responsive" style="display: none;">
                         <table class="table">
                             <thead>
+                                <!-- add/update/delete buttons -->
                                 <tr>
-                                    <th>Grind Spot Item</th>
-                                    <th>Quantity</th>
+                                    <th colspan="2" class="text-center">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpotItemModal">+</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Grind Spot</th>
+                                    <th>Item</th>
                                 </tr>
                             </thead>
                             <tbody id="GrinditemsTableBody">
@@ -107,6 +125,12 @@
                     <div id="grindSpotsTable" class="table-responsive" style="display: none;">
                         <table class="table">
                             <thead>
+                                <!-- add/update/delete buttons -->
+                                <tr>
+                                    <th colspan="7" class="text-center">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpoModal">+</button>
+                                    </th>
+                                </tr>
                                 <tr>
                                     <th>Grind Spot Name</th>
                                     <th>Location</th>
@@ -125,8 +149,46 @@
                 </div>
             </div>
         </div>
+
+        <!-- Add Item Modal -->
+        <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addItemModalLabel">Add Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.items.add') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="itemName">Item Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemDescription">Description</label>
+                                <textarea class="form-control" name="description" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="marketValue">Market Value</label>
+                                <input type="number" class="form-control" name="market_value" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vendorValue">Vendor Value</label>
+                                <input type="number" class="form-control" name="vendor_value" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemImage">Upload Image (optional)</label>
+                                <input type="file" class="form-control" name="image" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Item</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script>
         function fetchData(tableId) {
             let route = '';
@@ -178,6 +240,14 @@
                                         <td>${item.description}</td>
                                         <td>${item.market_value}</td>
                                         <td>${item.vendor_value}</td>
+                                        <td>                                   
+                                            <button type="button" class="btn btn-primary" onclick="updateItem()">^</button>
+                                            <form method="POST" action="{{ route('admin.items.delete', '') }}/${item.id}" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">-</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 `;
                                 tbody.innerHTML += row;
@@ -185,14 +255,27 @@
                             break;
 
                         case 'grindSpotItemsTable':
-                            data.forEach(item => {
-                                const row = `
-                                    <tr>
-                                        <td>${item.grind_spot_id}</td>
-                                        <td>${item.item_id}</td>
-                                    </tr>
-                                `;
-                                tbody.innerHTML += row;
+                            data.forEach(grindItem => {
+                                console.log(grindItem)
+                                if (grindItem.grind_spot && grindItem.item) {
+                                    const row = `
+                                        <tr>
+                                            <td>${grindItem.grind_spot.name}</td> 
+                                            <td>${grindItem.item.name}</td>
+                                            <td>                                          
+                                                <button type="button" class="btn btn-primary" onclick="">^</button>
+                                                <form method="POST" action="{{ route('admin.grinditems.delete', '') }}/${grindItem.id}" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">-</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tbody.innerHTML += row;
+                                } else {
+                                    console.error('Invalid grind item:', grindItem);
+                                }
                             });
                             break;
 
@@ -207,6 +290,10 @@
                                         <td>${spot.suggested_gearscore}</td>
                                         <td>${spot.difficulty}</td>
                                         <td>${spot.mechanics}</td>
+                                        <td>                                          
+                                            <button type="button" class="btn btn-primary" onclick="">^</button>
+                                            <button type="button" class="btn btn-danger" onclick="">-</button>
+                                        </td>
                                     </tr>
                                 `;
                                 tbody.innerHTML += row;

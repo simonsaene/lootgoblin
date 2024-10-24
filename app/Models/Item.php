@@ -13,7 +13,8 @@ class Item extends Model
         'name', 
         'description', 
         'market_value', 
-        'vendor_value'
+        'vendor_value',
+        'image'
     ];
 
     public function grindSpotItems()

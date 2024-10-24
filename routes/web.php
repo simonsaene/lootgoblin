@@ -25,9 +25,28 @@ Route::middleware(['auth'])->group(function () {
 
         // Tables
         Route::prefix('/tables')->group(function () {
-            Route::get('/items', [AdminController::class, 'showItemsTable'])->name('admin.items');
-            Route::get('/grind-spot-items', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grinditems');
-            Route::get('/grind-spots', [AdminController::class, 'showGrindSpotTable'])->name('admin.grindspots');
+        
+            // Items
+            Route::prefix('/items')->group(function ()
+            {
+                Route::get('/', [AdminController::class, 'showItemsTable'])->name('admin.items');
+                Route::post('/add', [AdminController::class, 'addItem'])->name('admin.items.add');
+                Route::delete('/delete/{id}', [AdminController::class, 'deleteItem'])->name('admin.items.delete');
+            });
+
+            // Grind Spot Items
+            Route::prefix('/grind-spot-items')->group(function ()
+            {
+                Route::get('/', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grinditems');
+                Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpotItem'])->name('admin.grinditems.delete');
+            });
+
+            // Grind Spots
+            Route::prefix('/grind-spots')->group(function ()
+            {
+                Route::get('/', [AdminController::class, 'showGrindSpotTable'])->name('admin.grindspots');
+            });
+
         });
     });
 
@@ -48,7 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('/characters')->group(function () {
         Route::post('/create', [CharacterController::class, 'create'])->name('characters.create');
         Route::put('/edit/{id}', [CharacterController::class, 'edit'])->name('characters.edit');
-        Route::delete('/{id}', [CharacterController::class, 'destroy'])->name('characters.destroy');
+        Route::delete('/delete/{id}', [CharacterController::class, 'delete'])->name('characters.delete');
     });
 });
 
