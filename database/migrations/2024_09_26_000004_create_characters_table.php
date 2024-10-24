@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->integer('level');
             $table->string('name');
+            $table->string('class');
             $table->string('profile_image')->nullable();
             $table->string('gear_image')->nullable();
             $table->timestamps();
