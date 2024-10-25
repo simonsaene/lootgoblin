@@ -158,6 +158,7 @@
 
     </div>
 
+    <!-- AJAX for displaying tables -->
     <script>
         function fetchData(tableId) {
             let route = '';
