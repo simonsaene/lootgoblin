@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
             {
                 Route::get('/', [AdminController::class, 'showItemsTable'])->name('admin.items');
                 Route::post('/add', [AdminController::class, 'addItem'])->name('admin.items.add');
+                Route::put('/edit/{id}', [AdminController::class, 'editItem'])->name('admin.items.edit');
                 Route::delete('/delete/{id}', [AdminController::class, 'deleteItem'])->name('admin.items.delete');
             });
 
