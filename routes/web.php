@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Admin routes
         Route::middleware(['admin'])->group(function () {
-            Route::get('/adminhome', [AdminController::class, 'index'])->name('adminhome');
+            Route::get('/', [AdminController::class, 'index'])->name('admin.home');
 
             // Tables
             Route::prefix('/tables')->group(function () {
@@ -65,18 +65,18 @@ Route::middleware(['auth'])->group(function () {
                 // Grind Spot Items
                 Route::prefix('/grind-spot-items')->group(function ()
                 {
-                    Route::get('/', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grinditems');
-                    Route::post('/add', [AdminController::class, 'addGrindSpotItem'])->name('admin.grinditems.add');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpotItem'])->name('admin.grinditems.delete');
+                    Route::get('/', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grind-items');
+                    Route::post('/add', [AdminController::class, 'addGrindSpotItem'])->name('admin.grind-items.add');
+                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpotItem'])->name('admin.grind-items.delete');
                 });
 
                 // Grind Spots
                 Route::prefix('/grind-spots')->group(function ()
                 {
-                    Route::get('/', [AdminController::class, 'showGrindSpotTable'])->name('admin.grindspots');
-                    Route::post('/add', [AdminController::class, 'addGrindSpot'])->name('admin.grindspots.add');
-                    Route::put('/edit/{id}', [AdminController::class, 'editGrindSpot'])->name('admin.grindspots.edit');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpot'])->name('admin.grindspots.delete');
+                    Route::get('/', [AdminController::class, 'showGrindSpotTable'])->name('admin.grind-spots');
+                    Route::post('/add', [AdminController::class, 'addGrindSpot'])->name('admin.grind-spots.add');
+                    Route::put('/edit/{id}', [AdminController::class, 'editGrindSpot'])->name('admin.grind-spots.edit');
+                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpot'])->name('admin.grind-spots.delete');
                 });
             });
         });

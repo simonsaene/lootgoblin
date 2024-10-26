@@ -24,7 +24,7 @@ class AdminController extends Controller
         $items = Item::all();
         $grindSpotItems = GrindSpotItem::with('item', 'grindSpot')->get();
         $grindSpots = GrindSpot::all();
-        return view('layouts.adminhome', compact('items', 'grindSpotItems' , 'grindSpots'));
+        return view('layouts.admin-home', compact('items', 'grindSpotItems' , 'grindSpots'));
     }
 
     /**
@@ -97,7 +97,7 @@ class AdminController extends Controller
     
             Item::create($data);
 
-            return redirect()->route('adminhome')->with('success', 'Item added successfully!');
+            return redirect()->route('admin.home')->with('success', 'Item added successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to add item: ' . $e->getMessage());
         }
@@ -128,7 +128,7 @@ class AdminController extends Controller
     
             $item->save();
 
-            return redirect()->route('adminhome')->with('success', 'Item updated successfully!');
+            return redirect()->route('admin.home')->with('success', 'Item updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to updated item: ' . $e->getMessage());
         }
@@ -140,7 +140,7 @@ class AdminController extends Controller
             $item = Item::findOrFail($id);
             $item->delete();
     
-            return redirect()->route('adminhome')->with('success', 'Item deleted successfully!');
+            return redirect()->route('admin.home')->with('success', 'Item deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to delete item: ' . $e->getMessage());
         }
@@ -159,6 +159,15 @@ class AdminController extends Controller
         try {
             $validatedData = $this->validateData($request, 'grind_spot_item');
     
+
+            $existingItem = GrindSpotItem::where('item_id', $validatedData['item_id'])
+            ->where('grind_spot_id', $validatedData['grind_spot_id'])
+            ->first();
+
+            if ($existingItem) {
+                return redirect()->back()->with('error', 'Grind spot item already exists for this grind spot!');
+            }
+
             GrindSpotItem::create([
                 'item_id' => $validatedData['item_id'],
                 'grind_spot_id' => $validatedData['grind_spot_id'],
@@ -176,7 +185,7 @@ class AdminController extends Controller
             $grindSpotItem = GrindSpotItem::findOrFail($id);
             $grindSpotItem->delete();
     
-            return redirect()->route('adminhome')->with('success', 'Item removed from grind spot successfully!');
+            return redirect()->route('admin.home')->with('success', 'Item removed from grind spot successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to remove item from grind spot: ' . $e->getMessage());
         }
@@ -240,7 +249,7 @@ class AdminController extends Controller
 
         $grindSpot->delete();
 
-        return redirect()->route('adminhome')->with('success', 'Item removed from grind spot successfully!');
+        return redirect()->route('admin.home')->with('success', 'Item removed from grind spot successfully!');
     }
     
 }

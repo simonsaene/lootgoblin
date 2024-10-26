@@ -8,7 +8,7 @@
             </div>
         @endif
 
-        <!-- Page Header with Create Button -->
+        {{-- Page Header --}}
         <div class="row mb-4">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
@@ -20,18 +20,19 @@
             </div>
         </div>
 
-            <div class="row">
-                <!-- Left card -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">{{ __($family_name) }}</div>
-                        <div class="card-body">
-                            {{ __('No Favourite set yet') }}
-                        </div>
+        <div class="row">
+            
+            {{-- Left Card --}}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">{{ __($family_name) }}</div>
+                    <div class="card-body">
+                        {{ __('No Favourite set yet') }}
                     </div>
                 </div>
+            </div>
 
-        <!-- Right side with 3 stacked cards -->
+        {{-- Right side, stacks cards depending on how many characters the user has --}}
         <div class="col-md-8">
             @if ($characters->isEmpty())
                 <div class="alert alert-info" role="alert">
@@ -51,7 +52,6 @@
 
                             @include('layouts.modals.characters.edit-char-modal')
                         
-                            <!-- Delete Button -->
                             <form method="POST" action="{{ route('characters.delete', $character->id) }}" style="display:inline;">
                                 @csrf
                                 @method('DELETE')

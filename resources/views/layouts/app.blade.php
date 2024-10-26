@@ -69,7 +69,7 @@
                                 
                                     <!-- Admin Dashboard link (only visible if user is admin) -->
                                     @if(auth()->user() && auth()->user()->is_admin)
-                                        <a class="dropdown-item" href="{{ route('adminhome') }}">
+                                        <a class="dropdown-item" href="{{ route('admin.home') }}">
                                             {{ __('Admin Dashboard') }}
                                         </a>
                                     @endif
@@ -122,7 +122,7 @@
 
                                                 @if(auth()->user() && auth()->user()->is_admin)
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="{{ route('adminhome') }}">
+                                                        <a class="nav-link" href="{{ route('admin.home') }}">
                                                             {{ __('Admin Dashboard') }}
                                                         </a>
                                                     </li>
