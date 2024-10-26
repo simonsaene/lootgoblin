@@ -50,7 +50,30 @@
                 <div class="card">
                     <div class="card-header">{{ __('Test') }}</div>
                     <div class="card-body">
-                    
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Launch demo modal
+                          </button>
+                          
+                          <!-- Modal -->
+                          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  ...
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -128,7 +151,7 @@
                                 <!-- add/update/delete buttons -->
                                 <tr>
                                     <th colspan="7" class="text-center">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpoModal">+</button>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpotModal">+</button>
                                     </th>
                                 </tr>
                                 <tr>
@@ -150,15 +173,13 @@
             </div>
         </div>
 
-        @include('layouts.modals.tables.add-item-modal')
-
-        @foreach ($items as $item)
-            @include('layouts.modals.tables.edit-item-modal', ['item' => $item])
-        @endforeach
+        @include('layouts.modals.tables.items.add-item-modal')
+        @include('layouts.modals.tables.grindspotitems.add-grindspotitem-modal', ['items' => $items, 'grindSpots' => $grindSpots])
+        @include('layouts.modals.tables.grindspots.add-grindspot-modal')
 
     </div>
 
-    <!-- AJAX for displaying tables -->
+     {{-- AJAX for showing tables --}}
     <script>
         function fetchData(tableId) {
             let route = '';
@@ -233,7 +254,6 @@
                                             <td>${grindItem.grind_spot.name}</td> 
                                             <td>${grindItem.item.name}</td>
                                             <td>                                          
-                                                <button type="button" class="btn btn-primary" onclick="">^</button>
                                                 <form method="POST" action="{{ route('admin.grinditems.delete', '') }}/${grindItem.id}" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
@@ -261,8 +281,12 @@
                                         <td>${spot.difficulty}</td>
                                         <td>${spot.mechanics}</td>
                                         <td>                                          
-                                            <button type="button" class="btn btn-primary" onclick="">^</button>
-                                            <button type="button" class="btn btn-danger" onclick="">-</button>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editGrindSpotModal${spot.id}">^</button>
+                                                <form method="POST" action="{{ route('admin.grindspots.delete', '') }}/${spot.id}" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">-</button>
+                                                </form>
                                         </td>
                                     </tr>
                                 `;
@@ -275,5 +299,15 @@
                 .catch(error => console.error('Error fetching items:', error));
         }
     </script>
+
+    {{-- Creates modals for all items, needs to be done after javascript has filled the tables with the items --}}
+    @foreach ($items as $item)
+        @include('layouts.modals.tables.items.edit-item-modal', ['item' => $item])
+    @endforeach
+
+    {{-- Creates modals for all grind spots, needs to be done after javascript has filled the tables with the grind spots --}}
+    @foreach ($grindSpots as $spot)
+        @include('layouts.modals.tables.grindspots.edit-grindspot-modal', ['spot' => $spot])
+    @endforeach
 
 @endsection

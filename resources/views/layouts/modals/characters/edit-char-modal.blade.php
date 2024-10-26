@@ -12,17 +12,17 @@
                     @method('PUT')
 
                     <div class="mb-3">
-                        <label for="characterName{{ $character->id }}" class="form-label">Character Name:</label>
+                        <label for="characterName{{ $character->id }}" class="form-label">Character Name</label>
                         <input type="text" class="form-control" id="characterName{{ $character->id }}" name="name" 
                             value="{{ $character->name }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="characterLevel{{ $character->id }}" class="form-label">Level:</label>
+                        <label for="characterLevel{{ $character->id }}" class="form-label">Level</label>
                         <input type="number" class="form-control" id="characterLevel{{ $character->id }}" name="level" 
                             value="{{ $character->level }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="characterClass{{ $character->id }}" class="form-label">Class:</label>
+                        <label for="characterClass{{ $character->id }}" class="form-label">Class</label>
                         <select class="form-select" id="characterClass{{ $character->id }}" name="class" required>
                             <option value="" disabled>Select Class</option>
                             @foreach ($classes as $class)

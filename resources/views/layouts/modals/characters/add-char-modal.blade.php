@@ -11,15 +11,15 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label for="characterName" class="form-label">Character Name:</label>
+                        <label for="characterName" class="form-label">Character Nam</label>
                         <input type="text" class="form-control" id="characterName" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="characterLevel" class="form-label">Level:</label>
+                        <label for="characterLevel" class="form-label">Level</label>
                         <input type="number" class="form-control" id="characterLevel" name="level" required>
                     </div>
                     <div class="mb-3">
-                        <label for="characterClass" class="form-label">Class:</label>
+                        <label for="characterClass" class="form-label">Class</label>
                         <select class="form-select" id="characterClass" name="class" required>
                             <option value="" disabled selected>Select Class</option>
                             @foreach ($classes as $class)

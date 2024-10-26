@@ -22,8 +22,51 @@ class AdminController extends Controller
         $user_id = auth()->id();
 
         $items = Item::all();
-        $grindSpotItems = GrindSpotItem::all();
-        return view('layouts.adminhome', compact('items', 'grindSpotItems'));
+        $grindSpotItems = GrindSpotItem::with('item', 'grindSpot')->get();
+        $grindSpots = GrindSpot::all();
+        return view('layouts.adminhome', compact('items', 'grindSpotItems' , 'grindSpots'));
+    }
+
+    /**
+     * Validates data, based on the type of data to return
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $type
+     * @throws \InvalidArgumentException
+     * @return mixed
+     */
+    public function validateData(Request $request, $type)
+    {
+        switch ($type) {
+            case 'grind_spot':
+                return $request->validate([
+                    'name' => 'required|string|max:255',
+                    'location' => 'required|string|max:255',
+                    'description' => 'required|string|max:255',
+                    'suggested_level' => 'required|integer',
+                    'suggested_gearscore' => 'required|integer',
+                    'difficulty' => 'required|integer',
+                    'mechanics' => 'required|string|max:255',
+                ]);
+
+            case 'grind_spot_item':
+                return $request->validate([
+                    'item_id' => 'required|exists:items,id',
+                    'grind_spot_id' => 'required|exists:grind_spots,id',
+                ]);
+
+            case 'item':
+                return $request->validate([
+                    'name' => 'required|string|max:255',
+                    'description' => 'required|string|max:255',
+                    'market_value' => 'required|integer',
+                    'vendor_value' => 'required|integer',
+                    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ]);
+
+            default:
+                throw new \InvalidArgumentException('Invalid validation type.');
+        }
     }
 
     // Items
@@ -35,27 +78,24 @@ class AdminController extends Controller
 
     public function addItem(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'market_value' => 'required|integer',
-            'vendor_value' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
         try {
-            $item = new Item();
-            $item->name = $validatedData['name'];
-            $item->description = $validatedData['description'];
-            $item->market_value = $validatedData['market_value'];
-            $item->vendor_value = $validatedData['vendor_value'];
-    
+
+            $validatedData = $this->validateData($request, 'item');
+
+            $data = [
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
+                'market_value' => $validatedData['market_value'],
+                'vendor_value' => $validatedData['vendor_value'],
+                
+            ];
+            
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('images', 'public');
-                $item->image = $path;
+                $data['image'] = $path;
             }
     
-            $item->save();
+            Item::create($data);
 
             return redirect()->route('adminhome')->with('success', 'Item added successfully!');
         } catch (\Exception $e) {
@@ -65,16 +105,12 @@ class AdminController extends Controller
 
     public function editItem($id, Request $request)
     {
-        $item = Item::findOrFail($id);
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'market_value' => 'required|integer',
-            'vendor_value' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max',
-        ]);
-
+        
         try {
+            $item = Item::findOrFail($id);
+
+            $validatedData = $this->validateData($request, 'item');
+
             $item->name = $validatedData['name'];
             $item->description = $validatedData['description'];
             $item->market_value = $validatedData['market_value'];
@@ -100,11 +136,14 @@ class AdminController extends Controller
 
     public function deleteItem($id)
     {
-        $item = Item::findOrFail($id);
-
-        $item->delete();
-
-        return redirect()->route('adminhome')->with('success', 'Item deleted successfully!');
+        try {
+            $item = Item::findOrFail($id);
+            $item->delete();
+    
+            return redirect()->route('adminhome')->with('success', 'Item deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete item: ' . $e->getMessage());
+        }
     }
     
 
@@ -115,13 +154,32 @@ class AdminController extends Controller
         return response()->json($grindItems);
     }
 
+    public function addGrindSpotItem(Request $request)
+    {
+        try {
+            $validatedData = $this->validateData($request, 'grind_spot_item');
+    
+            GrindSpotItem::create([
+                'item_id' => $validatedData['item_id'],
+                'grind_spot_id' => $validatedData['grind_spot_id'],
+            ]);
+    
+            return redirect()->back()->with('success', 'Grind spot item added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add grind spot item: ' . $e->getMessage());
+        }
+    }
+
     public function deleteGrindSpotItem($id)
     {
-        $grindSpotItem = GrindSpotItem::findOrFail($id);
-
-        $grindSpotItem->delete();
-
-        return redirect()->route('adminhome')->with('success', 'Item removed from grind spot successfully!');
+        try {
+            $grindSpotItem = GrindSpotItem::findOrFail($id);
+            $grindSpotItem->delete();
+    
+            return redirect()->route('adminhome')->with('success', 'Item removed from grind spot successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to remove item from grind spot: ' . $e->getMessage());
+        }
     }
     
 
@@ -130,6 +188,59 @@ class AdminController extends Controller
     {
         $grindSpot = GrindSpot::all();
         return response()->json($grindSpot);
+    }
+
+    public function addGrindSpot(Request $request)
+    {
+        try {
+            $validatedData = $this->validateData($request, 'grind_spot');
+
+            GrindSpot::create([
+                'name' => $validatedData['name'],
+                'location' => $validatedData['location'],
+                'description' => $validatedData['description'],
+                'suggested_level' => $validatedData['suggested_level'],
+                'suggested_gearscore' => $validatedData['suggested_gearscore'],
+                'difficulty' => $validatedData['difficulty'],
+                'mechanics' => $validatedData['mechanics'],
+            ]);
+
+            return redirect()->back()->with('success', 'Grind spot item added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add grind spot: ' . $e->getMessage());
+        }
+    }
+
+    public function editGrindSpot($id, Request $request)
+    {
+        try{
+            $grindSpot = GrindSpot::findOrFail($id);
+
+            $validatedData = $this->validateData($request, 'grind_spot');
+
+            $grindSpot->name = $validatedData['name'];
+            $grindSpot->location=  $validatedData['location'];
+            $grindSpot->description = $validatedData['description'];
+            $grindSpot->suggested_level = $validatedData['suggested_level'];
+            $grindSpot->suggested_gearscore = $validatedData['suggested_gearscore'];
+            $grindSpot->difficulty = $validatedData['difficulty'];
+            $grindSpot->mechanics = $validatedData['mechanics'];
+
+            $grindSpot->save();
+
+            return redirect()->back()->with('success', 'Grind spot item added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add grind spot: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteGrindSpot($id)
+    {
+        $grindSpot = GrindSpot::findOrFail($id);
+
+        $grindSpot->delete();
+
+        return redirect()->route('adminhome')->with('success', 'Item removed from grind spot successfully!');
     }
     
 }

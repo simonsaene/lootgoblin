@@ -6,58 +6,69 @@ use Illuminate\Http\Request;
 
 class CharacterController extends Controller
 {
-    public function create(Request $request)
-    {
 
-        $validatedData = $request->validate([
+    public function validateData(Request $request)
+    {
+        return $request->validate([
             'name' => 'required|string|max:255',
             'level' => 'required|integer',
             'class' => 'required|string|max:255',
         ]);
-
-        $character = new Character();
-        $character->name = $validatedData['name'];
-        $character->level = $validatedData['level'];
-        $character->class = $validatedData['class'];
-        $character->user_id = auth()->id(); 
-
-        $character->save();
-
-        return redirect()->route('home')->with('status', 'Character added successfully!');
     }
-
-    
-    public function edit($id, Request $request)
+    public function addChar(Request $request)
     {
-        $character = Character::findOrFail($id);
-    
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'level' => 'required|integer',
-            'class' => 'required|string|max:255',
-        ]);
+        try
+        {   
+            $validatedData = $this->validateData($request);
 
-        $character->name = $validatedData['name'];
-        $character->level = $validatedData['level'];
-        $character->class = $validatedData['class'];
-    
-        $character->save();
-    
-        return redirect()->route('home')->with('status', 'Character updated successfully!');
-    }
+            Character::create([
+                    'name' => $validatedData['name'],
+                    'level' => $validatedData['level'],
+                    'class' => $validatedData['class'],
+                    'user_id' => auth()->id(),
+                ]);
 
-    public function delete($id)
-    {
-
-        $character = Character::findOrFail($id);
-
-        if ($character->user_id != auth()->id()) {
-            return redirect()->route('home')->with('error', 'You are not authorized to delete this character.');
+            return redirect()->route('home')->with('status', 'Character added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error adding character: ' . $e->getMessage());
         }
+    }
 
-        $character->delete();
+    
+    public function editChar($id, Request $request)
+    {
+        try {
+            $character = Character::findOrFail($id);
 
-        return redirect()->route('home')->with('status', 'Character deleted successfully!');
+            $validatedData = $this->validateData($request);
+
+            $character->name = $validatedData['name'];
+            $character->level = $validatedData['level'];
+            $character->class = $validatedData['class'];
+        
+            $character->save();
+        
+            return redirect()->route('home')->with('status', 'Character updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error updating character: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteChar($id)
+    {
+        try {
+            $character = Character::findOrFail($id);
+    
+            if ($character->user_id != auth()->id()) {
+                return redirect()->route('home')->with('error', 'You are not authorized to delete this character.');
+            }
+
+            $character->delete();
+    
+            return redirect()->route('home')->with('status', 'Character deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error deleting character: ' . $e->getMessage());
+        }
     }
 
     public function choose_class()
