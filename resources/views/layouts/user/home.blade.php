@@ -50,7 +50,7 @@
                                 ^
                             </button>
 
-                            @include('layouts.modals.characters.edit-char-modal')
+                            @include('layouts.user.modals.characters.edit-char-modal')
                         
                             <form method="POST" action="{{ route('characters.delete', $character->id) }}" style="display:inline;">
                                 @csrf
@@ -63,6 +63,6 @@
             @endif
         </div>
 
-        @include('layouts.modals.characters.add-char-modal')
+        @include('layouts.user.modals.characters.add-char-modal')
     </div>
 @endsection

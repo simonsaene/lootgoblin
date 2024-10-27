@@ -1,4 +1,4 @@
- <!-- Add Item Modal -->
+{{-- Add Item Modal --}}
  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

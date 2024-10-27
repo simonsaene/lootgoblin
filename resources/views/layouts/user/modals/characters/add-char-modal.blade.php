@@ -1,4 +1,4 @@
-<!-- Add Character Modal -->
+{{-- Add Charcter Modal --}}
 <div class="modal fade" id="addCharacterModal" tabindex="-1" aria-labelledby="addCharacterModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

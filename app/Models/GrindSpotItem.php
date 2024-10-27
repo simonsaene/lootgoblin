@@ -23,4 +23,9 @@ class GrindSpotItem extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function grindSessionItems()
+    {
+        return $this->hasMany(GrindSessionItem::class);
+    }
 }

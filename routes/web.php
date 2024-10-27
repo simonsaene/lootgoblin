@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GrindSessionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,10 +41,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Grind routes
         Route::prefix('/grind')->group(function () {
-            Route::get('/summary', [SettingsController::class, 'index'])->name('grind.summary');
-            Route::get('/gyfin-up', [SettingsController::class, 'index'])->name('grind.gyfin-up');
-            Route::get('/jade-forest', [SettingsController::class, 'index'])->name('grind.jade-forest');
-            Route::get('/d-cres-shrine', [SettingsController::class, 'index'])->name('grind.d-cres');
+            Route::get('/summary', [GrindSessionController::class, 'showSummary'])->name('grind.summary');
+            Route::get('/{location}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
+            Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
+
         });
 
         // Admin routes

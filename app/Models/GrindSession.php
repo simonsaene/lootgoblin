@@ -8,12 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class GrindSession extends Model
 {
     use HasFactory;
-
-    use HasFactory;
-
     protected $fillable = [
         'user_id', 
-        'grindspot_id', 
+        'grind_spot_id', 
         'loot_image', 
         'video_link', 
         'notes', 
@@ -26,6 +23,11 @@ class GrindSession extends Model
     public function grindSpot()
     {
         return $this->belongsTo(GrindSpot::class);
+    }
+
+    public function grindSessionItems()
+    {
+        return $this->hasMany(GrindSessionItem::class);
     }
 
     public function character()

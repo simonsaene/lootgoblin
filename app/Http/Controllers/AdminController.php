@@ -24,7 +24,7 @@ class AdminController extends Controller
         $items = Item::all();
         $grindSpotItems = GrindSpotItem::with('item', 'grindSpot')->get();
         $grindSpots = GrindSpot::all();
-        return view('layouts.admin-home', compact('items', 'grindSpotItems' , 'grindSpots'));
+        return view('layouts.admin.admin-home', compact('items', 'grindSpotItems' , 'grindSpots'));
     }
 
     /**

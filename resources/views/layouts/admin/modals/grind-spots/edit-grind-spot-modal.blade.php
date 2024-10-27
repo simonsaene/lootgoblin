@@ -1,4 +1,4 @@
-<!-- Edit Grind Spot Modal-->
+{{-- Edit Grind Spot Modal --}}
 <div class="modal fade" id="editGrindSpotModal{{ $spot->id }}" tabindex="-1" aria-labelledby="editGrindSpotModalLabel{{ $spot->id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -10,7 +10,6 @@
                 <form method="POST" action="{{ route('admin.grind-spots.edit', $spot->id) }}">
                     @csrf
                     @method('PUT')
-
                     <div class="mb-3">
                         <label for="grindSpotName{{ $spot->id }}" class="form-label">Grind Spot Name</label>
                         <input type="text" class="form-control" id="grindSpotName{{ $spot->id }}" name="name" value="{{ $spot->name }}" required>

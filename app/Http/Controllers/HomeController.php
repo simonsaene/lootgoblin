@@ -31,7 +31,7 @@ class HomeController extends Controller
         $classes = $this->choose_class();
         $char = session('char');
 
-        return view('layouts.home', compact('characters', 'classes', 'family_name', 'char'));
+        return view('layouts.user.home', compact('characters', 'classes', 'family_name', 'char'));
     }
     
     public function choose_class()

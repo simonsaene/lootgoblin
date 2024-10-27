@@ -1,4 +1,4 @@
-<!-- Add Grind Spot Modal -->
+{{-- Add Grind Spot Modal --}}
 <div class="modal" id="addGrindSpotModal" tabindex="-1" aria-labelledby="addGrindSpotModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

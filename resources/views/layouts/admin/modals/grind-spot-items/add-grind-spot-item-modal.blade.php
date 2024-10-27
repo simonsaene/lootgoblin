@@ -1,3 +1,4 @@
+{{-- Add Grind Spot Item Modal --}}
 <div class="modal fade" id="addGrindSpotItemModal" tabindex="-1" aria-labelledby="addGrindSpotItemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

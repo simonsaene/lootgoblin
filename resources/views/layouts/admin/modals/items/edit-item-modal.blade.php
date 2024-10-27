@@ -1,4 +1,4 @@
-<!-- Edit Item Modal-->
+{{-- Edit Item Modal --}}
 <div class="modal fade" id="editItemModal{{ $item->id }}" tabindex="-1" aria-labelledby="editItemModalLabel{{ $item->id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -10,16 +10,6 @@
                 <form method="POST" action="{{ route('admin.items.edit', $item->id) }}">
                     @csrf
                     @method('PUT')
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
 
                     <div class="mb-3">
                         <label for="itemName{{ $item->id }}" class="form-label">Item Name</label>

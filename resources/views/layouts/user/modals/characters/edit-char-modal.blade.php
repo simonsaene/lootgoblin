@@ -1,4 +1,4 @@
-<!-- Edit Character Modal -->
+{{-- Edit Charcter Modal --}}
 <div class="modal fade" id="editCharacterModal{{ $character->id }}" tabindex="-1" aria-labelledby="editCharacterModalLabel{{ $character->id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
