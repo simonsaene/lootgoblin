@@ -1,4 +1,3 @@
-
 {{-- Display Grind Sessions --}}
 <div class="row">
     @if($grindSessions->isEmpty())

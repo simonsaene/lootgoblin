@@ -15,6 +15,39 @@
                 </button>
             </div>
         </div>
+
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    Total Hours
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ number_format($totalHours, 2) }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    Total Silver
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ number_format($totalSilver) }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    Silver Per Hour
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ number_format($totalSilverPerHour) }}</h5>
+                </div>
+            </div>
+        </div>
     </div>
     @include('layouts.grind.spot.display-tables')
 

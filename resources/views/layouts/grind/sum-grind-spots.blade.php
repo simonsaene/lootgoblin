@@ -29,7 +29,7 @@
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: false,
                 },
                 tooltip: {
                     callbacks: {
@@ -41,8 +41,25 @@
                             return label;
                         }
                     }
+                },
+                datalabels: {
+                    display: true,  // Show data labels
+                    color: '#fff',  // Label color (white text)
+                    formatter: function(value, ctx) {
+                        var label = ctx.chart.data.labels[ctx.dataIndex];  // Get the label (grind spot name)
+                        return label + ': ' + value;  // Display the name and value (sessions)
+                    },
+                    font: {
+                        size: 14,  // Font size for labels
+                        weight: 'bold'  // Make the label text bold
+                    },
+                    textStrokeColor: '#000',  // Outline color (black)
+                    textStrokeWidth: 3, // Set the width of the outline (adjust as needed)
+                    anchor: 'center',  // Position the label at the end of the slice (outside)
+                    align: 'center',  // Align the label to the left (outside the slice)
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels] 
     });
 </script>

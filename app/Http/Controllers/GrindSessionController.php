@@ -67,6 +67,27 @@ class GrindSessionController extends Controller
                 $grindSessions = GrindSession::where('grind_spot_id', $grindSpotId)
                     ->with('grindSessionItems.grindSpotItem.item')
                     ->get();
+
+                // Calculate Total Hours for the grind spot
+                $totalHours = $grindSessions->sum('hours');
+
+                // Calculate Total Silver for the grind spot
+                $totalSilver = $grindSessions->flatMap(function ($grindSession) {
+                    return $grindSession->grindSessionItems->map(function ($grindSessionItem) {
+                        $marketValue = $grindSessionItem->grindSpotItem->item->market_value;
+                        $vendorValue = $grindSessionItem->grindSpotItem->item->vendor_value;
+
+                        $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
+                        return $grindSessionItem->quantity * $valuePerItem;
+                    });
+                })->sum();
+
+                // Calculate Silver per Hour for the grind spot
+                if ($totalHours > 0) {
+                    $totalSilverPerHour = $totalSilver / $totalHours;
+                } else {
+                    $totalSilverPerHour = 0;
+                }
                     
                 return view($views[$location], [
                     'location' => $name, 
@@ -74,6 +95,9 @@ class GrindSessionController extends Controller
                     'grindSpotId' => $grindSpotId,
                     'grindSpotItems' => $grindSpotItems,
                     'grindSessions' => $grindSessions,
+                    'totalHours' => $totalHours,
+                    'totalSilver' => $totalSilver,
+                    'totalSilverPerHour' => $totalSilverPerHour
                 ]);
             } 
             else 

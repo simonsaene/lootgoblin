@@ -42,7 +42,7 @@
                     display: true, // Show the data labels
                     color: 'white',
                     formatter: function(value) {
-                        return value + ' hours'; // Add 'hours' text to the label
+                        return value.toFixed(2) + ' hours'; // Add 'hours' text to the label
                     },
                     anchor: 'end', // Position the label at the end of the bar
                     align: 'start', // Align the label to the right end of the bar
@@ -50,7 +50,9 @@
                     font: {
                         size: 12, // Adjust the font size
                         weight: 'bold' // Make the label text bold
-                    }
+                    },
+                    textStrokeColor: '#000',  // Set the outline color (black)
+                    textStrokeWidth: 3,
                 }
             },
             scales: {

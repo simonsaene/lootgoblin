@@ -53,7 +53,9 @@
                         weight: 'bold',
                         strokeStyle: 'black',
                         lineWidth: 2
-                    }
+                    },
+                    textStrokeColor: '#000',  // Set the outline color (black)
+                    textStrokeWidth: 3,
                 }
             },
             scales: {

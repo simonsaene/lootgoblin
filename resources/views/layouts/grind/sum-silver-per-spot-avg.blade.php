@@ -53,7 +53,9 @@
                     font: {
                         size: 12, // Adjust the font size
                         weight: 'bold' // Make the label text bold
-                    }
+                    },
+                    textStrokeColor: '#000',  // Set the outline color (black)
+                    textStrokeWidth: 3,
                 }
             },
             scales: {
