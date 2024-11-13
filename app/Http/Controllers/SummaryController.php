@@ -36,8 +36,11 @@ class SummaryController extends Controller
         $silverPerSpot = $grindSpotSilver->values();
         $avgSilverPerSpot = $grindSpotSilverPerHour->values();
 
-        // Calculate silver per hour for all spots
-        $totalSilverPerHour = $totalSilver / $totalHours;
+        if ($totalHours == 0) {
+            $totalSilverPerHour = 0;
+        } else {
+            $totalSilverPerHour = $totalSilver / $totalHours;
+        }
 
         return view('layouts.grind.summary', compact(
             'grindSpots', 
