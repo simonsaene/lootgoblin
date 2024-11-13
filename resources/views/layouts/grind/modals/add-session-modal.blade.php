@@ -20,7 +20,10 @@
                             <input type="number" name="item_quantities[{{ $item->id }}]" id="item_{{ $item->id }}" class="form-control" min="0" placeholder="Quantity">
                         </div>
                     @endforeach
-
+                    <div class="mb-3">
+                        <label for="hours" class="form-label">Hours</label>
+                        <input type="number" name="hours" id="hours" class="form-control" step="0.01" min="0" required>
+                    </div>
                     <div class="mb-3">
                         <label for="loot_image" class="form-label">Loot Image</label>
                         <input type="file" name="loot_image" id="loot_image" class="form-control" accept="image/*">

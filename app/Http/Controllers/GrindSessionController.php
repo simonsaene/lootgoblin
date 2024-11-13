@@ -6,16 +6,12 @@ use App\Models\GrindSpot;
 use App\Models\GrindSpotItem;
 use App\Models\GrindSession;
 use App\Models\GrindSessionItem;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GrindSessionController extends Controller
 {
-    public function showSummary()
-    {
-        // Your summary logic here
-        return view('layouts.grind.summary');
-    }
-
     public function setLocation($data)
     {
         switch ($data)
@@ -65,11 +61,13 @@ class GrindSessionController extends Controller
     
             if ($grindSpot) {
                 $grindSpotId = $grindSpot->id;
-                $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpotId)->with('item')->get();
-                $grindSessions = GrindSession::with('grindSessionItems.grindSpotItem.item')
-                ->where('grind_spot_id', $grindSpotId)
-                ->get();
-    
+                $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpotId)
+                    ->with('item')
+                    ->get();
+                $grindSessions = GrindSession::where('grind_spot_id', $grindSpotId)
+                    ->with('grindSessionItems.grindSpotItem.item')
+                    ->get();
+                    
                 return view($views[$location], [
                     'location' => $name, 
                     'modal' => $modal,
@@ -89,18 +87,21 @@ class GrindSessionController extends Controller
 
     public function addSession(Request $request)
     {
-       // dd($request->all());
+        Log::debug('Request Data:', $request->all());
 
         $validatedData = $request->validate([
             'grind_spot_id' => 'required|integer',
             'loot_image' => 'image|nullable',
             'video_link' => 'url|nullable',
             'notes' => 'string|nullable',
+            'hours' => 'numeric|min:0',
             'is_video_verified' => 'boolean',
             'is_image_verified' => 'boolean',
             'item_quantities' => 'array',
             'item_quantities.*' => 'integer|min:0',
         ]);
+
+        Log::debug('Validated Data:', $validatedData);
     
         if ($request->hasFile('loot_image')) {
             $validatedData['loot_image'] = $request->file('loot_image')->store('loot_images');
@@ -112,6 +113,7 @@ class GrindSessionController extends Controller
             'loot_image' => $validatedData['loot_image'] ?? null,
             'video_link' => $validatedData['video_link'] ?? null,
             'notes' => $validatedData['notes'] ?? null,
+            'hours' => $validatedData['hours'],
             'is_video_verified' => $validatedData['is_video_verified'] ?? false,
             'is_image_verified' => $validatedData['is_image_verified'] ?? false,
         ]);

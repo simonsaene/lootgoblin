@@ -38,7 +38,7 @@
                 <div class="collapse" id="grindSpots">
                     <ul class="nav flex-column ms-3">
                     <li class="nav-item">
-                            <a class="nav-link" href="{{ route('grind.summary') }}">
+                            <a class="nav-link" href="{{ route('summary') }}">
                                 {{ __('Summary') }}
                             </a>
                         </li>

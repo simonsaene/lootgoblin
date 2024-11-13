@@ -12,6 +12,7 @@
                     <div class="card-body">
                         <p class="card-text">Notes: {{ $session->notes ?? 'N/A' }}</p>
                         <p class="card-text">Video: {{ $session->video_link ?? 'N/A' }}</p>
+                        <p class="card-text">Hours: {{ $session->hours }}</p>
                         <p class="card-text">Loot Image: 
                             @if($session->loot_image)
                                 <img src="{{ asset($session->loot_image) }}" alt="Loot" style="max-width: 100px;">

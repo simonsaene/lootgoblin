@@ -8,6 +8,7 @@ use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GrindSessionController;
+use App\Http\Controllers\SummaryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Grind routes
         Route::prefix('/grind')->group(function () {
-            Route::get('/summary', [GrindSessionController::class, 'showSummary'])->name('grind.summary');
+            Route::get('/summary', [SummaryController::class, 'showSummary'])->name('summary');
             Route::get('/{location}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
             Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
 
