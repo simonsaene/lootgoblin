@@ -43,6 +43,7 @@ class SummaryController extends Controller
         }
 
         return view('layouts.grind.summary', compact(
+            'grindSessions',
             'grindSpots', 
             'hoursPerSpot', 
             'spotCount', 

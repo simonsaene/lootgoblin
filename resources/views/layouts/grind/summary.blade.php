@@ -42,15 +42,20 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12 col-12 mb-12">
-            @include('layouts.grind.sum-hours')
-            @include('layouts.grind.sum-silver-per-spot')
-            @include('layouts.grind.sum-silver-per-spot-avg')
-            @include('layouts.grind.sum-grind-spots')
+    @if($grindSessions->isEmpty())
+        <div class="col-12">
+            <p>You currently have no grind sessions</p>
         </div>
-    </div>
+    @else
+        <div class="row">
+            <div class="col-md-12 col-12 mb-12">
+                @include('layouts.grind.sum-hours')
+                @include('layouts.grind.sum-silver-per-spot')
+                @include('layouts.grind.sum-silver-per-spot-avg')
+                @include('layouts.grind.sum-grind-spots')
+            </div>
+        </div>
+    @endif
 </div>
 
 
