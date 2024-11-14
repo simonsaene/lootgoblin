@@ -14,7 +14,7 @@
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: grindSpots,
+            labels: grindSpotNames,
             datasets: [{
                 label: 'Hours Spent',
                 barPercentage: 0.5,

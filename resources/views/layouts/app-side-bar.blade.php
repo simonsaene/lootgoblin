@@ -32,31 +32,23 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#grindSpots" role="button" aria-expanded="false" aria-controls="grindSpots">
+                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#grindSection" role="button" aria-expanded="false" aria-controls="grindSection">
                     {{ __('Grind') }}
                 </a>
-                <div class="collapse" id="grindSpots">
+                <div class="collapse" id="grindSection">
                     <ul class="nav flex-column ms-3">
-                    <li class="nav-item">
-                            <a class="nav-link" href="{{ route('summary') }}">
-                                {{ __('Summary') }}
-                            </a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('grind.location', ['location' => 'jade-forest']) }}">
-                                {{ __('Jade Forest') }}
-                            </a>
+                                <a class="nav-link" href="{{ route('show.summary') }}">
+                                    {{ __('Summary') }}
+                                </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('grind.location', ['location' => 'gyfin-under']) }}">
-                                {{ __('Gyfin Rhasia Temple: Underground') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('grind.location', ['location' => 'd-cres-shrine']) }}">
-                                {{ __('Dekia: Crescent Shrine') }}
-                            </a>
-                        </li>
+                        @foreach ($grindSpots as $grindSpot)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('grind.location', ['id' => $grindSpot->id]) }}">
+                                    {{ __($grindSpot->name) }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </li>

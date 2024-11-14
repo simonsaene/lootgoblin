@@ -15,6 +15,7 @@ class SummaryController extends Controller
     public function showSummary(Request $request)
     {
         $user = auth()->user();
+        $grindSpots = GrindSpot::all();
         $grindSessions = GrindSession::where('user_id', $user->id)
             ->with(['grindSessionItems.grindSpotItem.item'])
             ->get();
@@ -29,7 +30,7 @@ class SummaryController extends Controller
         $grindSpotSilverPerHour = $this->calculateGrindSpotSilverPerHour($grindSpotSilver, $grindSpotHours);
 
         // Get additional data
-        $grindSpots = $this->getGrindSpots($grindSessions);
+        $grindSpotNames = $this->getGrindSpots($grindSessions);
         $grindSpotCount = $this->getGrindSpotCount($grindSessions);
         $spotCount = $grindSpotCount->values();
         $hoursPerSpot = $grindSpotHours->values();
@@ -43,8 +44,9 @@ class SummaryController extends Controller
         }
 
         return view('layouts.grind.summary', compact(
+            'grindSpots',
             'grindSessions',
-            'grindSpots', 
+            'grindSpotNames', 
             'hoursPerSpot', 
             'spotCount', 
             'totalHours',
@@ -109,7 +111,7 @@ class SummaryController extends Controller
     // Get the list of grind spots (unique names)
     private function getGrindSpots($grindSessions)
     {
-        return $grindSessions->pluck('grindSpot.name', 'grind_spot_id')->unique()->values();
+        return $grindSessions->pluck('grindSpot.name', 'grind_spot_id')->unique()->values()->toArray();
     }
 
     // Get the count of sessions for each grind spot

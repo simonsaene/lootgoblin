@@ -15,7 +15,7 @@
     new Chart(ctx, {
         type: 'bar', 
         data: {
-            labels: grindSpots,
+            labels: grindSpotNames,
             datasets: [{
                 label: 'Avg Silver Earned per Spot per Hour',
                 barPercentage: 0.5,

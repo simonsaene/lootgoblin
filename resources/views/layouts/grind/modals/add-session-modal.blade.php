@@ -1,16 +1,16 @@
 {{-- Add Session Modal --}}
-<div class="modal fade" id="add{{ $modal }}Modal" tabindex="-1" aria-labelledby="add{{ $modal }}ModalLabel" aria-hidden="true">
+<div class="modal fade" id="add{{ $grindSpot->id }}Modal" tabindex="-1" aria-labelledby="add{{ $grindSpot->id }}ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ route('grind.session.add') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="add{{ $modal }}ModalLabel">Add Session for {{ $location }}</h5>
+                    <h5 class="modal-title" id="add{{ $grindSpot->id }}ModalLabel">Add Session for {{ $grindSpot->name }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input type="hidden" name="grind_spot_id" id="grind_spot_id" value="{{ $grindSpotId }}">
+                        <input type="hidden" name="grind_spot_id" id="grind_spot_id" value="{{ $grindSpot->id }}">
                     </div>
 
                     {{-- Loop through grindSpotItems --}}

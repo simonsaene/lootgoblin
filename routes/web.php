@@ -38,12 +38,17 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/delete/{id}', [CharacterController::class, 'deleteChar'])->name('characters.delete');
             });
 
+            // Character routes
+            Route::prefix('/favourite')->group(function () {
+                Route::post('/add', [HomeController::class, 'addFavourite'])->name('favourite.add');
+            });
+
         });
 
         // Grind routes
         Route::prefix('/grind')->group(function () {
-            Route::get('/summary', [SummaryController::class, 'showSummary'])->name('summary');
-            Route::get('/{location}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
+            Route::get('/summary', [SummaryController::class, 'showSummary'])->name('show.summary');
+            Route::get('/{id}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
             Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
 
         });

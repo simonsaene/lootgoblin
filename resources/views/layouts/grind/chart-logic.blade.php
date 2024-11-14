@@ -1,9 +1,11 @@
 <script>
-    var grindSpots = @json($grindSpots);
+    var grindSpotNames = @json($grindSpotNames);
     var spotCount = @json($spotCount);
     var hours = @json($hoursPerSpot);
     var silverPerSpot = @json($silverPerSpot);
     var avgSilverPerSpot = @json($avgSilverPerSpot);
+
+    //console.log(grindSpotNames)
 
     var colorScale = chroma.scale([
         "#FF1493",   // Deep Pink
@@ -22,9 +24,9 @@
         "#FFCC00",   // Yellow
         ])
         .mode('lab')
-        .colors(grindSpots.length);
+        .colors(grindSpotNames.length);
 
-    var datasetColors = grindSpots.map(function (spot, index) {
+    var datasetColors = grindSpotNames.map(function (spot, index) {
         return colorScale[index];
     });
 </script>

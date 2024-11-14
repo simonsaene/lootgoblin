@@ -62,5 +62,3 @@
         @endforeach
     @endif
 </div>
-
-

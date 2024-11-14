@@ -12,101 +12,51 @@ use Illuminate\Support\Facades\Log;
 
 class GrindSessionController extends Controller
 {
-    public function setLocation($data)
+    public function showLocation($id)
     {
-        switch ($data)
-        {
-            case 'name':
-                return [
-                    'jade-forest' => 'Jade Forest',
-                    'gyfin-under' => 'Gyfin Rhasia Temple: Underground',
-                    'd-cres-shrine' => 'Dekia: Crescent Shrine',
-                ];
-                break;
-            
-            case 'modals':
-                return [
-                    'jade-forest' => 'jadeForest',
-                    'gyfin-under' => 'gyfinUnder',
-                    'd-cres-shrine' => 'dekCresShrine',
-                ];
-                break;
+        // Fetch the grind spot by ID, or abort if it doesn't exist
+        $grindSpots = GrindSpot::all();
 
-            case 'views':
-                return [
-                    'gyfin-under' => 'layouts.grind.spot.gyfin-upper.gyfin-upper',
-                    'jade-forest' => 'layouts.grind.spot.jade-forest.jade-forest',
-                    'd-cres-shrine' => 'layouts.grind.spot.dekia-crescent.dekia-crescent',
-                ];
-                break;
-        }
-    }
+        $grindSpot = GrindSpot::findOrFail($id);
 
-    public function showLocation($location)
-    {
+        // Get related grind spot items
+        $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpot->id)
+            ->with('item')
+            ->get();
 
-        $names = $this->setLocation('name');
+        // Get related grind sessions
+        $grindSessions = GrindSession::where('grind_spot_id', $grindSpot->id)
+            ->with('grindSessionItems.grindSpotItem.item')
+            ->get();
 
-        $modals = $this->setLocation('modals');
+        // Calculate total hours and silver for the grind spot
+        $totalHours = $grindSessions->sum('hours');
+        $totalSilver = $grindSessions->flatMap(function ($grindSession) {
+            return $grindSession->grindSessionItems->map(function ($grindSessionItem) {
+                $marketValue = $grindSessionItem->grindSpotItem->item->market_value;
+                $vendorValue = $grindSessionItem->grindSpotItem->item->vendor_value;
+                $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
+                return $grindSessionItem->quantity * $valuePerItem;
+            });
+        })->sum();
 
-        $views = $this->setLocation('views');
-
-        if (array_key_exists($location, $views)) {
-            $name = $names[$location];
-            $modal = $modals[$location];
-
-            $grindSpots = GrindSpot::all(); 
-
-            $grindSpot = $grindSpots->firstWhere('name', $name);
-    
-            if ($grindSpot) {
-                $grindSpotId = $grindSpot->id;
-                $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpotId)
-                    ->with('item')
-                    ->get();
-                $grindSessions = GrindSession::where('grind_spot_id', $grindSpotId)
-                    ->with('grindSessionItems.grindSpotItem.item')
-                    ->get();
-
-                // Calculate Total Hours for the grind spot
-                $totalHours = $grindSessions->sum('hours');
-
-                // Calculate Total Silver for the grind spot
-                $totalSilver = $grindSessions->flatMap(function ($grindSession) {
-                    return $grindSession->grindSessionItems->map(function ($grindSessionItem) {
-                        $marketValue = $grindSessionItem->grindSpotItem->item->market_value;
-                        $vendorValue = $grindSessionItem->grindSpotItem->item->vendor_value;
-
-                        $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
-                        return $grindSessionItem->quantity * $valuePerItem;
-                    });
-                })->sum();
-
-                // Calculate Silver per Hour for the grind spot
-                if ($totalHours > 0) {
-                    $totalSilverPerHour = $totalSilver / $totalHours;
-                } else {
-                    $totalSilverPerHour = 0;
-                }
-                    
-                return view($views[$location], [
-                    'location' => $name, 
-                    'modal' => $modal,
-                    'grindSpotId' => $grindSpotId,
-                    'grindSpotItems' => $grindSpotItems,
-                    'grindSessions' => $grindSessions,
-                    'totalHours' => $totalHours,
-                    'totalSilver' => $totalSilver,
-                    'totalSilverPerHour' => $totalSilverPerHour
-                ]);
-            } 
-            else 
-            {
-                abort(404, 'Grind spot not found.');
-            }
+        // Calculate Silver per Hour for the grind spot
+        if ($totalHours > 0) {
+            $totalSilverPerHour = $totalSilver / $totalHours;
+        } else {
+            $totalSilverPerHour = 0;
         }
 
-        abort(404);
+        // Pass everything to the display-spot view
+        return view('layouts.grind.spot.display-spot', [
+            'grindSpots' => $grindSpots,
+            'grindSpot' => $grindSpot,
+            'grindSpotItems' => $grindSpotItems,
+            'grindSessions' => $grindSessions,
+            'totalHours' => $totalHours,
+            'totalSilver' => $totalSilver,
+            'totalSilverPerHour' => $totalSilverPerHour,
+        ]);
     }
 
     public function addSession(Request $request)
@@ -152,15 +102,13 @@ class GrindSessionController extends Controller
             }
         }
     
-        $names = $this->setLocation('name');
-
         $grindSpot = GrindSpot::find($validatedData['grind_spot_id']);
+
         if ($grindSpot) {
-            $locationName = array_search($grindSpot->name, $names);
-            if ($locationName) {
-                return $this->showLocation($locationName);
-            }
+            return redirect()->route('grind.location', ['id' => $grindSpot->id])
+                ->with('success', 'Session added successfully!');
         }
+        return redirect()->back()->with('error', 'Grind spot not found.');
     }
     
 }

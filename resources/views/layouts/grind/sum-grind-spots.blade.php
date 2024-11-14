@@ -14,7 +14,7 @@
     new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: grindSpots,
+            labels: grindSpotNames,
             datasets: [{
                 label: 'Grind Spot Frequency',
                 data: spotCount,
