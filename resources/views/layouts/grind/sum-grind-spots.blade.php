@@ -43,20 +43,20 @@
                     }
                 },
                 datalabels: {
-                    display: true,  // Show data labels
-                    color: '#fff',  // Label color (white text)
+                    display: true,
+                    color: '#fff',
                     formatter: function(value, ctx) {
-                        var label = ctx.chart.data.labels[ctx.dataIndex];  // Get the label (grind spot name)
-                        return label + ': ' + value;  // Display the name and value (sessions)
+                        var label = ctx.chart.data.labels[ctx.dataIndex];
+                        return label + ': ' + value;
                     },
                     font: {
-                        size: 14,  // Font size for labels
-                        weight: 'bold'  // Make the label text bold
+                        size: 14,
+                        weight: 'bold'
                     },
-                    textStrokeColor: '#000',  // Outline color (black)
-                    textStrokeWidth: 3, // Set the width of the outline (adjust as needed)
-                    anchor: 'center',  // Position the label at the end of the slice (outside)
-                    align: 'center',  // Align the label to the left (outside the slice)
+                    textStrokeColor: '#000',
+                    textStrokeWidth: 3,
+                    anchor: 'center',
+                    align: 'center',
                 }
             }
         },

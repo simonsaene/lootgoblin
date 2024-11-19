@@ -12,7 +12,7 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>Profile</h2>
+                    <h2>Family Name: {{ __($family_name) }}</h2>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
                         Create New Character
                     </button>
@@ -25,7 +25,7 @@
             {{-- Left Card --}}
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">{{ __($family_name) }}</div>
+                    <div class="card-header">Favourite Spots</div>
                     <div class="card-body">
                         @if ($allFavourites->isEmpty())
                             <p>{{ __('No Favourites set yet') }}</p>

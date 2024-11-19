@@ -5,10 +5,11 @@ use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CharacterController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GrindSessionController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\SearchController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,13 +23,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['verified'])->group(function () {
 
-        // Home/profile
-        Route::prefix('/home')->group(function () {
-            Route::get('/', [HomeController::class, 'index'])->name('home');
+        // User
+        Route::prefix('/user')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('user.home');
+            Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
+            Route::get('/search', [SearchController::class, 'search'])->name('user.search');
 
             // Settings routes
             Route::prefix('/settings')->group(function () {
-                Route::get('/', [SettingsController::class, 'index'])->name('settings');
+                Route::get('/', [SettingsController::class, 'index'])->name('user.settings');
             });
 
             // Character routes
@@ -40,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
 
             // Character routes
             Route::prefix('/favourite')->group(function () {
-                Route::post('/add', [HomeController::class, 'addFavourite'])->name('favourite.add');
+                Route::post('/add', [UserController::class, 'addFavourite'])->name('favourite.add');
             });
 
         });
@@ -49,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/grind')->group(function () {
             Route::get('/summary', [SummaryController::class, 'showSummary'])->name('show.summary');
             Route::get('/{id}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
+            Route::get('/player-grind/{id}', [GrindSessionController::class, 'playerGrindSessions'])->name('grind.player');
             Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
 
         });

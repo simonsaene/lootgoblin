@@ -8,7 +8,7 @@ use App\Models\Favourite;
 use Illuminate\Http\Request;
 
 
-class HomeController extends Controller
+class UserController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -29,8 +29,6 @@ class HomeController extends Controller
     {
         $user_id = auth()->id();
 
-        $user = User::find($user_id);
-
         $family_name = User::where('id', $user_id)->value('family_name');
         $characters = Character::with(['favourites'])->where('user_id', $user_id)->get();
         $allFavourites = Favourite::with(['grindSpot'])->where('user_id', $user_id)->get()->unique('grind_spot_id');
@@ -47,6 +45,27 @@ class HomeController extends Controller
             'allFavourites',
             'grindSpots'
         ));
+    }
+
+    public function playerProfile($id)
+    {
+
+        $user = User::findOrFail($id);
+        
+        $family_name = $user->family_name;
+        
+        $characters = Character::with('favourites')->where('user_id', $id)->get();
+
+        $allFavourites = Favourite::with('grindSpot')->where('user_id', $id)->get()->unique('grind_spot_id');
+
+        $grindSpots = GrindSpot::all();
+
+        return view('layouts.user.player-profile', compact(
+            'user', 
+            'family_name', 
+            'characters', 
+            'allFavourites', 
+            'grindSpots'));
     }
 
     public function addFavourite(Request $request)

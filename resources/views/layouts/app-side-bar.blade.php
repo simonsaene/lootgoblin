@@ -10,13 +10,19 @@
                     <ul class="nav flex-column ms-3">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">
+                            <a class="nav-link" href="{{ route('user.home') }}">
                                 {{ __('Profile') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('settings') }}">
+                            <a class="nav-link" href="{{ route('user.settings') }}">
                                 {{ __('Settings') }}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user.search') }}">
+                                {{ __('Search') }}
                             </a>
                         </li>
 
@@ -27,6 +33,7 @@
                                 </a>
                             </li>
                         @endif
+
                     </ul>
                 </div>
             </li>

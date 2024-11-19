@@ -6,6 +6,8 @@ use App\Models\GrindSpotItem;
 use App\Models\GrindSpot;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+
 class AdminController extends Controller
 {
         /**
@@ -89,10 +91,23 @@ class AdminController extends Controller
                 'vendor_value' => $validatedData['vendor_value'],
                 
             ];
-            
+            /*
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('images', 'public');
                 $data['image'] = $path;
+            }*/
+
+            if ($request->hasFile('image')) {
+
+                Log::debug("Uploading image...");
+
+                $path = $request->file('image')->store('images', 'public');
+
+                Log::debug("Image stored at: " . $path);
+
+                $data['image'] = $path;
+            } else {
+                Log::debug("No image uploaded.");
             }
     
             Item::create($data);

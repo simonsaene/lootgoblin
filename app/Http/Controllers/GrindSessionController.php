@@ -6,6 +6,7 @@ use App\Models\GrindSpot;
 use App\Models\GrindSpotItem;
 use App\Models\GrindSession;
 use App\Models\GrindSessionItem;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,40 +15,46 @@ class GrindSessionController extends Controller
 {
     public function showLocation($id)
     {
-        // Fetch the grind spot by ID, or abort if it doesn't exist
+
         $grindSpots = GrindSpot::all();
 
         $grindSpot = GrindSpot::findOrFail($id);
 
-        // Get related grind spot items
         $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpot->id)
             ->with('item')
             ->get();
 
-        // Get related grind sessions
-        $grindSessions = GrindSession::where('grind_spot_id', $grindSpot->id)
+        $allGrindSessions = GrindSession::where('grind_spot_id', $grindSpot->id)
+            ->where('user_id', auth()->id())
             ->with('grindSessionItems.grindSpotItem.item')
             ->get();
+        
+        $grindSessions = GrindSession::where('grind_spot_id', $grindSpot->id)
+            ->where('user_id', auth()->id())
+            ->with('grindSessionItems.grindSpotItem.item')
+            ->paginate(5);
 
-        // Calculate total hours and silver for the grind spot
-        $totalHours = $grindSessions->sum('hours');
-        $totalSilver = $grindSessions->flatMap(function ($grindSession) {
+        $totalHours = $allGrindSessions->sum('hours');
+        $totalSilver = $allGrindSessions->flatMap(function ($grindSession) {
             return $grindSession->grindSessionItems->map(function ($grindSessionItem) {
                 $marketValue = $grindSessionItem->grindSpotItem->item->market_value;
                 $vendorValue = $grindSessionItem->grindSpotItem->item->vendor_value;
-                $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
+
+                if ($marketValue == 0) {
+                    $valuePerItem = $vendorValue;
+                } else {
+                    $valuePerItem = $marketValue;
+                }
                 return $grindSessionItem->quantity * $valuePerItem;
             });
         })->sum();
 
-        // Calculate Silver per Hour for the grind spot
         if ($totalHours > 0) {
             $totalSilverPerHour = $totalSilver / $totalHours;
         } else {
             $totalSilverPerHour = 0;
         }
 
-        // Pass everything to the display-spot view
         return view('layouts.grind.spot.display-spot', [
             'grindSpots' => $grindSpots,
             'grindSpot' => $grindSpot,
@@ -58,6 +65,60 @@ class GrindSessionController extends Controller
             'totalSilverPerHour' => $totalSilverPerHour,
         ]);
     }
+
+    public function playerGrindSessions($id)
+    {
+        $user = User::findOrFail($id);
+
+        $grindSpots = GrindSpot::all();
+
+        $allGrindSessions = GrindSession::where('user_id', $id)
+            ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
+            ->get();
+
+        $grindSessionsPaginated = [];
+
+        $grindSpotStats = [];
+
+        foreach ($grindSpots as $spot) {
+
+            $spotGrindSessions = $allGrindSessions->filter(function ($session) use ($spot) {
+                return $session->grind_spot_id === $spot->id;
+            });
+
+            $totalHours = $spotGrindSessions->sum('hours');
+            $totalSilver = $spotGrindSessions->flatMap(function ($session) {
+                return $session->grindSessionItems->map(function ($item) {
+                    $marketValue = $item->grindSpotItem->item->market_value;
+                    $vendorValue = $item->grindSpotItem->item->vendor_value;
+                    $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
+                    return $item->quantity * $valuePerItem;
+                });
+            })->sum();
+
+            $totalSilverPerHour = ($totalHours > 0) ? $totalSilver / $totalHours : 0;
+
+            $grindSpotStats[$spot->id] = [
+                'totalHours' => $totalHours,
+                'totalSilver' => $totalSilver,
+                'totalSilverPerHour' => $totalSilverPerHour,
+            ];
+
+            $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
+                ->where('grind_spot_id', $spot->id)
+                ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
+                ->paginate(5); 
+        }
+
+        return view('layouts.user.player-grind-sessions', [
+            'user' => $user,
+            'grindSpots' => $grindSpots,
+            'grindSessionsPaginated' => $grindSessionsPaginated,
+            'grindSpotStats' => $grindSpotStats,
+        ]);
+    }
+
+    
 
     public function addSession(Request $request)
     {
@@ -75,7 +136,7 @@ class GrindSessionController extends Controller
             'item_quantities.*' => 'integer|min:0',
         ]);
 
-        Log::debug('Validated Data:', $validatedData);
+        //Log::debug('Validated Data:', $validatedData);
     
         if ($request->hasFile('loot_image')) {
             $validatedData['loot_image'] = $request->file('loot_image')->store('loot_images');

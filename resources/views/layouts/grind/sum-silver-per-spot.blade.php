@@ -54,7 +54,7 @@
                         strokeStyle: 'black',
                         lineWidth: 2
                     },
-                    textStrokeColor: '#000',  // Set the outline color (black)
+                    textStrokeColor: '#000',
                     textStrokeWidth: 3,
                 }
             },

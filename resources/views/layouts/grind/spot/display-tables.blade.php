@@ -60,5 +60,14 @@
                 </div>
             </div>
         @endforeach
+
+        <div class="col-12">
+            <div class="results-info mb-3">
+                <p>Showing {{ $grindSessions->firstItem() }} to {{ $grindSessions->lastItem() }} of {{ $grindSessions->total() }} results</p>
+            </div>
+            <div class="pagination">
+                {{ $grindSessions->links('pagination::bootstrap-4') }}
+            </div>
+        </div>
     @endif
 </div>

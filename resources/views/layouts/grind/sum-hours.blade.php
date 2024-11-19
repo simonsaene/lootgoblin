@@ -30,40 +30,40 @@
         },
         options: {
             responsive: true,
-            indexAxis: 'y', // Make it a horizontal bar chart
+            indexAxis: 'y',
             plugins: {
                 legend: {
-                    display: false // Hide the legend
+                    display: false
                 },
                 tooltip: {
-                    enabled: false // Optional: Disable the tooltip
+                    enabled: false
                 },
                 datalabels: {
-                    display: true, // Show the data labels
+                    display: true,
                     color: 'white',
                     formatter: function(value) {
-                        return value.toFixed(2) + ' hours'; // Add 'hours' text to the label
+                        return value.toFixed(2) + ' hours';
                     },
-                    anchor: 'end', // Position the label at the end of the bar
-                    align: 'start', // Align the label to the right end of the bar
-                    offset: 0, // Position the label slightly outside the bar
+                    anchor: 'end',
+                    align: 'start',
+                    offset: 0,
                     font: {
-                        size: 12, // Adjust the font size
-                        weight: 'bold' // Make the label text bold
+                        size: 12,
+                        weight: 'bold'
                     },
-                    textStrokeColor: '#000',  // Set the outline color (black)
+                    textStrokeColor: '#000',
                     textStrokeWidth: 3,
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true // Make sure the y-axis starts at 0
+                    beginAtZero: true
                 },
                 x: {
-                    display: false // Hide the x-axis labels (hours values)
+                    display: false
                 }
             }
         },
-        plugins: [ChartDataLabels] // Include the ChartDataLabels plugin
+        plugins: [ChartDataLabels]
     });
 </script>

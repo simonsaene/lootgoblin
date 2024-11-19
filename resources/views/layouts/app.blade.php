@@ -65,12 +65,12 @@
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                                     {{-- Profile link --}}
-                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                    <a class="dropdown-item" href="{{ route('user.home') }}">
                                         {{ __('Profile') }}
                                     </a>
                                 
                                     {{-- Settings link --}}
-                                    <a class="dropdown-item" href="{{ route('settings') }}">
+                                    <a class="dropdown-item" href="{{ route('user.settings') }}">
                                         {{ __('Settings') }}
                                     </a>
                                 

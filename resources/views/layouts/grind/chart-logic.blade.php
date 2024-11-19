@@ -5,8 +5,6 @@
     var silverPerSpot = @json($silverPerSpot);
     var avgSilverPerSpot = @json($avgSilverPerSpot);
 
-    //console.log(grindSpotNames)
-
     var colorScale = chroma.scale([
         "#FF1493",   // Deep Pink
         "#00BFFF",   // Deep Sky Blue
