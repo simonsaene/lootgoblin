@@ -28,7 +28,7 @@ class CharacterController extends Controller
                     'user_id' => auth()->id(),
                 ]);
 
-            return redirect()->route('home')->with('status', 'Character added successfully!');
+            return redirect()->route('user.home')->with('status', 'Character added successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error adding character: ' . $e->getMessage());
         }
@@ -48,7 +48,7 @@ class CharacterController extends Controller
         
             $character->save();
         
-            return redirect()->route('home')->with('status', 'Character updated successfully!');
+            return redirect()->route('user.home')->with('status', 'Character updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error updating character: ' . $e->getMessage());
         }
@@ -60,12 +60,12 @@ class CharacterController extends Controller
             $character = Character::findOrFail($id);
     
             if ($character->user_id != auth()->id()) {
-                return redirect()->route('home')->with('error', 'You are not authorized to delete this character.');
+                return redirect()->route('user.home')->with('error', 'You are not authorized to delete this character.');
             }
 
             $character->delete();
     
-            return redirect()->route('home')->with('status', 'Character deleted successfully!');
+            return redirect()->route('user.home')->with('status', 'Character deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error deleting character: ' . $e->getMessage());
         }

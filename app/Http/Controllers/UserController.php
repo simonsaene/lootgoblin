@@ -83,7 +83,7 @@ class UserController extends Controller
 
         // If it exists, don't add and return a message
         if ($existingFavourite) {
-        return redirect()->route('home')->with('status', 'This grind spot is already in your favourites!');
+            return redirect()->route('user.home')->with('status', 'This grind spot is already in your favourites!');
         }
 
         Favourite::create([
@@ -92,7 +92,7 @@ class UserController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('home')->with('status', 'Grind spot added to your favourites!');
+        return redirect()->route('user.home')->with('status', 'Grind spot added to your favourites!');
     }
     
     
