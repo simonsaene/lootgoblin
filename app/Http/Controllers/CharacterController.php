@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class CharacterController extends Controller
 {
-
     public function validateData(Request $request)
     {
         return $request->validate([

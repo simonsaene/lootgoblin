@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['verified'])->group(function () {
 
         // User
-        Route::prefix('/user')->group(function () {
+        Route::prefix('/home')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
             Route::get('/search', [SearchController::class, 'search'])->name('user.search');
@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/delete/{id}', [CharacterController::class, 'deleteChar'])->name('characters.delete');
             });
 
-            // Character routes
+            // Favourites routes
             Route::prefix('/favourite')->group(function () {
                 Route::post('/add', [UserController::class, 'addFavourite'])->name('favourite.add');
             });
