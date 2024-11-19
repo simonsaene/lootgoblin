@@ -127,14 +127,18 @@
 
                     <div class="comments-section mt-4">
                         <h5>Comments</h5>
-                        @foreach ($comments[$spot->id] as $comment)
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    <p>{{ $comment->comment }}</p>
-                                    <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
+                        @if (isset($comments[$spot->id]) && $comments[$spot->id]->isNotEmpty())
+                            @foreach ($comments[$spot->id] as $comment)
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <p>{{ $comment->comment }}</p>
+                                        <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        @else
+                            <p>No comments yet for this spot. Be the first to post a comment!</p>
+                        @endif
 
                         @auth
                             <form action="{{ route('comments.post', $spot->id) }}" method="POST" class="mt-4">

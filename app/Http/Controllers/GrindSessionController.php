@@ -58,7 +58,7 @@ class GrindSessionController extends Controller
 
         $comments = Post::where('grind_spot_id', $grindSpot->id)
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')  // Optionally order by most recent
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('layouts.grind.spot.display-spot', [
@@ -117,8 +117,9 @@ class GrindSessionController extends Controller
                 ->paginate(5); 
 
             $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
-            ->where('user_id', $id)
-            ->get();
+                ->where('user_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
 
         return view('layouts.user.player-grind-sessions', [
