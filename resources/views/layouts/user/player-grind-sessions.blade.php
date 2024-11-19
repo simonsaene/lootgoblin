@@ -64,7 +64,7 @@
                             <tbody>
                                 @foreach ($grindSessionsPaginated[$spot->id] as $session)
                                     <tr>
-                                        <td>{{ $session->created_at->format('Y-m-d H:i') }}</td>
+                                        <td>{{ $session->created_at->format('Y-m-d') }}</td>
                                         <td>{{ $session->hours }}</td>
                                         <td>
                                             @php
@@ -124,8 +124,37 @@
                             {{ $grindSessionsPaginated[$spot->id]->links('pagination::bootstrap-4') }}
                         </div>
                     </div>
+
+                    <div class="comments-section mt-4">
+                        <h5>Comments</h5>
+                        @foreach ($comments[$spot->id] as $comment)
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p>{{ $comment->comment }}</p>
+                                    <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        @auth
+                            <form action="{{ route('comments.post', $spot->id) }}" method="POST" class="mt-4">
+                                @csrf
+                                <input type="hidden" name="grind_spot_id" value="{{ $spot->id }}">
+                                <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                                <div class="form-group">
+                                    <textarea name="comment" class="form-control" rows="3" placeholder="Add your comment..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+                            </form>
+                        @else
+                            <p class="mt-3">You must be logged in to post a comment.</p>
+                        @endauth
+                    </div>
                 </div>
             @endforeach
         </div>
     </div>
+
+            
 @endsection

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 
-    <h2>Search for Users by Family Name</h2>
+    <h2>Search for Players by Family Name</h2>
 
     <form action="{{ route('user.search') }}" method="GET" class="mb-4">
         <div class="row">

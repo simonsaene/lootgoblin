@@ -28,5 +28,10 @@ class GrindSpot extends Model
     {
         return $this->hasMany(GrindSpotItem::class);
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
     
 }

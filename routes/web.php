@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GrindSessionController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
             Route::get('/search', [SearchController::class, 'search'])->name('user.search');
+            Route::post('/post', [PostController::class, 'post'])->name('comments.post');
 
             // Settings routes
             Route::prefix('/settings')->group(function () {

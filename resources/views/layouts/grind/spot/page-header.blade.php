@@ -50,7 +50,7 @@
         </div>
     </div>
     @include('layouts.grind.spot.display-tables')
-
+    @include('layouts.grind.spot.display-posts')
     @include('layouts.grind.modals.add-session-modal')
 
 </div>

@@ -7,6 +7,7 @@ use App\Models\GrindSpotItem;
 use App\Models\GrindSession;
 use App\Models\GrindSessionItem;
 use App\Models\User;
+use App\Models\Post;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +56,11 @@ class GrindSessionController extends Controller
             $totalSilverPerHour = 0;
         }
 
+        $comments = Post::where('grind_spot_id', $grindSpot->id)
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')  // Optionally order by most recent
+            ->get();
+
         return view('layouts.grind.spot.display-spot', [
             'grindSpots' => $grindSpots,
             'grindSpot' => $grindSpot,
@@ -63,6 +69,7 @@ class GrindSessionController extends Controller
             'totalHours' => $totalHours,
             'totalSilver' => $totalSilver,
             'totalSilverPerHour' => $totalSilverPerHour,
+            'comments' => $comments,
         ]);
     }
 
@@ -77,8 +84,8 @@ class GrindSessionController extends Controller
             ->get();
 
         $grindSessionsPaginated = [];
-
         $grindSpotStats = [];
+        $comments = [];
 
         foreach ($grindSpots as $spot) {
 
@@ -108,6 +115,10 @@ class GrindSessionController extends Controller
                 ->where('grind_spot_id', $spot->id)
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
                 ->paginate(5); 
+
+            $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
+            ->where('user_id', $id)
+            ->get();
         }
 
         return view('layouts.user.player-grind-sessions', [
@@ -115,6 +126,7 @@ class GrindSessionController extends Controller
             'grindSpots' => $grindSpots,
             'grindSessionsPaginated' => $grindSessionsPaginated,
             'grindSpotStats' => $grindSpotStats,
+            'comments' => $comments
         ]);
     }
 
