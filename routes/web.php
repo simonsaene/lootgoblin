@@ -11,6 +11,7 @@ use App\Http\Controllers\GrindSessionController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,12 +29,16 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/home')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
-            Route::get('/search', [SearchController::class, 'search'])->name('user.search');
             Route::post('/post', [PostController::class, 'post'])->name('comments.post');
+
+            Route::prefix('/search')->group(function () {
+                Route::get('/', [SearchController::class, 'index'])->name('user.search.page');
+                Route::get('/player', [SearchController::class, 'search'])->name('user.search.player');
+            });
 
             // Settings routes
             Route::prefix('/settings')->group(function () {
-                Route::get('/', [SettingsController::class, 'index'])->name('user.settings');
+                Route::get('/', [SettingsController::class, 'settings'])->name('user.settings');
             });
 
             // Character routes

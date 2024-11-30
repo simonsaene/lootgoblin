@@ -13,7 +13,7 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-<body>
+<body data-bs-theme="dark">
     <div id="app">
         <div class="container mt-5">
             <div class="row justify-content-center">

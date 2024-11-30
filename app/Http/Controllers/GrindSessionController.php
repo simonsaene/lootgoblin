@@ -94,6 +94,7 @@ class GrindSessionController extends Controller
             $grindSessionsPaginated = [];
             $grindSpotStats = [];
             $comments = [];
+            $spotsWithSessions = [];
 
             foreach ($grindSpots as $spot) {
 
@@ -101,41 +102,46 @@ class GrindSessionController extends Controller
                     return $session->grind_spot_id === $spot->id;
                 });
 
-                $totalHours = $spotGrindSessions->sum('hours');
-                $totalSilver = $spotGrindSessions->flatMap(function ($session) {
-                    return $session->grindSessionItems->map(function ($item) {
-                        $marketValue = $item->grindSpotItem->item->market_value;
-                        $vendorValue = $item->grindSpotItem->item->vendor_value;
-                        if ($marketValue == 0) {
-                            $valuePerItem = $vendorValue;
-                        } else {
-                            $valuePerItem = $marketValue;
-                        }
-                        return $item->quantity * $valuePerItem;
-                    });
-                })->sum();
+                if ($spotGrindSessions->isNotEmpty()) {
 
-                if ($totalHours > 0) {
-                    $totalSilverPerHour = $totalSilver / $totalHours;
-                } else {
-                    $totalSilverPerHour = 0;
+                    $totalHours = $spotGrindSessions->sum('hours');
+                    $totalSilver = $spotGrindSessions->flatMap(function ($session) {
+                        return $session->grindSessionItems->map(function ($item) {
+                            $marketValue = $item->grindSpotItem->item->market_value;
+                            $vendorValue = $item->grindSpotItem->item->vendor_value;
+                            if ($marketValue == 0) {
+                                $valuePerItem = $vendorValue;
+                            } else {
+                                $valuePerItem = $marketValue;
+                            }
+                            return $item->quantity * $valuePerItem;
+                        });
+                    })->sum();
+
+                    if ($totalHours > 0) {
+                        $totalSilverPerHour = $totalSilver / $totalHours;
+                    } else {
+                        $totalSilverPerHour = 0;
+                    }
+
+                    $grindSpotStats[$spot->id] = [
+                        'totalHours' => $totalHours,
+                        'totalSilver' => $totalSilver,
+                        'totalSilverPerHour' => $totalSilverPerHour,
+                    ];
+
+                    $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
+                        ->where('grind_spot_id', $spot->id)
+                        ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
+                        ->paginate(5); 
+
+                    $spotsWithSessions[] = $spot;
                 }
 
-                $grindSpotStats[$spot->id] = [
-                    'totalHours' => $totalHours,
-                    'totalSilver' => $totalSilver,
-                    'totalSilverPerHour' => $totalSilverPerHour,
-                ];
-
-                $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
-                    ->where('grind_spot_id', $spot->id)
-                    ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
-                    ->paginate(5); 
-
-                $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
-                    ->where('user_id', $id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+                    $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
+                        ->where('user_id', $id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('user.home')->with('error', 'User not found.');
@@ -148,6 +154,7 @@ class GrindSessionController extends Controller
         return view('layouts.user.player-grind-sessions', [
             'user' => $user,
             'grindSpots' => $grindSpots,
+            'spotsWithSessions' => $spotsWithSessions,
             'grindSessionsPaginated' => $grindSessionsPaginated,
             'grindSpotStats' => $grindSpotStats,
             'comments' => $comments
