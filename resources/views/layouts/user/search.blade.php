@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
 
-        <h2>Search:</h2>
+        <h2>Looking for someone?</h2>
 
         <form action="{{ route('user.search.player') }}" method="GET" class="mb-4">
             @csrf
@@ -12,7 +12,9 @@
                     <label for="form-float">Enter Family Name</label>
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Search
+                    </button>
                 </div>
         </form>
 

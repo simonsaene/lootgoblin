@@ -11,7 +11,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h2>{{ $grindSpot->name }}</h2>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add{{ $grindSpot->id }}Modal">
-                    Add Session
+                    <i class="bi bi-plus-square-fill"></i> Session
                 </button>
             </div>
         </div>
@@ -49,9 +49,13 @@
             </div>
         </div>
     </div>
+
+    <div class="b-example-divider"></div>
     @include('layouts.grind.spot.display-tables')
+    <div class="b-example-divider"></div>
     @include('layouts.grind.spot.display-posts')
     @include('layouts.grind.modals.add-session-modal')
+
 
 </div>
 

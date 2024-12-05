@@ -46,16 +46,20 @@
                         data.forEach(item => {
                             const row = `
                                 <tr>
-                                    <td>${item.name}</td>
+                                    <td>
+                                        <img src="{{ asset('storage/${item.image}') }}" alt="loot image" /> ${item.name}
+                                    </td>
                                     <td>${item.description}</td>
                                     <td>${item.market_value}</td>
                                     <td>${item.vendor_value}</td>
                                     <td>                                   
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editItemModal${item.id}">^</button>
+                                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editItemModal${item.id}">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
                                         <form method="POST" action="{{ route('admin.items.delete', '') }}/${item.id}" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">-</button>
+                                            <button type="submit" class="btn"><i class="bi bi-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -76,7 +80,7 @@
                                             <form method="POST" action="{{ route('admin.grind-items.delete', '') }}/${grindItem.id}" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">-</button>
+                                                <button type="submit" class="btn"><i class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -100,12 +104,16 @@
                                     <td>${spot.difficulty}</td>
                                     <td>${spot.mechanics}</td>
                                     <td>                                          
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editGrindSpotModal${spot.id}">^</button>
-                                            <form method="POST" action="{{ route('admin.grind-spots.delete', '') }}/${spot.id}" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">-</button>
-                                            </form>
+                                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editGrindSpotModal${spot.id}">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <form method="POST" action="{{ route('admin.grind-spots.delete', '') }}/${spot.id}" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             `;

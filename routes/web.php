@@ -60,7 +60,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/summary', [SummaryController::class, 'showSummary'])->name('show.summary');
             Route::get('/{id}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
             Route::get('/player-grind/{id}', [GrindSessionController::class, 'playerGrindSessions'])->name('grind.player');
-            Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
+
+            Route::prefix('/session')->group(function () 
+            {
+                Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
+                Route::put('/edit/{id}', [GrindSessionController::class, 'editSession'])->name('grind.session.edit');
+            });
 
         });
 

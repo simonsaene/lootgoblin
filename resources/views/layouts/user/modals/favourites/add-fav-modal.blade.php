@@ -8,10 +8,9 @@
             <form method="POST" action="{{ route('favourite.add') }}">
                 @csrf
                 <div class="modal-body">
-
                     <div class="mb-3">
-                        <label for="character" class="form-label">Select Character</label>
                         <select name="character_id" id="character" class="form-select" required>
+                            <option value="" disabled selected>Select Class</option>
                             @foreach ($characters as $character)
                                 <option value="{{ $character->id }}">{{ $character->name }}</option>
                             @endforeach
@@ -19,17 +18,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="grind_spot" class="form-label">Select Grind Spot</label>
                         <select name="grind_spot_id" id="grind_spot" class="form-select" required>
+                            <option value="" disabled selected>Select Grind Spot</option>
                             @foreach ($grindSpots as $grindSpot)
                                 <option value="{{ $grindSpot->id }}">{{ $grindSpot->name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Favourite</button>
+                    <button type="submit" class="btn btn-primary">Finish</button>
                 </div>
             </form>
         </div>

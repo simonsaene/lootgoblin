@@ -6,23 +6,23 @@
                 <h5 class="modal-title" id="editCharacterModalLabel{{ $character->id }}">Edit Character</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ route('characters.edit', $character->id) }}">
+
+            <form method="POST" action="{{ route('characters.edit', $character->id) }}">
+                <div class="modal-body">
                     @csrf
                     @method('PUT')
 
-                    <div class="mb-3">
-                        <label for="characterName{{ $character->id }}" class="form-label">Character Name</label>
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="characterName{{ $character->id }}" name="name" 
                             value="{{ $character->name }}" required>
+                        <label for="characterName{{ $character->id }}" class="form-label">Character Name</label>
                     </div>
-                    <div class="mb-3">
-                        <label for="characterLevel{{ $character->id }}" class="form-label">Level</label>
+                    <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="characterLevel{{ $character->id }}" name="level" 
                             value="{{ $character->level }}" required>
+                            <label for="characterLevel{{ $character->id }}" class="form-label">Level</label>
                     </div>
                     <div class="mb-3">
-                        <label for="characterClass{{ $character->id }}" class="form-label">Class</label>
                         <select class="form-select" id="characterClass{{ $character->id }}" name="class" required>
                             <option value="" disabled>Select Class</option>
                             @foreach ($classes as $class)
@@ -32,9 +32,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Save</button>
-                </form>
-            </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

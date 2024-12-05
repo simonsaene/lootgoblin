@@ -63,7 +63,7 @@ class AdminController extends Controller
                     'description' => 'required|string|max:255',
                     'market_value' => 'required|integer',
                     'vendor_value' => 'required|integer',
-                    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                    'image' => 'image|nullable',
                 ]);
 
             default:
@@ -89,13 +89,8 @@ class AdminController extends Controller
                 'description' => $validatedData['description'],
                 'market_value' => $validatedData['market_value'],
                 'vendor_value' => $validatedData['vendor_value'],
-                
+                'image' => $validatedData['image'] ?? null
             ];
-            /*
-            if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('images', 'public');
-                $data['image'] = $path;
-            }*/
 
             if ($request->hasFile('image')) {
 

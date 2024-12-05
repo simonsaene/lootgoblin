@@ -14,7 +14,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Family Name: {{ __($family_name) }}</h2>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
-                        Create New Character
+                        <i class="bi bi-plus-square-fill"></i> Character
                     </button>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                             @endforeach
                         @endif
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFavouriteModal">
-                            Add Favourite
+                            <i class="bi bi-plus-square-fill"></i> Favourite
                         </button>
                         @include('layouts.user.modals.favourites.add-fav-modal')
                     </div>
@@ -79,8 +79,8 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
-                                    ^
+                                <button type="submit" class="btn" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
+                                    <i class="bi bi-pencil-square"></i>
                                 </button>
 
                                 @include('layouts.user.modals.characters.edit-char-modal')
@@ -88,7 +88,9 @@
                                 <form method="POST" action="{{ route('characters.delete', $character->id) }}" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">-</button>
+                                    <button type="submit" class="btn">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             </div>
                         </div>

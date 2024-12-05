@@ -5,7 +5,9 @@
             
             <tr>
                 <th colspan="7" class="text-center">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpotModal">+</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpotModal">
+                        <i class="bi bi-plus-square-fill"></i> Add
+                    </button>
                 </th>
             </tr>
             <tr>
@@ -16,6 +18,7 @@
                 <th>Gear Score</th>
                 <th>Difficulty</th>
                 <th>Mechanics</th>
+                <th>Edit/Delete</th>
             </tr>
         </thead>
         <tbody id="GrindSpotsTableBody">

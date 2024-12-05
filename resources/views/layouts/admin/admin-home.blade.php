@@ -64,14 +64,14 @@
             <div class="col-md-12 text-center">
                 <h2 class="mb-3">Tables</h2>
                 <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary me-2" onclick="fetchData('itemsTable')">
-                        Show Items
+                    <button type="button" class="btn me-2" onclick="fetchData('itemsTable')">
+                        <i class="bi bi-chevron-expand"></i> Items
                     </button>
-                    <button type="button" class="btn btn-primary me-2" onclick="fetchData('grindSpotItemsTable')">
-                        Show Grind Spot Items
+                    <button type="button" class="btn me-2" onclick="fetchData('grindSpotItemsTable')">
+                        <i class="bi bi-chevron-expand"></i> Grind Spot Items
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="fetchData('grindSpotsTable')">
-                        Show Grind Spots
+                    <button type="button" class="btn" onclick="fetchData('grindSpotsTable')">
+                        <i class="bi bi-chevron-expand"></i> Grind Spots
                     </button>
                 </div>
             </div>

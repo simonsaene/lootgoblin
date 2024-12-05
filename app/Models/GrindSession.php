@@ -11,6 +11,7 @@ class GrindSession extends Model
     protected $fillable = [
         'user_id', 
         'grind_spot_id', 
+        'hours',
         'loot_image', 
         'video_link', 
         'notes', 
