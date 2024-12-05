@@ -1,10 +1,8 @@
-<div class="card" style="width: 100%; max-width: 100%; margin: 5px auto;">
-    <div class="card-header">
-        Total Hours by Grind Spot
-    </div>
-    <div class="card-body">
-        <canvas id="grindSpotBarChart" height="100"></canvas>
-    </div>
+<div class="mt-5">
+    <h3 class="pb-2 border-bottom">Total Hours by Grind Spot</h3>
+</div>
+<div>
+    <canvas id="grindSpotBarChart" height="100"></canvas>
 </div>
 
 @include('layouts.grind.chart-logic')

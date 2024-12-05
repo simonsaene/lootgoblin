@@ -1,10 +1,8 @@
-<div class="card" style="width: 100%; max-width: 100%; margin: 5px auto;">
-    <div class="card-header">
-        Silver/h by Grind Spot
-    </div>
-    <div class="card-body">
-        <canvas id="silverPerSpotPerHourChart" height="100"></canvas>
-    </div>
+<div class="mt-5">
+    <h3 class="pb-2 border-bottom">Silver/h by Grind Spot</h3>
+</div>
+<div>
+    <canvas id="silverPerSpotPerHourChart" height="100"></canvas>
 </div>
 
 @include('layouts.grind.chart-logic')

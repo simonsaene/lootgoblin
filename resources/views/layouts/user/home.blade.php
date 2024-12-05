@@ -9,62 +9,44 @@
         @endif
 
         {{-- Page Header --}}
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Family Name: {{ __($family_name) }}</h2>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
-                        <i class="bi bi-plus-square-fill"></i> Character
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            
-            {{-- Left Card --}}
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Favourite Spots</div>
-                    <div class="card-body">
-                        @if ($allFavourites->isEmpty())
-                            <p>{{ __('No Favourites set yet') }}</p>
-                        @else
-                            @foreach ($allFavourites as $fav)
-                                <p>
-                                    <a href="{{ route('grind.location', ['id' => $fav->grindSpot->id]) }}">
-                                        {{ $fav->grindSpot->name }}
-                                    </a>
-                                </p>
-                            @endforeach
-                        @endif
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">{{ __($family_name) }}</h1>
+                    <p class="lead text-body-secondary">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+                    <p>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
+                            <i class="bi bi-plus-square-fill"></i> Character
+                        </button>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFavouriteModal">
                             <i class="bi bi-plus-square-fill"></i> Favourite
                         </button>
                         @include('layouts.user.modals.favourites.add-fav-modal')
-                    </div>
+                    </p>
                 </div>
             </div>
+        </section>
 
-            {{-- Right side, stacks cards depending on how many characters the user has --}}
-            <div class="col-md-8">
-                @if ($characters->isEmpty())
-                    <div class="alert alert-info" role="alert">
-                        No characters yet! Click the button below to create a new character.
-                    </div>
-                @else
-                    @foreach ($characters as $character)
-                        <div class="card mb-3">
-                            <div class="card-header">{{ __($character->name) }}</div>
-                            <div class="card-body">
-                                <p>Level: {{ $character->level }}</p>
-                                <p>Class: {{ $character->class }}</p>
-
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        Favourites
-                                    </div>
+        {{-- Album Section --}}
+        <div class="album py-5 bg-body-tertiary">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    @if ($characters->isEmpty())
+                        <div class="col">
+                            <div class="alert alert-info" role="alert">
+                                No characters yet! Click the button below to create a new character.
+                            </div>
+                        </div>
+                    @else
+                        @foreach ($characters as $character)
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                                    </svg>
                                     <div class="card-body">
+                                        <h3 class="card-title">{{ __($character->name) }}</h2>
+                                        <p class="card-text">{{ $character->level }}. {{ $character->class }}</h3>
                                         <p>
                                             @forelse ($character->favourites as $fav)
                                             <p>
@@ -76,28 +58,34 @@
                                                 <p>No Favourites set yet</p>
                                             @endforelse
                                         </p>
+
+                                        <div class="d-flex justify-content-end">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
+                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                </button>
+                                            </div>
+                
+                                            @include('layouts.user.modals.characters.edit-char-modal', ['character' => $character])
+
+                                            <form method="POST" action="{{ route('characters.delete', $character->id) }}" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-
-                                @include('layouts.user.modals.characters.edit-char-modal')
-                            
-                                <form method="POST" action="{{ route('characters.delete', $character->id) }}" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
                             </div>
-                        </div>
-                    @endforeach
-                @endif
+                        @endforeach
+                    @endif
+                </div>
             </div>
+        </div>
 
+        {{-- Modal for adding character --}}
         @include('layouts.user.modals.characters.add-char-modal')
     </div>
 @endsection

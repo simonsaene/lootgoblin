@@ -1,10 +1,8 @@
-<div class="card" style="width: 100%; max-width: 100%; margin: 5px auto;">
-    <div class="card-header">
-        Grind Spot Distribution
-    </div>
-    <div class="card-body">
-        <canvas id="grindSpotPieChart" height="50"></canvas>
-    </div>
+<div class="mt-5">
+    <h3 class="pb-2 border-bottom">Grind Spot Distribution</h3>
+</div>
+<div>
+    <canvas id="grindSpotPieChart" height="50"></canvas>
 </div>
 
 @include('layouts.grind.chart-logic')
