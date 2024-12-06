@@ -1,5 +1,5 @@
 {{-- Side Bar --}}
-<nav id="sidebar" class="bg-dark sidebar" style="width: 200px; height: 100vh;">
+<nav id="sidebar" class="bg-dark sidebar" style="width: 200px; height: 100vh; position: sticky; top: 0; overflow-y: auto;">
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item text-center border-bottom">
@@ -49,7 +49,7 @@
                                 @foreach ($grindSpot->grindSpotItems as $grindSpotItem)
                                     @if ($grindSpotItem->item && $grindSpotItem->item->is_trash)
                                         <div class="col-auto">
-                                            <img src="/storage/{{ $grindSpotItem->item->image }}" alt="Item Image" class="ms-2" style="width: 30px; height: 30px;">
+                                            <img src="/storage/{{ $grindSpotItem->item->image }}" alt="Item Image" style="width: 30px; height: 30px;">
                                         </div>
                                         <div class="col">
                                             <span>{{ __($grindSpot->name) }}</span>

@@ -25,11 +25,10 @@ class AdminController extends Controller
 
         $items = Item::all();
         $grindSpotItems = GrindSpotItem::with('item', 'grindSpot')->get();
-        //$grindSpots = GrindSpot::all();
         $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
             $query->where('is_trash', true);
         }])->get();
-        
+
         return view('layouts.admin.admin-home', compact(
             'items', 
             'grindSpotItems' , 
