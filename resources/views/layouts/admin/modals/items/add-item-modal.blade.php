@@ -30,6 +30,10 @@
                         <label for="image">Upload Image (optional)</label>
                         <input type="file" class="form-control" name="image" accept="image/*">
                     </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="is_trash" id="is_trash" value="true">
+                        <label class="form-check-label" for="is_trash">Trash Loot?</label>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

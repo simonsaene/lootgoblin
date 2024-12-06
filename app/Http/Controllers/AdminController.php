@@ -25,8 +25,16 @@ class AdminController extends Controller
 
         $items = Item::all();
         $grindSpotItems = GrindSpotItem::with('item', 'grindSpot')->get();
-        $grindSpots = GrindSpot::all();
-        return view('layouts.admin.admin-home', compact('items', 'grindSpotItems' , 'grindSpots'));
+        //$grindSpots = GrindSpot::all();
+        $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+            $query->where('is_trash', true);
+        }])->get();
+        
+        return view('layouts.admin.admin-home', compact(
+            'items', 
+            'grindSpotItems' , 
+            'grindSpots'
+        ));
     }
 
     /**
@@ -63,7 +71,7 @@ class AdminController extends Controller
                     'description' => 'required|string|max:255',
                     'market_value' => 'required|integer',
                     'vendor_value' => 'required|integer',
-                    'image' => 'image|nullable',
+                    'image' => 'image|nullable'
                 ]);
 
             default:
@@ -82,15 +90,19 @@ class AdminController extends Controller
     {
         try {
 
+            Log::debug('Incoming request data: ', $request->all());
             $validatedData = $this->validateData($request, 'item');
+            Log::debug('Validated data: ', $validatedData);
 
             $data = [
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
                 'market_value' => $validatedData['market_value'],
                 'vendor_value' => $validatedData['vendor_value'],
-                'image' => $validatedData['image'] ?? null
+                'image' => $validatedData['image'] ?? null,
+                'is_trash' => $request->has('is_trash') ? 1 : 0
             ];
+            
 
             if ($request->hasFile('image')) {
 
@@ -106,9 +118,11 @@ class AdminController extends Controller
             }
     
             Item::create($data);
+            Log::debug('Item created successfully.');
 
-            return redirect()->route('admin.home')->with('success', 'Item added successfully!');
+            return redirect()->route('admin.home')->with('status', 'Item added successfully!');
         } catch (\Exception $e) {
+            Log::error('Failed to add item: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add item: ' . $e->getMessage());
         }
     }
@@ -117,14 +131,17 @@ class AdminController extends Controller
     {
         
         try {
+            Log::debug('Incoming request data: ', $request->all());
             $item = Item::findOrFail($id);
 
             $validatedData = $this->validateData($request, 'item');
+            Log::debug('Validated data: ', $validatedData);
 
             $item->name = $validatedData['name'];
             $item->description = $validatedData['description'];
             $item->market_value = $validatedData['market_value'];
             $item->vendor_value = $validatedData['vendor_value'];
+            $item->is_trash = $request->has('is_trash') ? 1 : 0;
     
             if ($request->hasFile('image')) {
 
@@ -137,8 +154,9 @@ class AdminController extends Controller
             }
     
             $item->save();
+            Log::debug('Item edited successfully.');
 
-            return redirect()->route('admin.home')->with('success', 'Item updated successfully!');
+            return redirect()->route('admin.home')->with('status', 'Item updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to updated item: ' . $e->getMessage());
         }
@@ -152,6 +170,7 @@ class AdminController extends Controller
     
             return redirect()->route('admin.home')->with('success', 'Item deleted successfully!');
         } catch (\Exception $e) {
+            Log::error('Failed to Edit item: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to delete item: ' . $e->getMessage());
         }
     }

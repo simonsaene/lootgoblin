@@ -45,7 +45,18 @@
                 @foreach ($grindSpots as $grindSpot)
                     <li class="nav-item">
                         <a class="nav-link link-body-emphasis" href="{{ route('grind.location', ['id' => $grindSpot->id]) }}">
-                            {{ __($grindSpot->name) }}
+                            <div class="row align-items-center">
+                                @foreach ($grindSpot->grindSpotItems as $grindSpotItem)
+                                    @if ($grindSpotItem->item && $grindSpotItem->item->is_trash)
+                                        <div class="col-auto">
+                                            <img src="/storage/{{ $grindSpotItem->item->image }}" alt="Item Image" class="ms-2" style="width: 30px; height: 30px;">
+                                        </div>
+                                        <div class="col">
+                                            <span>{{ __($grindSpot->name) }}</span>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
                         </a>
                     </li>
                 @endforeach

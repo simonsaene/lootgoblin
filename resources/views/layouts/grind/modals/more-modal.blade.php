@@ -9,7 +9,7 @@
                 <div>
                     <strong>Loot Image:</strong> 
                     @if($session->loot_image)
-                        <img src="{{ asset($session->loot_image) }}" alt="Loot Image" style="max-width: 150px;">
+                        <img src="storage/{{ $session->loot_image }}" alt="Loot Image" style="max-width: 150px;">
                     @else
                         N/A
                     @endif
