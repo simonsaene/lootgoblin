@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('likes', function (Blueprint $table) {
-            $table->unsignedBigInteger('liker_id')->after('user_id');
-            $table->foreign('liker_id')->references('id')->on('users')->onDelete('cascade');
+            if (!Schema::hasColumn('likes', 'liker_id')) {
+                $table->unsignedBigInteger('liker_id')->after('user_id');
+                $table->foreign('liker_id')->references('id')->on('users')->onDelete('cascade');
+            }
         });
     }
 
