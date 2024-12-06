@@ -13,7 +13,7 @@
                     <th>Hours</th>
                     <th>Total Silver</th>
                     @foreach ($grindSpotItems as $item)
-                        <th>{{ $item->item->name }}</th>
+                        <th><img src="/storage/{{ $item->item->name }}" alt="Item Image" style="width: 30px; height: 30px;"></th>
                     @endforeach
                     <th>More</th>
                     <th>Edit/Delete</th>
