@@ -14,8 +14,7 @@ class Character extends Model
         'level',
         'name',
         'class',
-        'profile_image',
-        'gear_image',
+        'profile_image'
     ];
 
     public function grindSessions()

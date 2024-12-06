@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form method="POST" action="{{ route('admin.items.edit', $item->id) }}">
+            <form method="POST" action="{{ route('admin.items.edit', $item->id) }}"  enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 

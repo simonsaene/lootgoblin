@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container" id="featured-3">
         @if(empty($spotsWithSessions))
-            <h2>{{ $user->name }} has no grind sessions</h2>
+            <h1 class="border-bottom">{{ $user->name }} has no grind sessions</h1>
         @else
-            <h2>{{ $user->name }}'s Grind Sessions</h2>
-            <ul class="nav nav-tabs" id="grindSpotTabs" role="tablist">
+            <h1 class="border-bottom">{{ $user->name }}'s Grind Sessions</h1>
+            <ul class="nav nav-tabs mt-5" id="grindSpotTabs" role="tablist">
                 @foreach ($spotsWithSessions as $spot)
                     <li class="nav-item" role="presentation">
                         <a class="nav-link @if($loop->first) active @endif" id="spot-{{ $spot->id }}-tab" data-bs-toggle="tab" href="#spot-{{ $spot->id }}" role="tab" aria-controls="spot-{{ $spot->id }}" aria-selected="true">
@@ -22,36 +22,30 @@
                 {{-- Check if the grind spot stats exist for the current spot --}}
                 @if(isset($grindSpotStats[$spot->id]))
                     <div class="tab-pane fade @if($loop->first) show active @endif" id="spot-{{ $spot->id }}" role="tabpanel" aria-labelledby="spot-{{ $spot->id }}-tab">
-                        <div class="row mb-4 mt-3">
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Total Hours
+                        <div class="row mb-4">
+                            <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 justify-content-center">
+                                <div class="feature col">
+                                    <div class="feature-icon d-inline-flex fs-2 mb-3">
+                                        <i class="bi bi-alarm"></i>
                                     </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalHours'], 2) }}</h5>
-                                    </div>
+                                    <h3 class="fs-2 text-body-emphasis">Total Hours</h3>
+                                    <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalHours'], 2) }}</h5>
                                 </div>
-                            </div>
-        
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Total Silver
+                            
+                                <div class="feature col">
+                                    <div class="feature-icon d-inline-flex fs-2 mb-3">
+                                        <i class="bi bi-currency-exchange"></i>
                                     </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalSilver']) }}</h5>
-                                    </div>
+                                    <h3 class="fs-2 text-body-emphasis">Total Silver</h3>
+                                    <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalSilver']) }}</h5>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Average Silver/hour
+                            
+                                <div class="feature col">
+                                    <div class="feature-icon d-inline-flex fs-2 mb-3">
+                                        <i class="bi bi-hourglass-split"></i>
                                     </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalSilverPerHour']) }}</h5>
-                                    </div>
+                                    <h3 class="fs-2 text-body-emphasis">Silver Per Hour</h3>
+                                    <h5 class="card-title">{{ number_format($grindSpotStats[$spot->id]['totalSilverPerHour']) }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -93,8 +87,8 @@
                                                 {{ number_format($totalSilver) }}
                                             </td>
                                             <td>
-                                                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#loot-{{ $session->id }}" aria-expanded="false" aria-controls="loot-{{ $session->id }}">
-                                                    Show Loot
+                                                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#loot-{{ $session->id }}" aria-expanded="false" aria-controls="loot-{{ $session->id }}">
+                                                    <i class="bi bi-list"></i>
                                                 </button>
                                                 <div class="collapse" id="loot-{{ $session->id }}">
                                                     <table class="table table-sm">

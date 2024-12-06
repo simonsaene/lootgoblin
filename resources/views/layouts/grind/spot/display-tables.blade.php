@@ -1,5 +1,5 @@
 {{-- Display Grind Sessions --}}
-<div class="row">
+<div class="row py-5 bg-body-tertiary">
     @if($grindSessions->isEmpty())
         <div class="col-12">
             <p>No grind sessions found for this location.</p>
@@ -100,7 +100,7 @@
         </table>
 
         <div class="col-12">
-            <div class="results-info mb-3">
+            <div class="results-info">
                 <p>Showing {{ $grindSessions->firstItem() }} to {{ $grindSessions->lastItem() }} of {{ $grindSessions->total() }} results</p>
             </div>
             <div class="pagination">

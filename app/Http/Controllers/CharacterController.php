@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Character;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 class CharacterController extends Controller
 {
     public function validateData(Request $request)
@@ -11,7 +11,8 @@ class CharacterController extends Controller
         return $request->validate([
             'name' => 'required|string|max:255',
             'level' => 'required|integer',
-            'class' => 'required|string|max:255',
+            'profile_image' => 'image|nullable',
+            'class' => 'required|string|max:255'
         ]);
     }
     public function addChar(Request $request)
@@ -20,15 +21,31 @@ class CharacterController extends Controller
         {   
             $validatedData = $this->validateData($request);
 
+
+            if ($request->hasFile('profile_image')) {
+
+                Log::debug("Uploading image...");
+
+                $path = $request->file('profile_image')->store('profile_images', 'public');
+
+                Log::debug("Image stored at: " . $path);
+
+                $validatedData['profile_image'] = $path;
+            } else {
+                Log::debug("No image uploaded.");
+            }
+
             Character::create([
                     'name' => $validatedData['name'],
                     'level' => $validatedData['level'],
+                    'profile_image' => $validatedData['profile_image'] ?? null,
                     'class' => $validatedData['class'],
                     'user_id' => auth()->id(),
                 ]);
 
             return redirect()->route('user.home')->with('status', 'Character added successfully!');
         } catch (\Exception $e) {
+            Log::error('Error adding character: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error adding character: ' . $e->getMessage());
         }
     }

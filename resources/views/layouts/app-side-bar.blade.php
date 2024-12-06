@@ -1,5 +1,5 @@
 {{-- Side Bar --}}
-<nav id="sidebar" class="bg-dark sidebar" style="width: 200px;">
+<nav id="sidebar" class="bg-dark sidebar" style="width: 200px; height: 100vh;">
     <div class="position-sticky">
         <ul class="nav flex-column">
             <li class="nav-item text-center border-bottom">
