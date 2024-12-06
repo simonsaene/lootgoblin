@@ -60,9 +60,9 @@
                             @endphp
                             <td>{{ number_format($quantity) }}</td>
                         @endforeach
-        
+                        @include('layouts.grind.modals.more-modal')
                         <td>
-                            <button class="btn" data-toggle="collapse" data-target="#more-details-{{ $session->id }}">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#moreDetailsModal{{ $session->id }}">
                                 <i class="bi bi-list"></i>
                             </button>
                         </td>

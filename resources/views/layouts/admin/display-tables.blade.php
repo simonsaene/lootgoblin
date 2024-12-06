@@ -39,7 +39,7 @@
             })
             .then(data => {
                 tbody.innerHTML = '';
-                
+                const baseUrl = "{{ asset('storage') }}/";
                 switch (tableId)
                 {
                     case 'itemsTable':
@@ -47,7 +47,7 @@
                             const row = `
                                 <tr>
                                     <td>
-                                        <img src="{{ asset('storage/${item.image}') }}" alt="loot image" /> ${item.name}
+                                        <img src="${baseUrl}${item.image}" alt="loot image" /> ${item.name}
                                     </td>
                                     <td>${item.description}</td>
                                     <td>${item.market_value}</td>
