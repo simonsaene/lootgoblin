@@ -49,7 +49,7 @@
                                 @foreach ($grindSpot->grindSpotItems as $grindSpotItem)
                                     @if ($grindSpotItem->item && $grindSpotItem->item->is_trash)
                                         <div class="col-auto">
-                                            <img src="/storage/{{ $grindSpotItem->item->image }}" alt="Item Image" style="width: 30px; height: 30px;">
+                                            <img src="{{ asset($grindSpotItem->item->image) }}" alt="Item Image" style="width: 30px; height: 30px;">
                                         </div>
                                         <div class="col">
                                             <span>{{ __($grindSpot->name) }}</span>

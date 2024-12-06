@@ -32,7 +32,9 @@ class UserController extends Controller
         $family_name = User::where('id', $user_id)->value('family_name');
         $characters = Character::with(['favourites'])->where('user_id', $user_id)->get();
         $allFavourites = Favourite::with(['grindSpot'])->where('user_id', $user_id)->get()->unique('grind_spot_id');
-        $grindSpots = GrindSpot::all();
+        $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+            $query->where('is_trash', true);
+        }])->get();
 
         $classes = $this->choose_class();
         $char = session('char');

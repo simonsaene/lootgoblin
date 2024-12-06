@@ -85,7 +85,9 @@ class GrindSessionController extends Controller
         {
             $user = User::findOrFail($id);
 
-            $grindSpots = GrindSpot::all();
+            $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+                $query->where('is_trash', true);
+            }])->get();
 
             $allGrindSessions = GrindSession::where('user_id', $id)
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
@@ -157,6 +159,7 @@ class GrindSessionController extends Controller
             'spotsWithSessions' => $spotsWithSessions,
             'grindSessionsPaginated' => $grindSessionsPaginated,
             'grindSpotStats' => $grindSpotStats,
+            'allGrindSessions' => $allGrindSessions,
             'comments' => $comments
         ]);
     }

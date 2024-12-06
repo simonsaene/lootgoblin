@@ -15,7 +15,9 @@ class SummaryController extends Controller
     public function showSummary(Request $request)
     {
         $user = auth()->user();
-        $grindSpots = GrindSpot::all();
+        $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+            $query->where('is_trash', true);
+        }])->get();
         $grindSessions = GrindSession::where('user_id', $user->id)
             ->with(['grindSessionItems.grindSpotItem.item'])
             ->get();

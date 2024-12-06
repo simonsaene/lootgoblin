@@ -25,7 +25,9 @@ class SearchController extends Controller
                 'family_name' => 'required|string|max:255', 
             ]);
 
-            $grindSpots = GrindSpot::all();
+            $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+                $query->where('is_trash', true);
+            }])->get();
 
             $searchFamilyName = $validatedData['family_name'];
 

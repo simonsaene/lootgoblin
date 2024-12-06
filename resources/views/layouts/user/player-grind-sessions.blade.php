@@ -50,22 +50,37 @@
                             </div>
                         </div>
         
-                        <div class="table-responsive">
+                        <div class="row py-5 bg-body-tertiary">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Hours</th>
-                                        <th>Silver Earned</th>
-                                        <th>Loot</th>
+                                        <th class="text-end">Hours</th>
+                                        <th class="text-end">Silver</th>
+                                        @php
+                                            // Get all unique loot items from all grind sessions
+                                            $lootItems = [];
+                                            foreach ($grindSessionsPaginated[$spot->id] as $session) {
+                                                foreach ($session->grindSessionItems as $item) {
+                                                    $lootItems[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->image; // Using item name as key to avoid duplicates
+                                                }
+                                            }
+                                        @endphp
+
+                                        {{-- Display unique loot item columns --}}
+                                        @foreach ($lootItems as $lootItem)
+                                            <th class="text-end"><img src="{{ asset($lootItem) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
+                                        @endforeach
+
+                                        <th>More</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($grindSessionsPaginated[$spot->id] as $session)
                                         <tr>
                                             <td>{{ $session->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $session->hours }}</td>
-                                            <td>
+                                            <td class="text-end">{{ $session->hours }}</td>
+                                            <td class="text-end">
                                                 @php
                                                     $totalSilver = 0;
                                                     foreach ($session->grindSessionItems as $item) {
@@ -83,31 +98,27 @@
                                                         $totalSilver += $totalValue;
                                                     }
                                                 @endphp
-        
                                                 {{ number_format($totalSilver) }}
                                             </td>
+                                            
+                                            {{-- Display loot item quantities --}}
+                                            @foreach ($lootItems as $lootItem)
+                                                @php
+                                                    $quantity = 0;
+                                                    foreach ($session->grindSessionItems as $item) {
+                                                        if ($item->grindSpotItem->item->name === $lootItem) {
+                                                            $quantity = $item->quantity;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                <td class="text-end">{{ $quantity }}</td> <!-- Align quantities to the center -->
+                                            @endforeach
+                                            @include('layouts.grind.modals.more-modal')
                                             <td>
-                                                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#loot-{{ $session->id }}" aria-expanded="false" aria-controls="loot-{{ $session->id }}">
+                                                <button class="btn" data-bs-toggle="modal" data-bs-target="#moreDetailsModal{{ $session->id }}">
                                                     <i class="bi bi-list"></i>
                                                 </button>
-                                                <div class="collapse" id="loot-{{ $session->id }}">
-                                                    <table class="table table-sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Items</th>
-                                                                <th class="text-end">Qty</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($session->grindSessionItems as $item)
-                                                                <tr>
-                                                                    <td>{{ $item->grindSpotItem->item->name }}</td>
-                                                                    <td class="text-end">{{ $item->quantity }}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -158,7 +169,4 @@
                 @endif
             @endforeach
         </div>
-        
-
-            
 @endsection

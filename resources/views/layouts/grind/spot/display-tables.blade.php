@@ -10,10 +10,10 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Hours</th>
-                    <th>Total Silver</th>
+                    <th class="text-end">Hours</th>
+                    <th class="text-end">Silver</th>
                     @foreach ($grindSpotItems as $item)
-                        <th><img src="/storage/{{ $item->item->image }}" alt="Item Image" style="width: 30px; height: 30px;"></th>
+                        <th class="text-end"><img src="{{ asset($item->item->image) }}" alt="Item Image" style="width: 30px; height: 30px;"></th>
                     @endforeach
                     <th>More</th>
                     <th>Edit/Delete</th>
@@ -26,8 +26,8 @@
                     @endphp
                     <tr>
                         <td>{{ $session->created_at->format('Y-m-d') }}</td>
-                        <td>{{ number_format($session->hours, 2) }}</td>
-                        <td>
+                        <td class="text-end">{{ number_format($session->hours, 2) }}</td>
+                        <td class="text-end">
                             @foreach ($session->grindSessionItems as $sessionItem)
                                 @php
                                     $marketValue = $sessionItem->grindSpotItem->item->market_value;
@@ -58,7 +58,7 @@
                                     $quantity = 0;
                                 }
                             @endphp
-                            <td>{{ number_format($quantity) }}</td>
+                            <td class="text-end">{{ number_format($quantity) }}</td>
                         @endforeach
                         @include('layouts.grind.modals.more-modal')
                         <td>
