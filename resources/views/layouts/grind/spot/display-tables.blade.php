@@ -13,7 +13,7 @@
                     <th class="text-end">Hours</th>
                     <th class="text-end">Silver</th>
                     @foreach ($grindSpotItems as $item)
-                        <th class="text-end"><img src="{{ asset($item->item->image) }}" alt="Item Image" style="width: 30px; height: 30px;"></th>
+                        <th class="text-end"><img src="{{ asset('storage/' . $item->item->image) }}" alt="Item Image" style="width: 30px; height: 30px;"></th>
                     @endforeach
                     <th>More</th>
                     <th>Edit/Delete</th>

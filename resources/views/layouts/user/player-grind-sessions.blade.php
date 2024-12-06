@@ -69,7 +69,7 @@
 
                                         {{-- Display unique loot item columns --}}
                                         @foreach ($lootItems as $lootItem)
-                                            <th class="text-end"><img src="{{ asset($lootItem) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
+                                            <th class="text-end"><img src="{{ asset('storage/' . $lootItem) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
                                         @endforeach
 
                                         <th>More</th>

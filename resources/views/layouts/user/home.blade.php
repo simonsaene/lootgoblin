@@ -40,10 +40,8 @@
                             <div class="col">
                                 <div class="card shadow-sm">
                                     @if($character->profile_image)
-                                        <!-- If profile image exists, display it -->
                                         <img src="{{ asset('storage/'.$character->profile_image) }}" class="card-img-top" alt="Character Thumbnail" style="width: 100%; height: 225px; object-fit: contain;">
                                     @else
-                                        <!-- Fallback to SVG if no image exists -->
                                         <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                             <title>Placeholder</title>
                                             <rect width="100%" height="100%" fill="#55595c"></rect>
