@@ -14,7 +14,7 @@ class SearchController extends Controller
         $grindSpots = GrindSpot::all();
         $users = collect();
 
-        return view('layouts.user.search', compact(
+        return view('layouts.user.search.search', compact(
             'grindSpots',
             'users'
         ));
@@ -34,7 +34,7 @@ class SearchController extends Controller
 
             $users = User::where('family_name', 'like', '%' . $searchFamilyName . '%')->get();
 
-            return view('layouts.user.search', compact(
+            return view('layouts.user.search.search', compact(
                 'users', 
                 'searchFamilyName', 
                 'grindSpots'));

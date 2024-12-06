@@ -5,7 +5,7 @@
     <canvas id="silverPerSpotPerHourChart" height="100"></canvas>
 </div>
 
-@include('layouts.grind.chart-logic')
+@include('layouts.grind.summary.chart-logic')
 
 <script>
 

@@ -8,6 +8,8 @@ use App\Models\GrindSession;
 use App\Models\GrindSessionItem;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Like;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +19,7 @@ class GrindSessionController extends Controller
     public function showLocation($id)
     {
         try
-        {        
+        {   $user = auth()->id();
             $grindSpots = GrindSpot::all();
 
             $grindSpot = GrindSpot::findOrFail($id);
@@ -61,22 +63,28 @@ class GrindSessionController extends Controller
                 ->where('user_id', auth()->id())
                 ->orderBy('created_at', 'desc')
                 ->get();
+
+            $like = Like::where('user_id', $user)->where('grind_spot_id', $id);
+            $totalLikes = $like->count();
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('show.summary')->with('error', 'Grind spot not found.');
         } catch (\Exception $e) {
             return back()->with('error', 'An error occurred. Please try again later.');
         }
 
-        return view('layouts.grind.spot.display-spot', [
-            'grindSpots' => $grindSpots,
-            'grindSpot' => $grindSpot,
-            'grindSpotItems' => $grindSpotItems,
-            'grindSessions' => $grindSessions,
-            'totalHours' => $totalHours,
-            'totalSilver' => $totalSilver,
-            'totalSilverPerHour' => $totalSilverPerHour,
-            'comments' => $comments,
-        ]);
+        return view('layouts.grind.spot.display-spot', compact(
+            'user',
+            'grindSpots',
+            'grindSpot',
+            'grindSpotItems',
+            'grindSessions',
+            'totalHours',
+            'totalSilver',
+            'totalSilverPerHour',
+            'comments',
+            'totalLikes'
+        ));
     }
 
     public function playerGrindSessions($id)
@@ -153,15 +161,15 @@ class GrindSessionController extends Controller
             return back()->with('error', 'An unexpected error occurred. Please try again later.');
         }
 
-        return view('layouts.user.player-grind-sessions', [
-            'user' => $user,
-            'grindSpots' => $grindSpots,
-            'spotsWithSessions' => $spotsWithSessions,
-            'grindSessionsPaginated' => $grindSessionsPaginated,
-            'grindSpotStats' => $grindSpotStats,
-            'allGrindSessions' => $allGrindSessions,
-            'comments' => $comments
-        ]);
+        return view('layouts.user.search.player-grind-sessions', compact(
+            'user',
+            'grindSpots',
+            'spotsWithSessions',
+            'grindSessionsPaginated',
+            'grindSpotStats',
+            'allGrindSessions',
+            'comments'
+        ));
     }
 
     

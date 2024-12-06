@@ -11,16 +11,22 @@ class Like extends Model
     protected $fillable = [
         'user_id', 
         'post_id',
-        'grind_spot_id'
+        'grind_spot_id',
+        'liker_id'
     ];
 
     public function post()
     {
-        return $this->belongsTo(Comment::class);
+        return $this->belongsTo(Post::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function grindSpot()
+    {
+        return $this->belongsTo(GrindSpot::class);
     }
 }

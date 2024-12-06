@@ -1,26 +1,24 @@
 <div class="mt-5">
-    <h3 class="pb-2 border-bottom">Total Silver by Grind Spot</h3>
+    <h3 class="pb-2 border-bottom">Total Hours by Grind Spot</h3>
 </div>
 <div>
-    <canvas id="silverPerSpotChart" height="100"></canvas>
+    <canvas id="grindSpotBarChart" height="100"></canvas>
 </div>
 
-
-@include('layouts.grind.chart-logic')
+@include('layouts.grind.summary.chart-logic')
 
 <script>
-
-    var ctx = document.getElementById('silverPerSpotChart').getContext('2d');
+    var ctx = document.getElementById('grindSpotBarChart').getContext('2d');
     new Chart(ctx, {
-        type: 'bar', 
+        type: 'bar',
         data: {
             labels: grindSpotNames,
             datasets: [{
-                label: 'Silver Per Spot',
+                label: 'Hours Spent',
                 barPercentage: 0.5,
                 barThickness: 20,
                 maxBarThickness: 25,
-                data: silverPerSpot,
+                data: hours,
                 backgroundColor: datasetColors,
                 borderColor: datasetColors.map(function(color) {
                     return chroma(color).brighten(1).hex();
@@ -42,16 +40,14 @@
                     display: true,
                     color: 'white',
                     formatter: function(value) {
-                        return value.toLocaleString() + ' silver/spot'; 
+                        return value.toFixed(2) + ' hours';
                     },
                     anchor: 'end',
                     align: 'start',
                     offset: 0,
                     font: {
                         size: 12,
-                        weight: 'bold',
-                        strokeStyle: 'black',
-                        lineWidth: 2
+                        weight: 'bold'
                     },
                     textStrokeColor: '#000',
                     textStrokeWidth: 3,

@@ -63,6 +63,7 @@
                         </div>
         
                         <div class="row py-5 bg-body-tertiary">
+                            <th>@include('layouts.likes.like-grind')</th>
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -158,7 +159,7 @@
                                             <p>{{ $comment->comment }}</p>
                                             <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
                                         
-                                            @include('layouts.grind.spot.display-posts')
+                                            @include('layouts.likes.like-posts')
                                         </div>
                                     </div>
                                 @endforeach
@@ -175,7 +176,7 @@
                                     <div class="form-group">
                                         <textarea name="comment" class="form-control" rows="3" placeholder="Add your comment..." required></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+                                    <button type="submit" class="btn btn-outline-primary mt-2">Post Comment</button>
                                 </form>
                             @else
                                 <p class="mt-3">You must be logged in to post a comment.</p>

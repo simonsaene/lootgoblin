@@ -12,7 +12,7 @@
                         <label for="form-float">Enter Family Name</label>
                     </div>
                     <div class="col-md-4 mx-auto">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-outline-primary">
                             <i class="bi bi-search"></i> Search
                         </button>
                     </div>
@@ -31,10 +31,10 @@
                         </svg>
                         <h2 class="fw-normal">{{ $user->family_name }}</h2>
                         <p>
-                            <a class="btn btn-primary" href="{{ route('user.player.profile', $user->id) }}">
+                            <a class="btn btn-outline-primary" href="{{ route('user.player.profile', $user->id) }}">
                                 <i class="bi bi-arrow-bar-right"></i> Profile
                             </a>
-                            <a class="btn btn-primary" href="{{ route('grind.player', $user->id) }}">
+                            <a class="btn btn-outline-primary" href="{{ route('grind.player', $user->id) }}">
                                 <i class="bi bi-arrow-bar-right"></i> Sessions
                             </a>
                         </p>

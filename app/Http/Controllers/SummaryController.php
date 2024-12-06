@@ -45,7 +45,7 @@ class SummaryController extends Controller
             $totalSilverPerHour = $totalSilver / $totalHours;
         }
 
-        return view('layouts.grind.summary', compact(
+        return view('layouts.grind.summary.summary', compact(
             'grindSpots',
             'grindSessions',
             'grindSpotNames', 

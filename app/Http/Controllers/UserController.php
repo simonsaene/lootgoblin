@@ -5,9 +5,9 @@ use App\Models\Character;
 use App\Models\User;
 use App\Models\GrindSpot;
 use App\Models\Favourite;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
 
 class UserController extends Controller
 {
@@ -40,13 +40,17 @@ class UserController extends Controller
         $classes = $this->choose_class();
         $char = session('char');
 
+        $likes = Like::where('user_id', $user_id)->get();
+        $totalLikes = $likes->count(); 
+
         return view('layouts.user.home', compact(
             'characters', 
             'classes', 
             'family_name', 
             'char', 
             'allFavourites',
-            'grindSpots'
+            'grindSpots',
+            'totalLikes'
         ));
     }
 
@@ -63,7 +67,7 @@ class UserController extends Controller
 
         $grindSpots = GrindSpot::all();
 
-        return view('layouts.user.player-profile', compact(
+        return view('layouts.user.search.player-profile', compact(
             'user', 
             'family_name', 
             'characters', 

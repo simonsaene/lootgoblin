@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th colspan="5" class="text-center bg-body-tertiary">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         <i class="bi bi-plus-square-fill"></i> Add
                     </button>
                 </th>

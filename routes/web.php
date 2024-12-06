@@ -63,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/summary', [SummaryController::class, 'showSummary'])->name('show.summary');
             Route::get('/{id}', [GrindSessionController::class, 'showLocation'])->name('grind.location');
             Route::get('/player-grind/{id}', [GrindSessionController::class, 'playerGrindSessions'])->name('grind.player');
+            Route::post('/like/{id}', [LikeController::class, 'likeGrind'])->name('like.grind');
+            Route::delete('/unlike/{id}', [LikeController::class, 'unlikeGrind'])->name('unlike.grind');
 
             Route::prefix('/session')->group(function () 
             {

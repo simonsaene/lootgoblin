@@ -40,16 +40,16 @@
                         <div class="row g-4">
                             <!-- First Column for 'sum-grind-spots' -->
                             <div class="col-md-5 col-12">
-                                @include('layouts.grind.sum-grind-spots')
+                                @include('layouts.grind.summary.sum-grind-spots')
                             </div>
                         
                             <!-- Second Column for 'sum-hours' -->
                             <div class="col-md-7 col-12">
-                                @include('layouts.grind.sum-hours')
+                                @include('layouts.grind.summary.sum-hours')
                             </div>
                         </div>
-                        @include('layouts.grind.sum-silver-per-spot')
-                        @include('layouts.grind.sum-silver-per-spot-avg')
+                        @include('layouts.grind.summary.sum-silver-per-spot')
+                        @include('layouts.grind.summary.sum-silver-per-spot-avg')
                     </div>
                 </div>
             @endif

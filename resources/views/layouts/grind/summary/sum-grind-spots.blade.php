@@ -5,7 +5,7 @@
     <canvas id="grindSpotPieChart" height="50"></canvas>
 </div>
 
-@include('layouts.grind.chart-logic')
+@include('layouts.grind.summary.chart-logic')
 
 <script>
     var ctx = document.getElementById('grindSpotPieChart').getContext('2d');

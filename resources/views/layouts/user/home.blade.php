@@ -13,11 +13,12 @@
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">{{ __($family_name) }}</h1>
+                    <h3><i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}</h3>
                     <p>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCharacterModal">
                             <i class="bi bi-plus-square-fill"></i> Character
                         </button>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFavouriteModal">
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addFavouriteModal">
                             <i class="bi bi-plus-square-fill"></i> Favourite
                         </button>
                         @include('layouts.user.modals.favourites.add-fav-modal')
@@ -64,7 +65,7 @@
         
                                         <div class="d-flex justify-content-end">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editCharacterModal{{ $character->id }}">
                                                     <i class="bi bi-pencil-square"></i> Edit
                                                 </button>
                                             </div>

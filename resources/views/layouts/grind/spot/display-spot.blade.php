@@ -45,13 +45,16 @@
         </div>
 
         <div class="d-flex justify-content-center mb-4">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add{{ $grindSpot->id }}Modal">
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#add{{ $grindSpot->id }}Modal">
                 <i class="bi bi-plus-square-fill"></i> Session
             </button>
         </div>
 
         {{-- Display Grind Sessions --}}
         <div class="row py-5 bg-body-tertiary justify-content-center">
+
+            <h3 class="text-center"><i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}</h3>
+
             @if($grindSessions->isEmpty())
                 <div class="col-12">
                     <p>No grind sessions found for this location.</p>
@@ -73,7 +76,7 @@
                             <p>{{ $comment->comment }}</p>
                             <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
 
-                            @include('layouts.grind.spot.display-posts')
+                            @include('layouts.likes.like-posts')
                         </div>
                     </div>
                 @endforeach
