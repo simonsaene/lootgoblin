@@ -75,7 +75,7 @@
         </nav>
 
         {{-- Main container --}}
-        <div class="container-fluid">
+        <div class="container-fluid" id="featured-3">
             <div class="row">
 
                 <div class="d-flex">

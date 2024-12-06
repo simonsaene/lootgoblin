@@ -1,5 +1,85 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('layouts.grind.spot.page-header')
+    <div class="container" id="featured-3">
+        {{-- Display Session Status or Error Messages --}}
+        @if(session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        {{-- Page Header --}}
+        <h1 class="border-bottom">{{ $grindSpot->name }}</h1>
+
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 align-items-center justify-content-center">
+            <div class="feature col">
+                <div class="feature-icon d-inline-flex fs-2 mb-3">
+                    <i class="bi bi-alarm"></i>
+                </div>
+                <h3 class="fs-2 text-body-emphasis">Total Hours</h3>
+                <h5 class="card-title">{{ number_format($totalHours, 2) }}</h5>
+            </div>
+        
+            <div class="feature col">
+                <div class="feature-icon d-inline-flex fs-2 mb-3">
+                    <i class="bi bi-currency-exchange"></i>
+                </div>
+                <h3 class="fs-2 text-body-emphasis">Total Silver</h3>
+                <h5 class="card-title">{{ number_format($totalSilver) }}</h5>
+            </div>
+        
+            <div class="feature col">
+                <div class="feature-icon d-inline-flex fs-2 mb-3">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+                <h3 class="fs-2 text-body-emphasis">Silver Per Hour</h3>
+                <h5 class="card-title">{{ number_format($totalSilverPerHour) }}</h5>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add{{ $grindSpot->id }}Modal">
+                <i class="bi bi-plus-square-fill"></i> Session
+            </button>
+        </div>
+
+        {{-- Display Grind Sessions --}}
+        <div class="row py-5 bg-body-tertiary justify-content-center">
+            @if($grindSessions->isEmpty())
+                <div class="col-12">
+                    <p>No grind sessions found for this location.</p>
+                </div>
+            @else
+                @include('layouts.grind.spot.display-tables')
+                @include('layouts.grind.modals.add-session-modal')
+            @endif
+        </div>
+
+
+        <div class="comments-section mt-4">
+            <h5>Comments</h5>
+        
+            @if($comments->isNotEmpty())
+                @foreach ($comments as $comment)
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p>{{ $comment->comment }}</p>
+                            <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
+
+                            @include('layouts.grind.spot.display-posts')
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <p>No comments yet.</p>
+            @endif
+        </div>
+    </div>
 @endsection

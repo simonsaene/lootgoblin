@@ -2,9 +2,16 @@
 
 @section('content')
     <div class="container">
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
+        {{-- Display Session Status or Error Messages --}}
+        @if(session('status'))
+            <div class="alert alert-success">
                 {{ session('status') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
         @endif
 
@@ -50,7 +57,6 @@
                 <div class="card">
                     <div class="card-header">{{ __('Test') }}</div>
                     <div class="card-body">
-                       
                     </div>
                 </div>
             </div>
@@ -60,7 +66,7 @@
     <div class="container" style="margin: 20px;">
 
         {{--  Buttons for showing tables --}}
-        <div class="row mb-4 justify-content-center">
+        <div class="row">
             <div class="col-md-12 text-center">
                 <h2 class="mb-3">Tables</h2>
                 <div class="d-flex justify-content-center">
@@ -78,7 +84,7 @@
         </div>
     
         {{-- Tables --}}
-        <div class="row">
+        <div class="row py-5 bg-body-tertiary justify-content-center">
             <div class="col-md-12">
                 <div id="tablesContainer">
 

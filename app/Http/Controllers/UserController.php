@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\GrindSpot;
 use App\Models\Favourite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller

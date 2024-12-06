@@ -50,9 +50,9 @@
                                         <img src="${baseUrl}${item.image}" alt="loot image" /> ${item.name}
                                     </td>
                                     <td>${item.description}</td>
-                                    <td>${item.market_value}</td>
-                                    <td>${item.vendor_value}</td>
-                                    <td>                                   
+                                    <td class="text-end">${item.market_value}</td>
+                                    <td class="text-end">${item.vendor_value}</td>
+                                    <td class="text-center">                                   
                                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editItemModal${item.id}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
@@ -99,9 +99,9 @@
                                     <td>${spot.name}</td>
                                     <td>${spot.location}</td>
                                     <td>${spot.description}</td>
-                                    <td>${spot.suggested_level}</td>
-                                    <td>${spot.suggested_gearscore}</td>
-                                    <td>${spot.difficulty}</td>
+                                    <td class="text-end">${spot.suggested_level}</td>
+                                    <td class="text-end">${spot.suggested_gearscore}</td>
+                                    <td class="text-end">${spot.difficulty}</td>
                                     <td>${spot.mechanics}</td>
                                     <td>                                          
                                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editGrindSpotModal${spot.id}">

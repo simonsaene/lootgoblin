@@ -12,6 +12,7 @@ use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
             Route::post('/post', [PostController::class, 'post'])->name('comments.post');
+            Route::post('/like/{id}', [LikeController::class, 'likePost'])->name('like.post');
+            Route::delete('/unlike/{id}', [LikeController::class, 'unlikePost'])->name('unlike.post');
 
             Route::prefix('/search')->group(function () {
                 Route::get('/', [SearchController::class, 'index'])->name('user.search.page');

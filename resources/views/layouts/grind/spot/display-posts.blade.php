@@ -1,16 +1,25 @@
-<div class="comments-section mt-4">
-    <h5>Comments</h5>
-
-    @if($comments->isNotEmpty())
-        @foreach ($comments as $comment)
-            <div class="card mb-2">
-                <div class="card-body">
-                    <p>{{ $comment->comment }}</p>
-                    <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
-                </div>
-            </div>
-        @endforeach
+{{-- Add the Like button here --}}
+<div class="d-flex justify-content-between mt-2">
+    @if($comment->likes()->where('user_id', auth()->id())->exists())
+        <!-- Unlike Form -->
+        <form action="{{ route('unlike.post', $comment->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+            <input type="hidden" name="post_id" value="{{ $comment->id }}">
+            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-hand-thumbs-up"></i> ({{ $comment->likes()->count() }})
+            </button>
+        </form>
     @else
-        <p>No comments yet. Be the first to post a comment!</p>
+        <!-- Like Form -->
+        <form action="{{ route('like.post', $comment->id) }}" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+            <input type="hidden" name="post_id" value="{{ $comment->id }}">
+            <button type="submit" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-hand-thumbs-up"></i> ({{ $comment->likes()->count() }})
+            </button>
+        </form>
     @endif
 </div>

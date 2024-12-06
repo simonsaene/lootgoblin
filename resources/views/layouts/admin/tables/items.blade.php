@@ -3,7 +3,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th colspan="4" class="text-center">
+                <th colspan="5" class="text-center bg-body-tertiary">
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         <i class="bi bi-plus-square-fill"></i> Add
                     </button>
@@ -12,9 +12,9 @@
             <tr>
                 <th>Item Name</th>
                 <th>Description</th>
-                <th>Market Value</th>
-                <th>Vendor Value</th>
-                <th>Edit/Delete</th>
+                <th class="text-end">Market Value</th>
+                <th class="text-end">Vendor Value</th>
+                <th class="text-center">Edit/Delete</th>
             </tr>
         </thead>
         <tbody id="itemsTableBody">

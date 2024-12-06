@@ -4,7 +4,7 @@
         <thead>
         
             <tr>
-                <th colspan="2" class="text-center">
+                <th colspan="3" class="text-center bg-body-tertiary">
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addGrindSpotItemModal">
                         <i class="bi bi-plus-square-fill"></i> Add
                     </button>

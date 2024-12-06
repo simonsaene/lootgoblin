@@ -2,6 +2,18 @@
 
 @section('content')
     <div class="container" id="featured-3">
+            {{-- Display Session Status or Error Messages --}}
+            @if(session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         @if(empty($spotsWithSessions))
             <h1 class="border-bottom">{{ $user->name }} has no grind sessions</h1>
         @else
@@ -72,7 +84,7 @@
                                             <th class="text-end"><img src="{{ asset('storage/' . $lootItem) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
                                         @endforeach
 
-                                        <th>More</th>
+                                        <th class="text-center">More</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -114,8 +126,10 @@
                                                 @endphp
                                                 <td class="text-end">{{ $quantity }}</td> <!-- Align quantities to the center -->
                                             @endforeach
+
                                             @include('layouts.grind.modals.more-modal')
-                                            <td>
+
+                                            <td class="text-center">
                                                 <button class="btn" data-bs-toggle="modal" data-bs-target="#moreDetailsModal{{ $session->id }}">
                                                     <i class="bi bi-list"></i>
                                                 </button>
@@ -143,6 +157,8 @@
                                         <div class="card-body">
                                             <p>{{ $comment->comment }}</p>
                                             <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
+                                        
+                                            @include('layouts.grind.spot.display-posts')
                                         </div>
                                     </div>
                                 @endforeach
