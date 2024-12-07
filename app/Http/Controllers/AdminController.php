@@ -6,7 +6,6 @@ use App\Models\GrindSpotItem;
 use App\Models\GrindSpot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
@@ -149,8 +148,8 @@ class AdminController extends Controller
                     Storage::disk('public')->delete($item->image);
                 }
 
-                $path = $request->file('image')->store('images', 'public');
-                $item->image = $path;
+                $validatedData['image'] = $request->file('image')->store('images', 'public');
+                $item->image = $validatedData['image'];
             }
     
             $item->save();

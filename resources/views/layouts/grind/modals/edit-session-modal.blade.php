@@ -36,7 +36,7 @@
                         <input type="file" name="loot_image" id="loot_image" class="form-control" accept="image/*">
                         @if($session->loot_image)
                             <div>
-                                <img src="{{ asset('storage/loot_images/'.$session->loot_image) }}" alt="Current Loot Image" class="img-thumbnail" style="max-width: 150px;">
+                                <img src="{{ asset('storage/' . $session->loot_image) }}" alt="Current Loot Image" class="img-thumbnail" style="max-width: 150px;">
                             </div>
                         @endif
                     </div>

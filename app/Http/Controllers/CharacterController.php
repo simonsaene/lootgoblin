@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Character;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 class CharacterController extends Controller
 {
     public function validateData(Request $request)
@@ -61,6 +62,19 @@ class CharacterController extends Controller
             $character->name = $validatedData['name'];
             $character->level = $validatedData['level'];
             $character->class = $validatedData['class'];
+
+
+            if ($request->hasFile('profile_image')) {
+
+                if ($character->profile_image) {
+
+                    Log::debug("Deleting old image: " . $character->profile_image);
+                    Storage::disk('public')->delete($character->profile_image);
+                }
+
+                $validatedData['profile_image'] = $request->file('profile_image')->store('profile_images', 'public');
+                $character->profile_image = $validatedData['profile_image'];
+            }
         
             $character->save();
         

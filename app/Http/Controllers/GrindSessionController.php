@@ -13,6 +13,7 @@ use App\Models\Like;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class GrindSessionController extends Controller
 {
@@ -121,19 +122,22 @@ class GrindSessionController extends Controller
                     'lootImages' => $lootImages,
                 ];
 
-                // Get the sessions for this grind spot
                 $spotGrindSessions = $allGrindSessions->filter(function ($session) use ($spot) {
                     return $session->grind_spot_id === $spot->id;
                 });
 
                 if ($spotGrindSessions->isNotEmpty()) {
-                    // Calculate stats
                     $totalHours = $spotGrindSessions->sum('hours');
                     $totalSilver = $spotGrindSessions->flatMap(function ($session) {
                         return $session->grindSessionItems->map(function ($item) {
                             $marketValue = $item->grindSpotItem->item->market_value;
                             $vendorValue = $item->grindSpotItem->item->vendor_value;
-                            $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
+                            $valuePerItem = 0;
+                            if ($marketValue === 0) {
+                                $valuePerItem = $vendorValue;
+                            } else {
+                                $valuePerItem = $marketValue;
+                            }
                             return $item->quantity * $valuePerItem;
                         });
                     })->sum();

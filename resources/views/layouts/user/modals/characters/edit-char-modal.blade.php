@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form method="POST" action="{{ route('characters.edit', $character->id) }}">
+            <form method="POST" action="{{ route('characters.edit', $character->id) }}" enctype="multipart/form-data">
                 <div class="modal-body">
                     @csrf
                     @method('PUT')
@@ -21,6 +21,10 @@
                         <input type="number" class="form-control" id="characterLevel{{ $character->id }}" name="level" 
                             value="{{ $character->level }}" required>
                             <label for="characterLevel{{ $character->id }}" class="form-label">Level</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="profile_image">Upload Image (optional)</label>
+                        <input type="file" class="form-control" name="profile_image" accept="image/*">
                     </div>
                     <div class="mb-3">
                         <select class="form-select" id="characterClass{{ $character->id }}" name="class" required>
