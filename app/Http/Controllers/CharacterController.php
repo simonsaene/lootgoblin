@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 class CharacterController extends Controller
 {
-    public function validateData(Request $request)
+    public function validateupdate(Request $request)
     {
         return $request->validate([
             'name' => 'required|string|max:255',
@@ -20,7 +20,7 @@ class CharacterController extends Controller
     {
         try
         {   
-            $validatedData = $this->validateData($request);
+            $validatedupdate = $this->validateupdate($request);
 
 
             if ($request->hasFile('profile_image')) {
@@ -31,16 +31,16 @@ class CharacterController extends Controller
 
                 Log::debug("Image stored at: " . $path);
 
-                $validatedData['profile_image'] = $path;
+                $validatedupdate['profile_image'] = $path;
             } else {
                 Log::debug("No image uploaded.");
             }
 
             Character::create([
-                    'name' => $validatedData['name'],
-                    'level' => $validatedData['level'],
-                    'profile_image' => $validatedData['profile_image'] ?? null,
-                    'class' => $validatedData['class'],
+                    'name' => $validatedupdate['name'],
+                    'level' => $validatedupdate['level'],
+                    'profile_image' => $validatedupdate['profile_image'] ?? null,
+                    'class' => $validatedupdate['class'],
                     'user_id' => auth()->id(),
                 ]);
 
@@ -55,34 +55,42 @@ class CharacterController extends Controller
     public function editChar($id, Request $request)
     {
         try {
+            // Find character by ID
             $character = Character::findOrFail($id);
-
-            $validatedData = $this->validateData($request);
-
-            $character->name = $validatedData['name'];
-            $character->level = $validatedData['level'];
-            $character->class = $validatedData['class'];
-
-
+    
+            // Validate the incoming update
+            $validatedupdate = $this->validateupdate($request);
+    
+            // Prepare the update for updating
+            $update = [
+                'name' => $validatedupdate['name'],
+                'level' => $validatedupdate['level'],
+                'class' => $validatedupdate['class'],
+            ];
+    
+            // Handle profile image if a new one is uploaded
             if ($request->hasFile('profile_image')) {
-
+                // Delete the old image if it exists
                 if ($character->profile_image) {
-
                     Log::debug("Deleting old image: " . $character->profile_image);
                     Storage::disk('public')->delete($character->profile_image);
                 }
-
-                $validatedData['profile_image'] = $request->file('profile_image')->store('profile_images', 'public');
-                $character->profile_image = $validatedData['profile_image'];
+    
+                // Store the new image and add it to the update update
+                $update['profile_image'] = $request->file('profile_image')->store('profile_images', 'public');
             }
-        
-            $character->save();
-        
+    
+            // Perform the batch update in one query
+            $character->update($update);
+    
+            // Return success response
             return redirect()->route('user.home')->with('status', 'Character updated successfully!');
         } catch (\Exception $e) {
+            // Handle errors and provide feedback
             return redirect()->back()->with('error', 'Error updating character: ' . $e->getMessage());
         }
     }
+    
 
     public function deleteChar($id)
     {

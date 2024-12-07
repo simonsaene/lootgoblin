@@ -184,6 +184,20 @@ class GrindSessionController extends Controller
         ));
     }
 
+    public function validateData(Request $request)
+    {
+        return $request->validate([
+            'grind_spot_id' => 'required|integer',
+            'loot_image' => 'image|nullable',
+            'video_link' => 'url|nullable',
+            'notes' => 'string|nullable',
+            'hours' => 'nullable|numeric|min:0',
+            'is_video_verified' => 'boolean',
+            'is_image_verified' => 'boolean',
+            'item_quantities' => 'array',
+            'item_quantities.*' => 'required|integer|min:0',
+        ]);
+    }
 
     public function addSession(Request $request)
     {
@@ -191,17 +205,7 @@ class GrindSessionController extends Controller
         {
             Log::debug('Request Data:', $request->all());
 
-            $validatedData = $request->validate([
-                'grind_spot_id' => 'required|integer',
-                'loot_image' => 'image|nullable',
-                'video_link' => 'url|nullable',
-                'notes' => 'string|nullable',
-                'hours' => 'nullable|numeric|min:0',
-                'is_video_verified' => 'boolean',
-                'is_image_verified' => 'boolean',
-                'item_quantities' => 'array',
-                'item_quantities.*' => 'required|integer|min:0',
-            ]);
+            $validatedData = $this->validateData($request);
 
             $validatedData['hours'] = floatval($validatedData['hours']);
 
@@ -220,6 +224,7 @@ class GrindSessionController extends Controller
                 'is_video_verified' => $validatedData['is_video_verified'] ?? false,
                 'is_image_verified' => $validatedData['is_image_verified'] ?? false,
             ]);
+
             Log::debug('Image Upload Debug', [
                 'has_file' => $request->hasFile('loot_image'),
                 'file_exists' => $request->file('loot_image') ? true : false,
@@ -227,7 +232,7 @@ class GrindSessionController extends Controller
             ]);
             Log::debug('Validated Data:', $validatedData);
 
-            //Log::debug('GrindSession Created:', $grindSession);
+            Log::debug('GrindSession Created:', $grindSession);
         
             foreach ($validatedData['item_quantities'] as $itemId => $quantity) {
                 if ($quantity > 0) {
@@ -236,7 +241,7 @@ class GrindSessionController extends Controller
                         'grind_spot_item_id' => $itemId,
                         'quantity' => $quantity,
                     ]);
-                    //Log::debug('GrindSessionItem Created for Item ID ' . $itemId . ' with Quantity:', $quantity);
+                    Log::debug('GrindSessionItem Created for Item ID ' . $itemId . ' with Quantity:', $quantity);
                 }
             }
     
@@ -272,29 +277,27 @@ class GrindSessionController extends Controller
 
             $grindSession = GrindSession::findOrFail($id);
 
-            // Validate the incoming data
-            $validatedData = $request->validate([
-                'grind_spot_id' => 'required|integer',
-                'loot_image' => 'image|nullable',
-                'video_link' => 'url|nullable',
-                'notes' => 'string|nullable',
-                'hours' => 'nullable|numeric|min:0',
-                'is_video_verified' => 'boolean',
-                'is_image_verified' => 'boolean',
-                'item_quantities' => 'array',
-                'item_quantities.*' => 'required|integer|min:0',
-            ]);
+            $validatedData = $this->validateData($request);
 
             $validatedData['hours'] = floatval($validatedData['hours']);
 
             if ($request->hasFile('loot_image')) {
+
+                if ($grindSession->loot_image) {
+                    Log::debug("Deleting old loot image: " . $grindSession->loot_image);
+                    Storage::disk('public')->delete($grindSession->loot_image);
+                }
+
                 $path = $request->file('loot_image')->store('loot_images', 'public');
                 $validatedData['loot_image'] = $path;
+            } else {
+
+                $validatedData['loot_image'] = $grindSession->loot_image;
             }
 
             $grindSession->update([
                 'grind_spot_id' => $validatedData['grind_spot_id'],
-                'loot_image' => $validatedData['loot_image'] ?? $grindSession->loot_image, // Keep the old image if no new one is uploaded
+                'loot_image' => $validatedData['loot_image'] ?? $grindSession->loot_image,
                 'video_link' => $validatedData['video_link'] ?? $grindSession->video_link,
                 'notes' => $validatedData['notes'] ?? $grindSession->notes,
                 'hours' => $validatedData['hours'] ?? $grindSession->hours,
@@ -302,8 +305,7 @@ class GrindSessionController extends Controller
                 'is_image_verified' => $validatedData['is_image_verified'] ?? $grindSession->is_image_verified,
             ]);
 
-            // Delete existing GrindSessionItems and recreate them with new quantities
-            $grindSession->grindSessionItems()->delete();   // Delete all associated items
+            $grindSession->grindSessionItems()->delete();
 
             foreach ($validatedData['item_quantities'] as $itemId => $quantity) {
                 if ($quantity > 0) {
@@ -315,7 +317,6 @@ class GrindSessionController extends Controller
                 }
             }
 
-            // Retrieve the related grind spot and redirect to its page
             $grindSpot = GrindSpot::find($validatedData['grind_spot_id']);
 
             if ($grindSpot) {
@@ -339,5 +340,27 @@ class GrindSessionController extends Controller
         }
     }
 
+    public function deleteSession($id)
+    {
+        try {
+            $session = GrindSession::findOrFail($id);
     
+            if ($session->user_id != auth()->id()) {
+                return redirect()->route('grind.location')->with('error', 'You are not authorized to delete this session.');
+            }
+
+            $grindSpotId = $session->grind_spot_id;
+
+            $session->delete();
+    
+            // Redirect back to the grind spot after deleting the session
+            return redirect()->route('grind.location', ['id' => $grindSpotId])
+                ->with('status', 'Session deleted successfully!');
+
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the deletion process
+            return redirect()->back()->with('error', 'Error deleting session: ' . $e->getMessage());
+        }
+    }
+
 }

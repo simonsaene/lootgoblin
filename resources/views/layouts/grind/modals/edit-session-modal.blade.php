@@ -34,11 +34,6 @@
                     <div class="mb-3">
                         <label for="loot_image" class="form-label">Loot Image (optional)</label>
                         <input type="file" name="loot_image" id="loot_image" class="form-control" accept="image/*">
-                        @if($session->loot_image)
-                            <div>
-                                <img src="{{ asset('storage/' . $session->loot_image) }}" alt="Current Loot Image" class="img-thumbnail" style="max-width: 150px;">
-                            </div>
-                        @endif
                     </div>
 
                     {{-- Video Link --}}

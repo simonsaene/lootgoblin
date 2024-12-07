@@ -66,9 +66,13 @@
                         <i class="bi bi-pencil-square"></i>
                     </button>
 
-                    <button class="btn" data-bs-toggle="modal" data-bs-target="#editSessionModal{{ $session->id }}">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                    <form method="POST" action="{{ route('grind.session.delete', $session->id) }}" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
         @endforeach

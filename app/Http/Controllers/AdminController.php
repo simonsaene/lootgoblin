@@ -128,36 +128,43 @@ class AdminController extends Controller
 
     public function editItem($id, Request $request)
     {
-        
         try {
             Log::debug('Incoming request data: ', $request->all());
             $item = Item::findOrFail($id);
 
+            // Validate the incoming data
             $validatedData = $this->validateData($request, 'item');
             Log::debug('Validated data: ', $validatedData);
 
-            $item->name = $validatedData['name'];
-            $item->description = $validatedData['description'];
-            $item->market_value = $validatedData['market_value'];
-            $item->vendor_value = $validatedData['vendor_value'];
-            $item->is_trash = $request->has('is_trash') ? 1 : 0;
-    
+            // Prepare the data to be updated
+            $update = [
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
+                'market_value' => $validatedData['market_value'],
+                'vendor_value' => $validatedData['vendor_value'],
+                'is_trash' => $request->has('is_trash') ? 1 : 0,
+            ];
+
+            // If there's a new image, handle file upload
             if ($request->hasFile('image')) {
 
+                // Delete the old image if it exists
                 if ($item->image) {
                     Storage::disk('public')->delete($item->image);
                 }
 
-                $validatedData['image'] = $request->file('image')->store('images', 'public');
-                $item->image = $validatedData['image'];
+                // Store the new image and add it to the update data
+                $update['image'] = $request->file('image')->store('images', 'public');
             }
-    
-            $item->save();
+
+            // Perform the batch update
+            $item->update($update);
+
             Log::debug('Item edited successfully.');
 
             return redirect()->route('admin.home')->with('status', 'Item updated successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to updated item: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update item: ' . $e->getMessage());
         }
     }
 

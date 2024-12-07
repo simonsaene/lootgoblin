@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
             {
                 Route::post('/add', [GrindSessionController::class, 'addSession'])->name('grind.session.add');
                 Route::put('/edit/{id}', [GrindSessionController::class, 'editSession'])->name('grind.session.edit');
+                Route::delete('/delete/{id}', [GrindSessionController::class, 'deleteSession'])->name('grind.session.delete');
             });
 
         });
