@@ -70,24 +70,14 @@
                                         <th>Date</th>
                                         <th class="text-end">Hours</th>
                                         <th class="text-end">Silver</th>
-                                        @php
-                                            // Get all unique loot items from all grind sessions
-                                            $lootItems = [];
-                                            $lootImages = [];
-                                            foreach ($grindSessionsPaginated[$spot->id] as $session) {
-                                                foreach ($session->grindSessionItems as $item) {
-                                                    $lootItems[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->name;
-                                                    $lootImages[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->image;
 
-                                                }
-                                            }
-                                        @endphp
-
-                                        {{-- Display unique loot item columns --}}
-                                        @foreach ($lootImages as $images)
-                                            <th class="text-end"><img src="{{ asset('storage/' . $images) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
+                                        {{-- Display loot item columns for the selected spot --}}
+                                        @foreach ($lootData[$spot->id]['lootImages'] as $image)
+                                            <th class="text-end">
+                                                <img src="{{ asset('storage/' . $image) }}" alt="Loot Image" style="max-width: 150px;">
+                                            </th>
                                         @endforeach
-
+                                                
                                         <th class="text-center">More</th>
                                     </tr>
                                 </thead>
@@ -117,8 +107,8 @@
                                                 {{ number_format($totalSilver) }}
                                             </td>
                                             
-                                            {{-- Display loot item quantities --}}
-                                            @foreach ($lootItems as $lootItem)
+                                            {{-- Display loot item quantities for each session --}}
+                                            @foreach ($lootData[$spot->id]['lootItems'] as $lootItem)
                                                 @php
                                                     $quantity = 0;
                                                     foreach ($session->grindSessionItems as $item) {
@@ -128,8 +118,13 @@
                                                         }
                                                     }
                                                 @endphp
-                                                <td class="text-end">{{ $quantity }}</td> <!-- Align quantities to the center -->
+                                                <td class="text-end">{{ number_format($quantity) }}</td> 
                                             @endforeach
+
+                                            <script>
+                                                var lootData = @json($lootData);
+                                                console.log(lootData);
+                                            </script>
 
                                             @include('layouts.grind.modals.more-modal')
 

@@ -20,7 +20,9 @@ class GrindSessionController extends Controller
     {
         try
         {   $user = auth()->id();
-            $grindSpots = GrindSpot::all();
+            $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
+                $query->where('is_trash', true);
+            }])->get();
 
             $grindSpot = GrindSpot::findOrFail($id);
 
@@ -89,52 +91,54 @@ class GrindSessionController extends Controller
 
     public function playerGrindSessions($id)
     {
-        try
-        {
+        try {
             $user = User::findOrFail($id);
 
-            $grindSpots = GrindSpot::with(['grindSpotItems.item' => function ($query) {
-                $query->where('is_trash', true);
-            }])->get();
+            $grindSpots = GrindSpot::with(['grindSpotItems.item'])->get(); // Ensure all items related to grind spots are fetched
 
             $allGrindSessions = GrindSession::where('user_id', $id)
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
                 ->get();
 
-            $grindSpotItems = GrindSpotItem::all();
-
             $grindSessionsPaginated = [];
             $grindSpotStats = [];
             $comments = [];
             $spotsWithSessions = [];
+            $lootData = [];
 
             foreach ($grindSpots as $spot) {
+                $lootItems = [];
+                $lootImages = [];
 
+                // Gather all loot items for this grind spot
+                foreach ($spot->grindSpotItems as $spotItem) {
+                    $lootItems[] = $spotItem->item->name;
+                    $lootImages[] = $spotItem->item->image;
+                }
+
+                $lootData[$spot->id] = [
+                    'lootItems' => $lootItems,
+                    'lootImages' => $lootImages,
+                ];
+
+                // Get the sessions for this grind spot
                 $spotGrindSessions = $allGrindSessions->filter(function ($session) use ($spot) {
                     return $session->grind_spot_id === $spot->id;
                 });
 
                 if ($spotGrindSessions->isNotEmpty()) {
-
+                    // Calculate stats
                     $totalHours = $spotGrindSessions->sum('hours');
                     $totalSilver = $spotGrindSessions->flatMap(function ($session) {
                         return $session->grindSessionItems->map(function ($item) {
                             $marketValue = $item->grindSpotItem->item->market_value;
                             $vendorValue = $item->grindSpotItem->item->vendor_value;
-                            if ($marketValue == 0) {
-                                $valuePerItem = $vendorValue;
-                            } else {
-                                $valuePerItem = $marketValue;
-                            }
+                            $valuePerItem = ($marketValue == 0) ? $vendorValue : $marketValue;
                             return $item->quantity * $valuePerItem;
                         });
                     })->sum();
 
-                    if ($totalHours > 0) {
-                        $totalSilverPerHour = $totalSilver / $totalHours;
-                    } else {
-                        $totalSilverPerHour = 0;
-                    }
+                    $totalSilverPerHour = ($totalHours > 0) ? $totalSilver / $totalHours : 0;
 
                     $grindSpotStats[$spot->id] = [
                         'totalHours' => $totalHours,
@@ -145,15 +149,16 @@ class GrindSessionController extends Controller
                     $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
                         ->where('grind_spot_id', $spot->id)
                         ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
-                        ->paginate(20); 
+                        ->paginate(20);
 
                     $spotsWithSessions[] = $spot;
                 }
 
-                    $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
-                        ->where('user_id', $id)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+                // Comments for the spot
+                $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
+                    ->where('user_id', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('user.home')->with('error', 'User not found.');
@@ -170,12 +175,11 @@ class GrindSessionController extends Controller
             'grindSessionsPaginated',
             'grindSpotStats',
             'allGrindSessions',
-            'grindSpotItems',
-            'comments'
+            'comments',
+            'lootData'
         ));
     }
 
-    
 
     public function addSession(Request $request)
     {

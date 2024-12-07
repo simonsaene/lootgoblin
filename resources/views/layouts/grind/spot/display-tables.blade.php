@@ -71,22 +71,6 @@
                     </button>
                 </td>
             </tr>
-
-            <tr class="collapse" id="more-details-{{ $session->id }}">
-                <td colspan="{{ count($session->grindSessionItems) + 4 }}">
-                    <div>
-                        <strong>Video:</strong> {{ $session->video_link ?? 'N/A' }}<br>
-                        <strong>Loot Image:</strong> 
-                        @if($session->loot_image)
-                            <img src="{{ asset($session->loot_image) }}" alt="Loot Image" style="max-width: 150px;">
-                        @else
-                            N/A
-                        @endif
-                        <br>
-                        <strong>Notes:</strong> {{ $session->notes ?? 'N/A' }}
-                    </div>
-                </td>
-            </tr>
         @endforeach
     </tbody>
 </table>
