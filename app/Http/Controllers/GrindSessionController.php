@@ -101,6 +101,8 @@ class GrindSessionController extends Controller
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
                 ->get();
 
+            $grindSpotItems = GrindSpotItem::all();
+
             $grindSessionsPaginated = [];
             $grindSpotStats = [];
             $comments = [];
@@ -168,6 +170,7 @@ class GrindSessionController extends Controller
             'grindSessionsPaginated',
             'grindSpotStats',
             'allGrindSessions',
+            'grindSpotItems',
             'comments'
         ));
     }

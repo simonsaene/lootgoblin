@@ -73,16 +73,19 @@
                                         @php
                                             // Get all unique loot items from all grind sessions
                                             $lootItems = [];
+                                            $lootImages = [];
                                             foreach ($grindSessionsPaginated[$spot->id] as $session) {
                                                 foreach ($session->grindSessionItems as $item) {
-                                                    $lootItems[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->image; // Using item name as key to avoid duplicates
+                                                    $lootItems[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->name;
+                                                    $lootImages[$item->grindSpotItem->item->name] = $item->grindSpotItem->item->image;
+
                                                 }
                                             }
                                         @endphp
 
                                         {{-- Display unique loot item columns --}}
-                                        @foreach ($lootItems as $lootItem)
-                                            <th class="text-end"><img src="{{ asset('storage/' . $lootItem) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
+                                        @foreach ($lootImages as $images)
+                                            <th class="text-end"><img src="{{ asset('storage/' . $images) }}" alt="Loot Image" style="max-width: 150px;"></th> <!-- Align loot item columns to center -->
                                         @endforeach
 
                                         <th class="text-center">More</th>
