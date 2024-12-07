@@ -1,8 +1,8 @@
 {{-- Side Bar --}}
-<nav id="sidebar" class="bg-dark sidebar" style="width: 200px; height: 100vh; position: sticky; top: 0; overflow-y: auto;">
+<nav id="sidebar" class="bg-dark sidebar" style="width: 250px; height: 100vh; position: sticky; top: 0; overflow-y: auto;">
     <div class="position-sticky">
         <ul class="nav flex-column">
-            <li class="nav-item text-center border-bottom">
+            <li class="nav-item text-center border-bottom bg-secondary mt-3">
                 <span class="fs-5 fw-semibold">User</span>
             </li>
             <ul class="nav flex-column ms-3">
@@ -33,7 +33,7 @@
             </ul>
 
             <!-- Grind Section -->
-            <li class="nav-item text-center border-bottom">
+            <li class="nav-item text-center border-bottom bg-secondary mt-3">
                 <span class="fs-5 fw-semibold">Grind</span>
             </li>
             <ul class="nav flex-column ms-3">
