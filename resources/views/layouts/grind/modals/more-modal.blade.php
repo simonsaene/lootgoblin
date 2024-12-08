@@ -9,9 +9,9 @@
                 <div>
                     <strong>Loot Image:</strong> 
                     @if($session->loot_image)
-                        @if($session->is_image_verified === false)
+                        @if($session->is_image_verified === 0)
                             <i class="bi bi-slash-square" title="Image not verified"></i> Image Unverified
-                        @elseif($session->is_image_verified === true)
+                        @elseif($session->is_image_verified === 1)
                             <img src="{{ asset('storage/' . $session->loot_image ) }}" alt="Loot Image" style="max-width: 150px;">
                         @else
                             N/A
@@ -23,9 +23,9 @@
 
                     <strong>Video:</strong>
                     @if($session->video_link)
-                        @if($session->is_video_verified === false)
+                        @if($session->is_video_verified === 0)
                             <i class="bi bi-slash-square" title="Video not verified"></i> Video Unverified.
-                        @elseif($session->is_video_verified === true)
+                        @elseif($session->is_video_verified === 1)
                             {{ $session->video_link }}
                         @else
                             N/A

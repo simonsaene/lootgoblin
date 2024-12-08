@@ -79,6 +79,12 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['admin'])->group(function () {
             Route::get('/', [AdminController::class, 'index'])->name('admin.home');
 
+            // Verify video/images
+            Route::prefix('/verify')->group(function () {
+                Route::post('/video', [AdminController::class, 'verifyVideo'])->name('admin.verify.video');
+                Route::post('/image', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
+            });
+
             // Tables
             Route::prefix('/tables')->group(function () {
             

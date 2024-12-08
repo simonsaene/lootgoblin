@@ -1,5 +1,5 @@
 {{-- Grind Spots table --}}
-<div id="grindSpotsTable" class="table-responsive" style="display: none;">
+<div id="grindSpotsTable" class="table-responsive mt-5 mb-5" style="display: none; padding: 0; margin: 0; width: 100%;">
     <table class="table">
         <thead>
             

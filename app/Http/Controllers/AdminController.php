@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\GrindSpotItem;
 use App\Models\GrindSpot;
+use App\Models\GrindSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -29,10 +30,21 @@ class AdminController extends Controller
             $query->where('is_trash', true);
         }])->get();
 
+        $sessions = GrindSession::all();
+
+        // Filter sessions that have unverified video/image
+        $unverifiedSessions = $sessions->filter(function($session) {
+            return (
+                ($session->video_link && $session->is_video_verified === 0) || 
+                ($session->loot_image && $session->is_image_verified === 0)
+            );
+        });
+
         return view('layouts.admin.admin-home', compact(
             'items', 
             'grindSpotItems' , 
-            'grindSpots'
+            'grindSpots',
+            'unverifiedSessions'
         ));
     }
 
@@ -285,6 +297,44 @@ class AdminController extends Controller
         $grindSpot->delete();
 
         return redirect()->route('admin.home')->with('success', 'Item removed from grind spot successfully!');
+    }
+
+    public function verifyVideo(Request $request)
+    {
+        try {
+            // Find the session by its ID
+            $session = GrindSession::findOrFail($request->session_id);
+
+            // Update the verification status of the video
+            $session->is_video_verified = 1;
+            $session->save();
+
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'Video successfully verified!');
+        } catch (\Exception $e) {
+            // Handle error and log it
+            Log::error('Error verifying video: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to verify video.');
+        }
+    }
+
+    public function verifyImage(Request $request)
+    {
+        try {
+            // Find the session by its ID
+            $session = GrindSession::findOrFail($request->session_id);
+
+            // Update the verification status of the image
+            $session->is_image_verified = 1;
+            $session->save();
+
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'Image successfully verified!');
+        } catch (\Exception $e) {
+            // Handle error and log it
+            Log::error('Error verifying image: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to verify image.');
+        }
     }
     
 }

@@ -1,5 +1,5 @@
 {{-- Items table --}}
-<div id="itemsTable" class="table-responsive" style="display: none;">
+<div id="itemsTable" class="table-responsive col-md-12 col-12 mt-5 mb-5" style="display: none; padding: 0; margin: 0; width: 100%;">
     <table class="table">
         <thead>
             <tr>

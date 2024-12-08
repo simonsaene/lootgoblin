@@ -15,94 +15,69 @@
             </div>
         @endif
 
-        {{-- First row (mb-4 adds margin bottom) --}}
-        <div class="row mb-4">
-
-            {{-- First card --}}
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">{{ __('General') }}</div>
-                    <div class="card-body">
-                        {{ __('EEmpty') }}
-                    </div>
+        <h1 class="border-bottom">Admin</h1>
+        <div class="row mt-5">
+            <div class="col-md-6 col-12">
+                <h3 class="pb-2 border-bottom"><i class="bi bi-patch-check"></i> Session Data Verification</h3>
+                <div class="pb-2">
+                    <p><i class="bi bi-camera-video"></i> Videos</p>
+                        @foreach($unverifiedSessions as $session)
+                            @if($session->video_link && $session->is_video_verified === 0)
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#verifyVideoModal{{ $session->id }}">
+                                    Session: {{ $session->id }}
+                                </button>
+                                @include('layouts.admin.modals.verify.verify-video')
+                            @endif
+                        @endforeach
+                </div>
+                <div>
+                    <p><i class="bi bi-image"></i> Images</p>
+                    @foreach($unverifiedSessions as $session)
+                        @if($session->loot_image && $session->is_image_verified === 0)
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#verifyImageModal{{ $session->id }}">
+                                Session: {{ $session->id }}
+                            </button>
+                            @include('layouts.admin.modals.verify.verify-image')
+                        @endif
+                    @endforeach
                 </div>
             </div>
+        
+            <div class="col-md-6 col-12">
+                <h3 class="pb-2 border-bottom"><i class="bi bi-hammer"></i> Banned Users</h3>
+            </div>
+        </div>
 
-            {{-- Second card --}}
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">{{ __('Window') }}</div>
-                    <div class="card-body">
-                        {{ __('Empty') }}
-                    </div>
-                </div>
+
+        <div class="row mt-5">
+            <h3 class="mb-3  border-bottom"><i class="bi bi-database-fill-gear"></i> Tables</h3>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('itemsTable')">
+                    <i class="bi bi-chevron-expand"></i> Items
+                </button>
+                <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('grindSpotItemsTable')">
+                    <i class="bi bi-chevron-expand"></i> Grind Spot Items
+                </button>
+                <button type="button" class="btn btn-outline-warning" onclick="fetchData('grindSpotsTable')">
+                    <i class="bi bi-chevron-expand"></i> Grind Spots
+                </button>
             </div>
         </div>
 
-        {{-- Second row --}}
-        <div class="row">
-
-            {{-- Third card --}}
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">{{ __('Verification') }}</div>
-                    <div class="card-body">
-                        {{ __('Verification Options') }}
-                </div>
-                </div>
-            </div>
-
-            {{-- Fourth card --}}
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">{{ __('Test') }}</div>
-                    <div class="card-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" style="margin: 20px;">
-
-        {{--  Buttons for showing tables --}}
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h2 class="mb-3">Tables</h2>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('itemsTable')">
-                        <i class="bi bi-chevron-expand"></i> Items
-                    </button>
-                    <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('grindSpotItemsTable')">
-                        <i class="bi bi-chevron-expand"></i> Grind Spot Items
-                    </button>
-                    <button type="button" class="btn btn-outline-warning" onclick="fetchData('grindSpotsTable')">
-                        <i class="bi bi-chevron-expand"></i> Grind Spots
-                    </button>
-                </div>
-            </div>
-        </div>
-    
         {{-- Tables --}}
-        <div class="row py-5 bg-body-tertiary justify-content-center">
-            <div class="col-md-12">
-                <div id="tablesContainer">
-
-                    {{-- Displays tables --}}
-                    @include('layouts.admin.tables.items')
-                    @include('layouts.admin.tables.grind-spot-items')
-                    @include('layouts.admin.tables.grind-spots')
-    
-                </div>
-            </div>
+        <div class="row mt-3 bg-body-tertiary">
+            {{-- Displays tables --}}
+            @include('layouts.admin.tables.items')
+            @include('layouts.admin.tables.grind-spot-items')
+            @include('layouts.admin.tables.grind-spots')
         </div>
-
-        {{-- Modals for adding items, items to grind spots and grind spots --}}
-        @include('layouts.admin.modals.items.add-item-modal')
-        @include('layouts.admin.modals.grind-spot-items.add-grind-spot-item-modal', ['items' => $items, 'grindSpots' => $grindSpots])
-        @include('layouts.admin.modals.grind-spots.add-grind-spot-modal')
-
     </div>
+
+    {{-- Modals for adding items, items to grind spots and grind spots --}}
+    @include('layouts.admin.modals.items.add-item-modal')
+    @include('layouts.admin.modals.grind-spot-items.add-grind-spot-item-modal', ['items' => $items, 'grindSpots' => $grindSpots])
+    @include('layouts.admin.modals.grind-spots.add-grind-spot-modal')
+
 
     {{-- AJAX for showing tables --}}
     @include('layouts.admin.display-tables')
@@ -116,5 +91,4 @@
     @foreach ($grindSpots as $spot)
         @include('layouts.admin.modals.grind-spots.edit-grind-spot-modal')
     @endforeach
-
 @endsection

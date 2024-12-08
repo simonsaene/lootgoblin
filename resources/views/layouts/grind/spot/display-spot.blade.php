@@ -18,7 +18,7 @@
         {{-- Page Header --}}
         <h1 class="border-bottom">{{ $grindSpot->name }}</h1>
 
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 align-items-center justify-content-center">
+        <div class="row py-5 row-cols-1 row-cols-lg-3 align-items-center justify-content-center">
             <div class="feature col">
                 <div class="feature-icon d-inline-flex fs-2 mb-3">
                     <i class="bi bi-alarm"></i>

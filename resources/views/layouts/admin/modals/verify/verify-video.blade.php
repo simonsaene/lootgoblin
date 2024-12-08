@@ -1,0 +1,27 @@
+<div class="modal fade" id="verifyVideoModal{{ $session->id }}" tabindex="-1" aria-labelledby="verifyVideoModalLabel{{ $session->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verifyVideoModalLabel{{ $session->id }}">Loot Image for Session: {{ $session->id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Display the loot image -->
+                <div class="text-center">
+                    {{ $session->video_link }}
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <form action="{{ route('admin.verify.video') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="session_id" value="{{ $session->id }}">
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="bi bi-check-circle"></i> Verify Video
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
