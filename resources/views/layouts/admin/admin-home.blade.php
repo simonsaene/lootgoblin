@@ -50,7 +50,12 @@
 
 
         <div class="row mt-5">
-            <h3 class="mb-3  border-bottom"><i class="bi bi-database-fill-gear"></i> Tables</h3>
+            <h3 class="mb-3  border-bottom">
+                <i class="bi bi-database-fill-gear"></i> Tables 
+                <button type="button" class="btn">
+                    <i class="bi bi-info-lg"></i> Help
+                </button>
+            </h3>
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('itemsTable')">
                     <i class="bi bi-chevron-expand"></i> Items
@@ -58,8 +63,16 @@
                 <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('grindSpotItemsTable')">
                     <i class="bi bi-chevron-expand"></i> Grind Spot Items
                 </button>
-                <button type="button" class="btn btn-outline-warning" onclick="fetchData('grindSpotsTable')">
+                <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('grindSpotsTable')">
                     <i class="bi bi-chevron-expand"></i> Grind Spots
+                </button>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="bi bi-info-circle"></i> Help
                 </button>
             </div>
         </div>
@@ -72,7 +85,7 @@
             @include('layouts.admin.tables.grind-spots')
         </div>
     </div>
-
+    @include('layouts.admin.modals.help-modal')
     {{-- Modals for adding items, items to grind spots and grind spots --}}
     @include('layouts.admin.modals.items.add-item-modal')
     @include('layouts.admin.modals.grind-spot-items.add-grind-spot-item-modal', ['items' => $items, 'grindSpots' => $grindSpots])

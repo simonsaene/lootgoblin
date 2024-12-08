@@ -7,34 +7,39 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <strong>Loot Image:</strong> 
                     @if($session->loot_image)
                         @if($session->is_image_verified === 0)
                             <i class="bi bi-slash-square" title="Image not verified"></i> Image Unverified
                         @elseif($session->is_image_verified === 1)
                             <img src="{{ asset('storage/' . $session->loot_image ) }}" alt="Loot Image" style="max-width: 150px;">
                         @else
-                            N/A
+                            No Loot Image
                         @endif
                     @else
-                        N/A
+                    No Loot Image
                     @endif
                     <br>
 
-                    <strong>Video:</strong>
                     @if($session->video_link)
                         @if($session->is_video_verified === 0)
                             <i class="bi bi-slash-square" title="Video not verified"></i> Video Unverified.
                         @elseif($session->is_video_verified === 1)
-                            {{ $session->video_link }}
+                            <a href="{{ $session->video_link }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                Watch Video
+                            </a>
                         @else
-                            N/A
+                            No Video
                         @endif
                     @else
-                        N/A
+                        No Video
                     @endif
                     <br>
-                    <strong>Notes:</strong> {{ $session->notes ?? 'N/A' }}
+
+                    @if($session->notes)
+                        <strong>Notes:</strong> {{ $session->notes }}
+                    @else
+                        No Notes
+                    @endif
                 </div>
             </div>
             <div class="modal-footer">

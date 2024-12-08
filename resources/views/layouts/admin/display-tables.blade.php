@@ -52,6 +52,9 @@
                                     <td>${item.description}</td>
                                     <td class="text-end">${item.market_value}</td>
                                     <td class="text-end">${item.vendor_value}</td>
+                                    <td class="text-center">
+                                        <span>${item.is_trash === 1 ? '<i class="bi bi-check2"></i>' : ''}</span>
+                                    </td>
                                     <td class="text-center">                                   
                                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editItemModal${item.id}">
                                             <i class="bi bi-pencil-square"></i>

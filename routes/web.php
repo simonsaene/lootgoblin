@@ -39,11 +39,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/player', [SearchController::class, 'search'])->name('user.search.player');
             });
 
-            // Settings routes
-            Route::prefix('/settings')->group(function () {
-                Route::get('/', [SettingsController::class, 'settings'])->name('user.settings');
-            });
-
             // Character routes
             Route::prefix('/characters')->group(function () {
                 Route::post('/create', [CharacterController::class, 'addChar'])->name('characters.create');

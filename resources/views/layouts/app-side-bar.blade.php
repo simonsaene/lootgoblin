@@ -11,11 +11,6 @@
                         <i class="bi bi-person-circle"> </i>{{ __('Profile') }}
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link link-body-emphasis" href="{{ route('user.settings') }}">
-                        <i class="bi bi-gear"></i> {{ __('Settings') }}
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a class="nav-link link-body-emphasis" href="{{ route('user.search.page') }}">

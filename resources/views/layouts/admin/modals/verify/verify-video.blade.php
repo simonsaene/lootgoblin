@@ -9,7 +9,9 @@
             <div class="modal-body">
                 <!-- Display the loot image -->
                 <div class="text-center">
-                    {{ $session->video_link }}
+                    <a href="{{ $session->video_link }}" target="_blank" class="btn btn-outline-warning btn-sm">
+                        Watch Video (Session: {{ $session->id }})
+                    </a>
                 </div>
             </div>
 

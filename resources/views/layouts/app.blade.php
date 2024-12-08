@@ -35,10 +35,6 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    {{-- Left side Nav Bar --}}
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
 
                     {{-- Right side Nav Bar --}}
                     <ul class="navbar-nav ms-auto">
@@ -57,13 +53,25 @@
                                 </li>
                             @endif
                         @else
+                            {{-- Centered Search bar --}}
+                            <li class="nav-item mx-auto">
+                                <form action="{{ route('user.search.player') }}" method="GET" class="d-flex">
+                                    @csrf
+                                    <input type="text" name="family_name" class="form-control" value="{{ request()->get('family_name') }}" placeholder="Enter Family Name">
+                                    <button type="submit" class="btn btn-outline-primary ms-2">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </form>
+                            </li>
+
                             {{-- Logout link for authenticated users --}}
-                            <li class="nav-item">
+                            <li class="nav-item justify-content-center">
                                 <a class="nav-link" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
                                 </a>
+                                
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
