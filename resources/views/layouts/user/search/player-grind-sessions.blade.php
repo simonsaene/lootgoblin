@@ -15,9 +15,9 @@
             </div>
         @endif
         @if(empty($spotsWithSessions))
-            <h1 class="border-bottom">{{ $user->name }} has no grind sessions</h1>
+            <h1 class="border-bottom">{{ $user->family_name }} has no grind sessions</h1>
         @else
-            <h1 class="border-bottom">{{ $user->name }}'s Grind Sessions</h1>
+            <h1 class="border-bottom">{{ $user->family_name }}'s Grind Sessions</h1>
             <ul class="nav nav-tabs mt-5" id="grindSpotTabs" role="tablist">
                 @foreach ($spotsWithSessions as $spot)
                     <li class="nav-item" role="presentation">

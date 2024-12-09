@@ -318,6 +318,26 @@ class AdminController extends Controller
         }
     }
 
+    public function deleteVideo($id) {
+        try {
+            // Find the session by its ID
+            $session = GrindSession::findOrFail($id);
+            
+            // Set the video_link to null
+            $session->video_link = null;
+            
+            // Save the session to persist the change
+            $session->save();
+    
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'Video link successfully deleted!');
+        } catch (\Exception $e) {
+            // Handle error and log it
+            Log::error('Error deleting video link: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete video link.');
+        }
+    }
+
     public function verifyImage(Request $request)
     {
         try {
@@ -334,6 +354,26 @@ class AdminController extends Controller
             // Handle error and log it
             Log::error('Error verifying image: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to verify image.');
+        }
+    }
+
+    public function deleteImage($id) {
+        try {
+            // Find the session by its ID
+            $session = GrindSession::findOrFail($id);
+            
+            // Set the video_link to null
+            $session->loot_image = null;
+            
+            // Save the session to persist the change
+            $session->save();
+    
+            // Redirect back with a success message
+            return redirect()->back()->with('status', 'Loot image successfully deleted!');
+        } catch (\Exception $e) {
+            // Handle error and log it
+            Log::error('Error deleting loot image: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete loot image.');
         }
     }
     

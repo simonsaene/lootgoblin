@@ -16,6 +16,15 @@
             </div>
 
             <div class="modal-footer">
+
+                <form method="POST" action="{{ route('admin.delete.video', $session->id) }}" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </form>
+
                 <form action="{{ route('admin.verify.video') }}" method="POST">
                     @csrf
                     <input type="hidden" name="session_id" value="{{ $session->id }}">
@@ -23,6 +32,7 @@
                         <i class="bi bi-check-circle"></i> Verify Video
                     </button>
                 </form>
+
             </div>
         </div>
     </div>

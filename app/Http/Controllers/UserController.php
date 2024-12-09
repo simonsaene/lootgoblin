@@ -72,12 +72,17 @@ class UserController extends Controller
 
         $grindSpots = GrindSpot::all();
 
+        $likes = Like::where('user_id', $user)->get();
+        $totalLikes = $likes->count(); 
+
         return view('layouts.user.search.player-profile', compact(
             'user', 
             'family_name', 
             'characters', 
             'allFavourites', 
-            'grindSpots'));
+            'grindSpots',
+            'totalLikes'
+        ));
     }
 
     public function addFavourite(Request $request)

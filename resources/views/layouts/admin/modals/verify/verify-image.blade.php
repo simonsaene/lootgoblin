@@ -14,6 +14,13 @@
             </div>
 
             <div class="modal-footer">
+                <form method="POST" action="{{ route('admin.delete.image', $session->id) }}" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </form>
                 <form action="{{ route('admin.verify.image') }}" method="POST">
                     @csrf
                     <input type="hidden" name="session_id" value="{{ $session->id }}">

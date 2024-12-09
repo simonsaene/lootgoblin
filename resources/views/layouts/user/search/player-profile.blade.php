@@ -12,14 +12,15 @@
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
+                    <h3><i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}</h3>
+                    <h1 class="fw-light">{{ $user->family_name }}</h1>
                     @if($user->profile_image)
-                        <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image">
+                        <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
                     @else
                         <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
                         </svg>
                     @endif
-                    <h1 class="fw-light">{{ $user->family_name }}</h1>
                     <p>Viewing Profile</p>
                 </div>
             </div>
@@ -35,6 +36,7 @@
                             @else
                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                     <title>Placeholder</title>
+                                    <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">No Image</text>
                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                 </svg>
                             @endif
@@ -58,6 +60,7 @@
                                             @else
                                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                                     <title>Placeholder</title>
+                                                    <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">No Image</text>
                                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                                 </svg>
                                             @endif

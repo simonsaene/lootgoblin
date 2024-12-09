@@ -90,8 +90,15 @@ Route::middleware(['auth'])->group(function () {
 
             // Verify video/images
             Route::prefix('/verify')->group(function () {
-                Route::post('/video', [AdminController::class, 'verifyVideo'])->name('admin.verify.video');
-                Route::post('/image', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
+                Route::prefix('/video')->group(function () {
+                    Route::post('/', [AdminController::class, 'verifyVideo'])->name('admin.verify.video');
+                    Route::delete('/delete/{id}', [AdminController::class, 'deleteVideo'])->name('admin.delete.video');
+                });
+
+                Route::prefix('/image')->group(function () {
+                    Route::post('/image', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
+                    Route::delete('/delete/{id}', [AdminController::class, 'deleteimage'])->name('admin.delete.image');
+                });
             });
 
             // Tables
