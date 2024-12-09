@@ -26,14 +26,16 @@
             <div class="row">
                 @foreach($users as $user)
                     <div class="col-lg-4 col-md-6 col-sm-12 text-center">
+
+                        <h2 class="fw-normal">{{ $user->family_name }}</h2>
+
                         @if ($user->profile_image)
-                            <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image">
+                            <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle mb-2" alt="Profile Image">
                         @else
-                            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <svg class="bd-placeholder-img rounded-circle mb-2" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                                 <title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
                             </svg>
                         @endif
-                        <h2 class="fw-normal">{{ $user->family_name }}</h2>
                         <p>
                             <a class="btn btn-outline-primary" href="{{ route('user.player.profile', $user->id) }}">
                                 <i class="bi bi-arrow-bar-right"></i> Profile

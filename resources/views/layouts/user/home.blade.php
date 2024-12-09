@@ -19,26 +19,30 @@
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
 
+                    @include('layouts.user.modals.profile.edit-profile-image-modal')
+
+                    <h3><i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}</h3>
+                    <h1 class="fw-light">{{ __($family_name) }}</h1>
+
                     @if($profile_image)
                         <img src="{{ asset('storage/' . $profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image">
+                        <p>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileImageModal">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </button>
+                        </p>
                     @else
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                    </svg>
+                        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <title>Placeholder</title>
+                            <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">Upload a Profile Image</text>
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        </svg>
+                        <p>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editProfileImageModal">
+                                <i class="bi bi-plus-square-fill"></i> Profile Image
+                            </button>
+                        </p>
                     @endif
-
-                    <h1 class="fw-light">{{ __($family_name) }}</h1>
-                    <h3><i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}</h3>
-                    <p>
-                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editProfileImageModal">
-                            <i class="bi bi-pencil-square"></i> Profile Image
-                        </button>
-                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editGearImageModal">
-                            <i class="bi bi-pencil-square"></i> Gear Image
-                        </button>
-                        @include('layouts.user.modals.profile.edit-profile-image-modal')
-                        @include('layouts.user.modals.profile.edit-gear-image-modal')
-                    </p>
                 </div>
             </div>
         </section>
@@ -56,19 +60,23 @@
                 </p>
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="shadow-sm text-center">
+                        <div class="text-center">
+                            @include('layouts.user.modals.profile.edit-gear-image-modal')
                             @if($gear_image)
                                 <img src="{{ asset('storage/' . $gear_image) }}" class="img-fluid" alt="Gear Image">
                                 <form action="{{ route('user.delete.gear.image') }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash "></i> Delete</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editGearImageModal">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm text-end"><i class="bi bi-trash "></i> Delete</button>
                                 </form>
                             @else
-                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#55595c"></rect>
-                                </svg>
+                                <p>Upload an image of your gear!</p>
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editGearImageModal">
+                                    <i class="bi bi-plus-square-fill"></i> Gear Image
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -90,6 +98,7 @@
                                             @else
                                                 <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                                     <title>Placeholder</title>
+                                                    <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">No Image</text>
                                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                                 </svg>
                                             @endif
