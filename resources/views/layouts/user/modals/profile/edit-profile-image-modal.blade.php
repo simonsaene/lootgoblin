@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <div>
                         @if ($profile_image)
-                            <img src="{{ asset('storage/' . $profile_image) }}" alt="Profile Image" class="img-fluid rounded-circle" />
+                            <img src="{{ asset('storage/' . $profile_image) }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;"/>
                         @else
                             <p>No image on file</p>
                         @endif

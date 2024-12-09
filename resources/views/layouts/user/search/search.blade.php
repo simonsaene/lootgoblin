@@ -30,7 +30,7 @@
                         <h2 class="fw-normal">{{ $user->family_name }}</h2>
 
                         @if ($user->profile_image)
-                            <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle mb-2" alt="Profile Image">
+                            <img src="{{ asset('storage/' . $user->profile_image) }}" class="img-fluid rounded-circle mb-2" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
                         @else
                             <svg class="bd-placeholder-img rounded-circle mb-2" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                                 <title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>

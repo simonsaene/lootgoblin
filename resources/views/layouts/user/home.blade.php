@@ -25,16 +25,16 @@
                     <h1 class="fw-light">{{ __($family_name) }}</h1>
 
                     @if($profile_image)
-                        <img src="{{ asset('storage/' . $profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image">
+                        <img src="{{ asset('storage/' . $profile_image) }}" class="img-fluid rounded-circle mb-2" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
                         <p>
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileImageModal">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </button>
                         </p>
                     @else
-                        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <svg class="bd-placeholder-img rounded-circle mb-2" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
-                            <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">Upload a Profile Image</text>
+                            <text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle" dy=".3em">No Image</text>
                             <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
                         </svg>
                         <p>
@@ -63,7 +63,7 @@
                         <div class="text-center">
                             @include('layouts.user.modals.profile.edit-gear-image-modal')
                             @if($gear_image)
-                                <img src="{{ asset('storage/' . $gear_image) }}" class="img-fluid" alt="Gear Image">
+                                <img src="{{ asset('storage/' . $gear_image) }}" class="img-fluid mb-2" alt="Gear Image">
                                 <form action="{{ route('user.delete.gear.image') }}" method="POST">
                                     @csrf
                                     @method('DELETE')
