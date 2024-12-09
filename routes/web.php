@@ -39,6 +39,19 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/player', [SearchController::class, 'search'])->name('user.search.player');
             });
 
+            Route::prefix('/images')->group(function () {
+
+                Route::prefix('/profile')->group(function () {
+                    Route::put('/edit', [UserController::class, 'editProfileImage'])->name('user.edit.profile.image');
+                    Route::delete('/delete', [UserController::class, 'deleteProfileImage'])->name('user.delete.profile.image');
+                });
+
+                Route::prefix('/gear')->group(function () {
+                    Route::put('/edit', [UserController::class, 'editGearImage'])->name('user.edit.gear.image');
+                    Route::delete('/delete', [UserController::class, 'deleteGearImage'])->name('user.delete.gear.image');
+                });
+            });
+
             // Character routes
             Route::prefix('/characters')->group(function () {
                 Route::post('/create', [CharacterController::class, 'addChar'])->name('characters.create');
@@ -49,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
             // Favourites routes
             Route::prefix('/favourite')->group(function () {
                 Route::post('/add', [UserController::class, 'addFavourite'])->name('favourite.add');
+                Route::delete('/delete/{id}', [UserController::class, 'deleteFavourite'])->name('favourite.delete');
             });
 
         });

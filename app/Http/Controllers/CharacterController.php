@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 class CharacterController extends Controller
 {
-    public function validateupdate(Request $request)
+    public function validateUpdate(Request $request)
     {
         return $request->validate([
             'name' => 'required|string|max:255',
@@ -20,8 +20,7 @@ class CharacterController extends Controller
     {
         try
         {   
-            $validatedupdate = $this->validateupdate($request);
-
+            $validatedUpdate = $this->validateUpdate($request);
 
             if ($request->hasFile('profile_image')) {
 
@@ -31,16 +30,16 @@ class CharacterController extends Controller
 
                 Log::debug("Image stored at: " . $path);
 
-                $validatedupdate['profile_image'] = $path;
+                $validatedUpdate['profile_image'] = $path;
             } else {
                 Log::debug("No image uploaded.");
             }
 
             Character::create([
-                    'name' => $validatedupdate['name'],
-                    'level' => $validatedupdate['level'],
-                    'profile_image' => $validatedupdate['profile_image'] ?? null,
-                    'class' => $validatedupdate['class'],
+                    'name' => $validatedUpdate['name'],
+                    'level' => $validatedUpdate['level'],
+                    'profile_image' => $validatedUpdate['profile_image'] ?? null,
+                    'class' => $validatedUpdate['class'],
                     'user_id' => auth()->id(),
                 ]);
 
@@ -59,13 +58,13 @@ class CharacterController extends Controller
             $character = Character::findOrFail($id);
     
             // Validate the incoming update
-            $validatedupdate = $this->validateupdate($request);
+            $validatedUpdate = $this->validateUpdate($request);
     
             // Prepare the update for updating
             $update = [
-                'name' => $validatedupdate['name'],
-                'level' => $validatedupdate['level'],
-                'class' => $validatedupdate['class'],
+                'name' => $validatedUpdate['name'],
+                'level' => $validatedUpdate['level'],
+                'class' => $validatedUpdate['class'],
             ];
     
             // Handle profile image if a new one is uploaded

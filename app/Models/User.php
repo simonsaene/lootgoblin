@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'is_admin',
+        'profile_image',
+        'gear_image'
     ];
 
     protected $casts = [

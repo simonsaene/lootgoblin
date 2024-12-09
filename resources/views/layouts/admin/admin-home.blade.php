@@ -52,9 +52,6 @@
         <div class="row mt-5">
             <h3 class="mb-3  border-bottom">
                 <i class="bi bi-database-fill-gear"></i> Tables 
-                <button type="button" class="btn">
-                    <i class="bi bi-info-lg"></i> Help
-                </button>
             </h3>
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn me-2 btn-outline-warning" onclick="fetchData('itemsTable')">
