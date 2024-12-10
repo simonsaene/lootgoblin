@@ -8,7 +8,7 @@
             <input type="hidden" name="user_id" value="{{ $user->id }}">
             <input type="hidden" name="grind_spot_id" value="{{ $spot->id }}">
             <button type="submit" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes}}
+                <i class="bi bi-hand-thumbs-up"></i> {{ $spot->likes()->count() }}
             </button>
         </form>
     @else
@@ -18,7 +18,7 @@
             <input type="hidden" name="user_id" value="{{ $user->id  }}">
             <input type="hidden" name="grind_spot_id" value="{{ $spot->id }}">
             <button type="submit" class="btn btn-outline-success btn-sm">
-                <i class="bi bi-hand-thumbs-up"></i> {{ $totalLikes }}
+                <i class="bi bi-hand-thumbs-up"></i> {{ $spot->likes()->count() }}
             </button>
         </form>
     @endif

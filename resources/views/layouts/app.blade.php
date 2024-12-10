@@ -53,16 +53,6 @@
                                 </li>
                             @endif
                         @else
-                            {{-- Centered Search bar --}}
-                            <li class="nav-item mx-auto">
-                                <form action="{{ route('user.search.player') }}" method="GET" class="d-flex">
-                                    @csrf
-                                    <input type="text" name="family_name" class="form-control" value="{{ request()->get('family_name') }}" placeholder="Enter Family Name">
-                                    <button type="submit" class="btn btn-outline-primary ms-2">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </form>
-                            </li>
 
                             {{-- Logout link for authenticated users --}}
                             <li class="nav-item justify-content-center">
