@@ -175,6 +175,9 @@ class GrindSessionController extends Controller
                     $spotsWithSessions[] = $spot;
                 }
 
+                $like = Like::where('user_id', $user)->where('grind_spot_id', $id);
+                $totalLikes = $like->count();
+
                 // Comments for the spot
                 $comments[$spot->id] = Post::where('grind_spot_id', $spot->id)
                     ->where('user_id', $id)
@@ -206,6 +209,7 @@ class GrindSessionController extends Controller
             'grindSessionsPaginated',
             'grindSpotStats',
             'allGrindSessions',
+            'totalLikes',
             'comments',
             'lootData',
             'flaggedSessions',
