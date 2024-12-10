@@ -34,6 +34,17 @@
                     <div class="mb-3">
                         <label for="loot_image" class="form-label">Loot Image (optional)</label>
                         <input type="file" name="loot_image" id="loot_image" class="form-control" accept="image/*">
+
+                        
+                        {{-- Display current loot image if it exists --}}
+                        @if ($session->loot_image)
+                            <div class="mt-2">
+                                <div class="form-check mt-2">
+                                    <input type="checkbox" name="delete_loot_image" id="delete_loot_image" class="form-check-input">
+                                    <label for="delete_loot_image" class="form-check-label">Delete current loot image</label>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Video Link --}}

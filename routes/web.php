@@ -152,7 +152,7 @@ Route::prefix('exceptions')->group(function () {
             ], 404);
         });
 
-        // Simulate a slow server response (503 error)
+        //slow server response (503 error)
         Route::get('/slow-response', function () {
             sleep(5); // Simulate a slow server response by delaying for 5 seconds
             return response()->view('errors.503', [
@@ -160,14 +160,14 @@ Route::prefix('exceptions')->group(function () {
             ], 503);
         });
 
-        // Simulate a token mismatch (419 error)
+        //token mismatch (419 error)
         Route::get('/token-mismatch', function () {
             return response()->view('errors.token-mismatch', [
                 'message' => 'Session expired. Please refresh the page and try again.'
             ], 419);
         });
 
-        // Simulate a database error (500 error)
+        //database error (500 error)
         Route::get('/database-error', function () {
             // Trigger a database query exception
             return response()->view('errors.database', [
@@ -176,7 +176,7 @@ Route::prefix('exceptions')->group(function () {
         });
     });
 
-    // Simulate MethodNotAllowedHttpException (405 error)
+    // MethodNotAllowedHttpException (405 error)
     Route::match(['get'], '/method-not-allowed', function () {
         // This would simulate a route that accepts only POST requests
         return response()->view('errors.method-not-allowed', [
@@ -184,21 +184,21 @@ Route::prefix('exceptions')->group(function () {
         ], 405);
     });
 
-    // Simulate AuthenticationException (401 error)
+    // AuthenticationException (401 error)
     Route::get('/authentication-error', function () {
         return response()->view('errors.401', [
             'message' => 'You are not authorized to access this resource.'
         ], 401);
     });
 
-    // Simulate AccessDeniedHttpException (403 error)
+    // AccessDeniedHttpException (403 error)
     Route::get('/access-denied', function () {
         return response()->view('errors.403', [
             'message' => 'Access denied. You do not have permission to view this page.'
         ], 403);
     });
 
-    // Simulate ValidationException (redirect back with errors)
+    // ValidationException (redirect back with errors)
     Route::post('/validation-error', function (\Illuminate\Http\Request $request) {
         $rules = [
             'name' => 'required|string',
@@ -215,7 +215,7 @@ Route::prefix('exceptions')->group(function () {
         return 'Validation Passed';
     });
 
-    // Simulate Unhandled Exception (500 error)
+    //Unhandled Exception (500 error)
     Route::get('/unhandled-error', function () {
         // This is an unhandled exception which would normally be caught by Laravel's exception handler
         return response()->view('errors.500', [
