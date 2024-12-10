@@ -6,6 +6,7 @@ use App\Models\GrindSpot;
 use App\Models\GrindSpotItem;
 use App\Models\GrindSession;
 use App\Models\GrindSessionItem;
+use App\Models\Status;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Like;
@@ -26,6 +27,8 @@ class GrindSessionController extends Controller
             }])->get();
 
             $grindSpot = GrindSpot::findOrFail($id);
+
+            $posts = Post::all();
 
             $grindSpotItems = GrindSpotItem::where('grind_spot_id', $grindSpot->id)
                 ->with('item')
@@ -70,6 +73,16 @@ class GrindSessionController extends Controller
             $like = Like::where('user_id', $user)->where('grind_spot_id', $id);
             $totalLikes = $like->count();
 
+            $flaggedSessions = Status::where('status_type', 'flagged session')
+                ->whereIn('session_id', $allGrindSessions->pluck('id'))
+                ->pluck('status_start_reason', 'session_id')
+                ->toArray();
+            
+            $flaggedPosts = Status::where('status_type', 'flagged post')
+                ->whereIn('post_id', $posts->pluck('id'))
+                ->pluck('status_start_reason', 'post_id')
+                ->toArray();
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('show.summary')->with('error', 'Grind spot not found.');
         } catch (\Exception $e) {
@@ -86,7 +99,9 @@ class GrindSessionController extends Controller
             'totalSilver',
             'totalSilverPerHour',
             'comments',
-            'totalLikes'
+            'totalLikes',
+            'flaggedSessions',
+            'flaggedPosts'
         ));
     }
 
@@ -100,6 +115,8 @@ class GrindSessionController extends Controller
             $allGrindSessions = GrindSession::where('user_id', $id)
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
                 ->get();
+
+            $posts = Post::all();
 
             $grindSessionsPaginated = [];
             $grindSpotStats = [];
@@ -163,6 +180,16 @@ class GrindSessionController extends Controller
                     ->where('user_id', $id)
                     ->orderBy('created_at', 'desc')
                     ->get();
+
+                $flaggedSessions = Status::where('status_type', 'flagged session')
+                    ->whereIn('session_id', $allGrindSessions->pluck('id'))
+                    ->pluck('status_start_reason', 'session_id')
+                    ->toArray();
+
+                $flaggedPosts = Status::where('status_type', 'flagged post')
+                    ->whereIn('post_id', $posts->pluck('id'))
+                    ->pluck('status_start_reason', 'post_id')
+                    ->toArray();
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('user.home')->with('error', 'User not found.');
@@ -180,7 +207,9 @@ class GrindSessionController extends Controller
             'grindSpotStats',
             'allGrindSessions',
             'comments',
-            'lootData'
+            'lootData',
+            'flaggedSessions',
+            'flaggedPosts'
         ));
     }
 
@@ -232,7 +261,7 @@ class GrindSessionController extends Controller
             ]);
             Log::debug('Validated Data:', $validatedData);
 
-            Log::debug('GrindSession Created:', $grindSession);
+            Log::debug('GrindSession Created:', $grindSession->toArray());
         
             foreach ($validatedData['item_quantities'] as $itemId => $quantity) {
                 if ($quantity > 0) {
@@ -241,7 +270,7 @@ class GrindSessionController extends Controller
                         'grind_spot_item_id' => $itemId,
                         'quantity' => $quantity,
                     ]);
-                    Log::debug('GrindSessionItem Created for Item ID ' . $itemId . ' with Quantity:', $quantity);
+                    Log::debug('GrindSessionItem Created for Item ID ' . $itemId . ' with Quantity:', ['quantity' => $quantity]);
                 }
             }
     

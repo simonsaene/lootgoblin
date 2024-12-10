@@ -67,6 +67,10 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        
+                                        @if(auth()->user() || auth()->user()->is_admin)
+                                            <th class="text-center">Flag</th>
+                                        @endif
                                         <th>Date</th>
                                         <th class="text-end">Hours</th>
                                         <th class="text-end">Silver</th>
@@ -84,6 +88,13 @@
                                 <tbody>
                                     @foreach ($grindSessionsPaginated[$spot->id] as $session)
                                         <tr>
+                                            @php
+                                                $session_id = $session->id;
+                                                $user_id = $session->user_id;
+                                            @endphp
+
+                                            @include('layouts.grind.spot.show-session-flags')
+
                                             <td>{{ $session->created_at->format('Y-m-d') }}</td>
                                             <td class="text-end">{{ $session->hours }}</td>
                                             <td class="text-end">
@@ -152,12 +163,23 @@
                             <h5>Comments</h5>
                             @if (isset($comments[$spot->id]) && $comments[$spot->id]->isNotEmpty())
                                 @foreach ($comments[$spot->id] as $comment)
+                                @php
+                                    $post_id = $comment->id;
+                                    $user_id = $comment->poster_id;
+                                @endphp
                                     <div class="card mb-2">
                                         <div class="card-body">
                                             <p>{{ $comment->comment }}</p>
                                             <small class="text-muted">Posted by {{ $comment->poster->family_name }} on {{ $comment->created_at->format('Y-m-d H:i') }}</small>
-                                        
-                                            @include('layouts.likes.like-posts')
+                                            
+                                            <div class="d-flex justify-content-start mt-2">
+                                                <div>
+                                                    @include('layouts.likes.like-posts')
+                                                </div>
+                                                <div class="ml-2">
+                                                    @include('layouts.grind.spot.show-post-flags')
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

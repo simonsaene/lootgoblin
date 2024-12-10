@@ -1,6 +1,9 @@
 <table class="table">
     <thead>
         <tr>
+            @if(auth()->user() || auth()->user()->is_admin)
+                <th>Flag</th>
+            @endif
             <th>Date</th>
             <th class="text-end">Hours</th>
             <th class="text-end">Silver</th>
@@ -15,8 +18,12 @@
         @foreach ($grindSessions as $session)
             @php
                 $totalSilver = 0;
+                $session_id = $session->id;
+                $user_id = $session->user_id;
             @endphp
             <tr>
+                @include('layouts.grind.spot.show-session-flags')
+
                 <td>{{ $session->created_at->format('Y-m-d') }}</td>
                 <td class="text-end">{{ number_format($session->hours, 2) }}</td>
                 <td class="text-end">

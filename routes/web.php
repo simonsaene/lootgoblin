@@ -86,7 +86,14 @@ Route::middleware(['auth'])->group(function () {
 
         // Admin routes
         Route::middleware(['admin'])->group(function () {
+
+            // Dashboard
             Route::get('/', [AdminController::class, 'index'])->name('admin.home');
+
+            // Flag
+            Route::post('/flag', [AdminController::class, 'flag'])->name('admin.flag');
+            Route::put('/unflag/session', [AdminController::class, 'unflagSession'])->name('admin.unflag.session');
+            Route::put('/unflag/post', [AdminController::class, 'unflagPost'])->name('admin.unflag.post');
 
             // Verify video/images
             Route::prefix('/verify')->group(function () {
@@ -96,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
                 });
 
                 Route::prefix('/image')->group(function () {
-                    Route::post('/image', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
+                    Route::post('/', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
                     Route::delete('/delete/{id}', [AdminController::class, 'deleteimage'])->name('admin.delete.image');
                 });
             });

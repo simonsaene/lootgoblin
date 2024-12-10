@@ -35,4 +35,9 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'post_id');
+    }
 }

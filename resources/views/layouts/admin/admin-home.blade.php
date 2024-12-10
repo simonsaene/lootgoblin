@@ -31,7 +31,7 @@
                         @endforeach
                 </div>
                 <div>
-                    <p><i class="bi bi-image"></i> Images</p>
+                    <p class="mt-3"><i class="bi bi-image"></i> Images</p>
                     @foreach($unverifiedSessions as $session)
                         @if($session->loot_image && $session->is_image_verified === 0)
                             <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#verifyImageModal{{ $session->id }}">
@@ -44,7 +44,38 @@
             </div>
         
             <div class="col-md-6 col-12">
-                <h3 class="pb-2 border-bottom"><i class="bi bi-hammer"></i> Banned Users</h3>
+                <h3 class="pb-2 border-bottom"><i class="bi bi-flag"></i> Flags</h3>
+                <p><i class="bi bi-list-columns"></i> Sessions</p>
+                @if(!$allFlaggedSessions->isEmpty())
+                        @foreach($allFlaggedSessions as $session)
+                            @php
+                                $session_id = $session->session_id;
+                                $user_id = $session->user_id;
+                            @endphp
+                            @include('layouts.admin.modals.flags.unflag-session-modal')
+                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unflagModal{{ $session_id }}">
+                                Session: {{ $session_id }}
+                            </button>
+                        @endforeach
+                @else
+                    <p>No flagged sessions.</p>
+                @endif
+
+                <p class="mt-3"><i class="bi bi-chat-left-dots"></i> Posts</p>
+                @if(!$allFlaggedPosts->isEmpty())
+                    @foreach($allFlaggedPosts as $post)
+                        @php
+                            $post_id = $post->post_id;
+                            $user_id = $post->user_id;
+                        @endphp
+                        @include('layouts.admin.modals.flags.unflag-post-modal')
+                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unflagPostModal{{ $post_id }}">
+                            Post: {{ $post_id }}
+                        </button>
+                    @endforeach
+                @else
+                    <p>No flagged Posts.</p>
+                @endif
             </div>
         </div>
 

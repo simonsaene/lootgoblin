@@ -5,6 +5,8 @@ use App\Models\Item;
 use App\Models\GrindSpotItem;
 use App\Models\GrindSpot;
 use App\Models\GrindSession;
+use App\Models\Status;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -31,6 +33,7 @@ class AdminController extends Controller
         }])->get();
 
         $sessions = GrindSession::all();
+        $posts = Post::all();
 
         // Filter sessions that have unverified video/image
         $unverifiedSessions = $sessions->filter(function($session) {
@@ -40,11 +43,24 @@ class AdminController extends Controller
             );
         });
 
+        $session_ids = $sessions->pluck('id');
+        $post_ids = $posts->pluck('id');
+
+        $allFlaggedSessions = Status::where('status_type', 'flagged session')
+            ->whereIn('session_id', $session_ids) // Assuming $sessions is a collection of sessions
+            ->get();
+
+        $allFlaggedPosts = Status::where('status_type', 'flagged post')
+            ->whereIn('post_id', $post_ids)
+            ->get();
+
         return view('layouts.admin.admin-home', compact(
             'items', 
             'grindSpotItems' , 
             'grindSpots',
-            'unverifiedSessions'
+            'unverifiedSessions',
+            'allFlaggedSessions',
+            'allFlaggedPosts'
         ));
     }
 
@@ -83,6 +99,16 @@ class AdminController extends Controller
                     'market_value' => 'required|integer',
                     'vendor_value' => 'required|integer',
                     'image' => 'image|nullable'
+                ]);
+
+            case 'flag':
+                return $request->validate([
+                    'user_id' => 'required|exists:users,id',
+                    'session_id' => 'nullable|exists:grind_sessions,id',
+                    'post_id' => 'nullable|exists:posts,id',
+                    'status_type' => 'required|string|max:255',
+                    'status_start_reason' => 'nullable|string|max:255',
+                    'status_end_reason' => 'nullable|string|max:255',
                 ]);
 
             default:
@@ -376,5 +402,88 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Failed to delete loot image.');
         }
     }
+
+    public function flag(Request $request)
+    {
+        try
+        {
+            $validatedData = $this->validateData($request, 'flag');
+            Log::debug('Flagging data: ', $validatedData);
+            // Prepare data for mass assignment
+            $data = [
+                'user_id' => $validatedData['user_id'], // User ID from the hidden field
+                'session_id' => $validatedData['session_id'] ?? null,
+                'post_id' => $validatedData['post_id'] ?? null,
+                'status_type' => $validatedData['status_type'],
+                'status_start_reason' => $validatedData['status_start_reason'] ?? null,
+                'status_end_reason' => $validatedData['status_end_reason'] ?? null,
+                'date_end' => null
+            ];
+
+            Status::create($data);
     
+            // Redirect back with success message
+            return redirect()->back()->with('status', 'Successfully flagged.');
+
+        } catch (\Exception $e) {
+            Log::error('Error flagging: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to flag.');
+        }
+    }
+
+    public function unflagSession(Request $request)
+    {
+        try
+        {
+            $validatedData = $this->validateData($request, 'flag');
+            Log::debug('Unflagging data: ', $validatedData);
+
+            $status = Status::where('session_id', $validatedData['session_id'])
+                        ->where('status_type', 'flagged session') // Ensure it's flagged session
+                        ->first();
+            // Prepare data for mass assignment
+            $update = [
+                'status_type' => $validatedData['status_type'],
+                'status_end_reason' => $validatedData['status_end_reason'] ?? null,
+                'date_end' => now()
+            ];
+
+            $status->update($update);
+    
+            // Redirect back with success message
+            return redirect()->back()->with('status', 'Successfully unflagged session.');
+
+        } catch (\Exception $e) {
+            Log::error('Error unflagging session: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to unflag session.');
+        }
+    }
+    
+    public function unflagPost(Request $request)
+    {
+        try
+        {
+            $validatedData = $this->validateData($request, 'flag');
+            Log::debug('Unflagging data: ', $validatedData);
+
+            $status = Status::where('post_id', $validatedData['post_id'])
+                        ->where('status_type', 'flagged post') // Ensure it's flagged session
+                        ->first();
+            // Prepare data for mass assignment
+            $update = [
+                'status_type' => $validatedData['status_type'],
+                'status_end_reason' => $validatedData['status_end_reason'] ?? null,
+                'date_end' => now()
+            ];
+
+            $status->update($update);
+    
+            // Redirect back with success message
+            return redirect()->back()->with('status', 'Successfully unflagged post.');
+
+        } catch (\Exception $e) {
+            Log::error('Error unflagging post: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to unflag post.');
+        }
+    }
 }
