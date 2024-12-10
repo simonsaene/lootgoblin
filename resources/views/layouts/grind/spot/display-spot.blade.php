@@ -50,7 +50,7 @@
                 <i class="bi bi-plus-square-fill"></i> Session
             </button>
         </div>
-
+        @include('layouts.grind.modals.filter-session-modal')
         {{-- Display Grind Sessions --}}
         <div class="row py-5 bg-body-tertiary justify-content-center">
 

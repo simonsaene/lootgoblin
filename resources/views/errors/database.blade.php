@@ -44,7 +44,6 @@
 <body>
     <div class="container">
         <h1>500 - Database Error</h1>
-        <p>{{ $message }}</p>
         <a href="{{ url('/') }}">Go back to Home</a>
     </div>
 </body>

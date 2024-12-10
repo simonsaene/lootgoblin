@@ -38,10 +38,41 @@ class GrindSessionController extends Controller
                 ->where('user_id', auth()->id())
                 ->with('grindSessionItems.grindSpotItem.item')
                 ->get();
+
+            // Capture filter values from the request
+            $validated = request()->validate([
+                'hours_filter' => 'nullable|integer|min:0', // Optional, must be a positive integer if provided
+                'silver_filter' => 'nullable|numeric|min:0', // Optional, must be a non-negative number if provided
+            ]);
+            
+            $hoursFilter = $validated['hours_filter'] ?? null;
+            $silverFilter = $validated['silver_filter'] ?? null;
+            $hasImage = request()->get('has_image');
+            $hasVideo = request()->get('has_video');
             
             $grindSessions = GrindSession::where('grind_spot_id', $grindSpot->id)
                 ->where('user_id', auth()->id())
                 ->with('grindSessionItems.grindSpotItem.item')
+                // filter hours
+                ->when($hoursFilter, function ($query) use ($hoursFilter) {
+                    return $query->where('hours', '>=', $hoursFilter);
+                })
+                // filter spots with images
+                ->when($hasImage != '', function ($query) use ($hasImage) {
+                    return $query->when($hasImage == '1', function ($query) {
+                        return $query->whereNotNull('loot_image');
+                    }, function ($query) {
+                        return $query->whereNull('loot_image');
+                    });
+                })                   
+                    // filter spots with video links
+                ->when($hasVideo != '', function ($query) use ($hasVideo) {
+                    return $query->when($hasVideo == '1', function ($query) {
+                        return $query->whereNotNull('video_link');
+                    }, function ($query) {
+                        return $query->whereNull('video_link');
+                    });
+                })
                 ->paginate(20);
 
             $totalHours = $allGrindSessions->sum('hours');
@@ -101,7 +132,8 @@ class GrindSessionController extends Controller
             'comments',
             'totalLikes',
             'flaggedSessions',
-            'flaggedPosts'
+            'flaggedPosts',
+            'silverFilter'
         ));
     }
 
@@ -115,6 +147,16 @@ class GrindSessionController extends Controller
             $allGrindSessions = GrindSession::where('user_id', $id)
                 ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
                 ->get();
+
+            // Capture filter values from the request
+            $validated = request()->validate([
+                'hours_filter' => 'nullable|integer|min:0', // Optional, must be a positive integer if provided
+                'silver_filter' => 'nullable|numeric|min:0', // Optional, must be a non-negative number if provided
+            ]);
+            $hoursFilter = $validated['hours_filter'] ?? null;
+            $silverFilter = $validated['silver_filter'] ?? null;
+            $hasImage = request()->get('has_image');
+            $hasVideo = request()->get('has_video');
 
             $posts = Post::all();
 
@@ -167,10 +209,31 @@ class GrindSessionController extends Controller
                         'totalSilverPerHour' => $totalSilverPerHour,
                     ];
 
-                    $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
-                        ->where('grind_spot_id', $spot->id)
-                        ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
-                        ->paginate(20);
+                // Paginate grind sessions for each spot
+                $grindSessionsPaginated[$spot->id] = GrindSession::where('user_id', $id)
+                    ->where('grind_spot_id', $spot->id)
+                    ->with('grindSpot', 'grindSessionItems.grindSpotItem.item')
+                    // filter hours
+                    ->when($hoursFilter, function ($query) use ($hoursFilter) {
+                        return $query->where('hours', '>=', $hoursFilter);
+                    })
+                    // filter spots with images
+                    ->when($hasImage != '', function ($query) use ($hasImage) {
+                        return $query->when($hasImage == '1', function ($query) {
+                            return $query->whereNotNull('loot_image');
+                        }, function ($query) {
+                            return $query->whereNull('loot_image');
+                        });
+                    })                   
+                     // filter spots with video links
+                    ->when($hasVideo != '', function ($query) use ($hasVideo) {
+                        return $query->when($hasVideo == '1', function ($query) {
+                            return $query->whereNotNull('video_link');
+                        }, function ($query) {
+                            return $query->whereNull('video_link');
+                        });
+                    })
+                    ->paginate(20);
 
                     $spotsWithSessions[] = $spot;
                 }
@@ -197,6 +260,12 @@ class GrindSessionController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('user.home')->with('error', 'User not found.');
         } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database Query Exception:', [
+                'message' => $e->getMessage(),
+                'sql' => $e->getSql(),
+                'bindings' => $e->getBindings(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return back()->with('error', 'Database error occurred. Please try again later.');
         } catch (\Exception $e) {
             return back()->with('error', 'An unexpected error occurred. Please try again later.');
@@ -213,7 +282,8 @@ class GrindSessionController extends Controller
             'comments',
             'lootData',
             'flaggedSessions',
-            'flaggedPosts'
+            'flaggedPosts',
+            'silverFilter'
         ));
     }
 
@@ -393,6 +463,9 @@ class GrindSessionController extends Controller
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the deletion process
             return redirect()->back()->with('error', 'Error deleting session: ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database query error during deleting session:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Database error occurred. Please try again later.');
         }
     }
 

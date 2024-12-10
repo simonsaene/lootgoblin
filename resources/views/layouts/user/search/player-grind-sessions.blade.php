@@ -14,10 +14,13 @@
                 {{ session('error') }}
             </div>
         @endif
+
+
         @if(empty($spotsWithSessions))
             <h1 class="border-bottom">{{ $user->family_name }} has no grind sessions</h1>
         @else
             <h1 class="border-bottom">{{ $user->family_name }}'s Grind Sessions</h1>
+
             <ul class="nav nav-tabs mt-5" id="grindSpotTabs" role="tablist">
                 @foreach ($spotsWithSessions as $spot)
                     <li class="nav-item" role="presentation">
@@ -61,7 +64,9 @@
                                 </div>
                             </div>
                         </div>
-        
+
+                        @include('layouts.grind.modals.filter-session-modal')
+                        
                         <div class="row py-5 bg-body-tertiary">
                             <th>@include('layouts.likes.like-grind')</th>
                             <table class="table">
@@ -87,64 +92,63 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($grindSessionsPaginated[$spot->id] as $session)
-                                        <tr>
-                                            @php
-                                                $session_id = $session->id;
-                                                $user_id = $session->user_id;
-                                            @endphp
+                                        @php
+                                            $session_id = $session->id;
+                                            $user_id = $session->user_id;
 
-                                            @include('layouts.grind.spot.show-session-flags')
+                                            $totalSilver = 0;
+                                            foreach ($session->grindSessionItems as $item) {
+                                                $marketValue = $item->grindSpotItem->item->market_value;
+                                                $vendorValue = $item->grindSpotItem->item->vendor_value;
+                                                $quantity = $item->quantity;
 
-                                            <td>{{ $session->created_at->format('Y-m-d') }}</td>
-                                            <td class="text-end">{{ $session->hours }}</td>
-                                            <td class="text-end">
-                                                @php
-                                                    $totalSilver = 0;
-                                                    foreach ($session->grindSessionItems as $item) {
-                                                        $marketValue = $item->grindSpotItem->item->market_value;
-                                                        $vendorValue = $item->grindSpotItem->item->vendor_value;
-                                                        $quantity = $item->quantity;
-        
-                                                        if ($marketValue === 0) {
-                                                            $valuePerItem = $vendorValue;
-                                                        } else {
-                                                            $valuePerItem = $marketValue;
+                                                if ($marketValue === 0) {
+                                                    $valuePerItem = $vendorValue;
+                                                } else {
+                                                    $valuePerItem = $marketValue;
+                                                }
+
+                                                $totalValue = $valuePerItem * $quantity;
+                                                $totalSilver += $totalValue;
+                                            }
+                                        @endphp
+
+                                        @if ($silverFilter === null || $totalSilver >= $silverFilter)
+                                            <tr>
+                                                @include('layouts.grind.spot.show-session-flags')
+
+                                                <td>{{ $session->created_at->format('Y-m-d') }}</td>
+                                                <td class="text-end">{{ $session->hours }}</td>
+                                                <td class="text-end">{{ number_format($totalSilver) }}</td>
+                                                
+                                                {{-- Display loot item quantities for each session --}}
+                                                @foreach ($lootData[$spot->id]['lootItems'] as $lootItem)
+                                                    @php
+                                                        $quantity = 0;
+                                                        foreach ($session->grindSessionItems as $item) {
+                                                            if ($item->grindSpotItem->item->name === $lootItem) {
+                                                                $quantity = $item->quantity;
+                                                                break;
+                                                            }
                                                         }
-        
-                                                        $totalValue = $valuePerItem * $quantity;
-                                                        $totalSilver += $totalValue;
-                                                    }
-                                                @endphp
-                                                {{ number_format($totalSilver) }}
-                                            </td>
-                                            
-                                            {{-- Display loot item quantities for each session --}}
-                                            @foreach ($lootData[$spot->id]['lootItems'] as $lootItem)
-                                                @php
-                                                    $quantity = 0;
-                                                    foreach ($session->grindSessionItems as $item) {
-                                                        if ($item->grindSpotItem->item->name === $lootItem) {
-                                                            $quantity = $item->quantity;
-                                                            break;
-                                                        }
-                                                    }
-                                                @endphp
-                                                <td class="text-end">{{ number_format($quantity) }}</td> 
-                                            @endforeach
+                                                    @endphp
+                                                    <td class="text-end">{{ number_format($quantity) }}</td> 
+                                                @endforeach
 
-                                            <script>
-                                                var lootData = @json($lootData);
-                                                console.log(lootData);
-                                            </script>
+                                                <script>
+                                                    var lootData = @json($lootData);
+                                                    console.log(lootData);
+                                                </script>
 
-                                            @include('layouts.grind.modals.more-modal')
+                                                @include('layouts.grind.modals.more-modal')
 
-                                            <td class="text-center">
-                                                <button class="btn" data-bs-toggle="modal" data-bs-target="#moreDetailsModal{{ $session->id }}">
-                                                    <i class="bi bi-list"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                <td class="text-center">
+                                                    <button class="btn" data-bs-toggle="modal" data-bs-target="#moreDetailsModal{{ $session->id }}">
+                                                        <i class="bi bi-list"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
