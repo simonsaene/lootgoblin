@@ -12,7 +12,7 @@ class CharacterController extends Controller
         return $request->validate([
             'name' => 'required|string|max:255',
             'level' => 'required|integer',
-            'profile_image' => 'image|nullable',
+            'profile_image' => 'image|nullable|dimensions:max_width=500,max_height=300',
             'class' => 'required|string|max:255'
         ]);
     }

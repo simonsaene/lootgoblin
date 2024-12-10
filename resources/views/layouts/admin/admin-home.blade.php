@@ -53,7 +53,7 @@
                                 $user_id = $session->user_id;
                             @endphp
                             @include('layouts.admin.modals.flags.unflag-session-modal')
-                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unflagModal{{ $session_id }}">
+                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unflagSessionModal{{ $session_id }}">
                                 Session: {{ $session_id }}
                             </button>
                         @endforeach

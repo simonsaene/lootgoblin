@@ -145,12 +145,12 @@ class UserController extends Controller
         switch ($type) {
             case 'profile':
                 return $request->validate([
-                    'profile_image' => 'image|nullable'
+                    'profile_image' => 'image|nullable|dimensions:max_width=300,max_height=300'
                 ]);
 
             case 'gear':
                 return $request->validate([
-                    'gear_image' => 'image|nullable'
+                    'gear_image' => 'image|nullable|dimensions:max_width=500,max_height=700'
                 ]);
 
             default:
