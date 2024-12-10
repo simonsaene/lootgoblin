@@ -11,7 +11,6 @@ use App\Http\Controllers\GrindSessionController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
@@ -141,67 +140,86 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/test-users', function () {
-    try {
-        // Attempt to fetch all users from the database
-        $users = DB::table('users')->get();
+Route::prefix('exceptions')->group(function () {
 
-        // Check if users were retrieved
-        if ($users->isNotEmpty()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Connected to the database successfully!',
-                'data' => $users,
-            ]);
-        } else {
-            return response()->json([
-                'success' => true,
-                'message' => 'Connected to the database, but no users found.',
-                'data' => [],
-            ]);
-        }
-    } catch (\Exception $e) {
-        // Return error message if database connection fails
-        return response()->json([
-            'success' => false,
-            'error' => 'Could not connect to the database: ' . $e->getMessage(),
-        ], 500);
-    }
-});
+    // Apply the slow response middleware to this group
+    Route::middleware(['db_slow_response_test'])->group(function () {
 
-Route::get('/test-spots', function () {
-    try {
-        // Attempt to fetch all users from the database
-        $spots = DB::table('grind_spots')->get();
+        // 404 error
+        Route::get('/not-found', function () {
+            return response()->view('errors.404', [
+                'message' => 'The page you are looking for could not be found.'
+            ], 404);
+        });
 
-        // Check if users were retrieved
-        if ($spots->isNotEmpty()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Connected to the database successfully!',
-                'data' => $spots,
-            ]);
-        } else {
-            return response()->json([
-                'success' => true,
-                'message' => 'Connected to the database, but no users found.',
-                'data' => [],
-            ]);
-        }
-    } catch (\Exception $e) {
-        // Return error message if database connection fails
-        return response()->json([
-            'success' => false,
-            'error' => 'Could not connect to the database: ' . $e->getMessage(),
-        ], 500);
-    }
-});
+        // Simulate a slow server response (503 error)
+        Route::get('/slow-response', function () {
+            sleep(5); // Simulate a slow server response by delaying for 5 seconds
+            return response()->view('errors.503', [
+                'message' => 'The server is currently slow. Please try again later.'
+            ], 503);
+        });
 
-Route::get('/test-email', function () {
-    $data = [
-        'verification_token' => 'fjdlskfjkl',
-        'user' => 'simon'
+        // Simulate a token mismatch (419 error)
+        Route::get('/token-mismatch', function () {
+            return response()->view('errors.token-mismatch', [
+                'message' => 'Session expired. Please refresh the page and try again.'
+            ], 419);
+        });
+
+        // Simulate a database error (500 error)
+        Route::get('/database-error', function () {
+            // Trigger a database query exception
+            return response()->view('errors.database', [
+                'message' => 'A database error occurred. Please try again later.'
+            ], 500);
+        });
+    });
+
+    // Simulate MethodNotAllowedHttpException (405 error)
+    Route::match(['get'], '/method-not-allowed', function () {
+        // This would simulate a route that accepts only POST requests
+        return response()->view('errors.method-not-allowed', [
+            'message' => 'The requested method is not allowed.'
+        ], 405);
+    });
+
+    // Simulate AuthenticationException (401 error)
+    Route::get('/authentication-error', function () {
+        return response()->view('errors.401', [
+            'message' => 'You are not authorized to access this resource.'
+        ], 401);
+    });
+
+    // Simulate AccessDeniedHttpException (403 error)
+    Route::get('/access-denied', function () {
+        return response()->view('errors.403', [
+            'message' => 'Access denied. You do not have permission to view this page.'
+        ], 403);
+    });
+
+    // Simulate ValidationException (redirect back with errors)
+    Route::post('/validation-error', function (\Illuminate\Http\Request $request) {
+        $rules = [
+            'name' => 'required|string',
+            'email' => 'required|email',
         ];
-    Mail::to('support@lootgoblin.lol')->send(new VerifyEmail( $data));
-    echo "verification sent";
+
+        // Perform validation
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        return 'Validation Passed';
+    });
+
+    // Simulate Unhandled Exception (500 error)
+    Route::get('/unhandled-error', function () {
+        // This is an unhandled exception which would normally be caught by Laravel's exception handler
+        return response()->view('errors.500', [
+            'message' => 'An unexpected error occurred. Please try again later.'
+        ], 500);
+    });
 });
