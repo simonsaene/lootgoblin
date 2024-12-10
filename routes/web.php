@@ -223,3 +223,4 @@ Route::prefix('exceptions')->group(function () {
         ], 500);
     });
 });
+
