@@ -28,7 +28,16 @@
         <main >
             <div class="container">
 
-                <hr class="featurette-divider">
+                <div class="row py-lg-5 bg-body-tertiary">
+                    <div class="col-12 text-center">
+                        <!-- Heading "BDO GRIND SESSION" -->
+                        <h1 class="display-3">BDO GRIND SESSION</h1>
+                
+                        <!-- Subheading "lootgoblin" -->
+                        <p class="lead">lootgoblin</p>
+                    </div>
+                </div>
+                <hr class="featurette-divider ">
         
                 <div class="row featurette">
                     <div class="col-md-7">
@@ -39,6 +48,10 @@
                             <div class="mt-4">
                                 @auth
                                     <a href="{{ route('user.home') }}" class="btn btn-outline-primary ml-2">Profile</a>
+                                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-secondary ml-2">Logout</button>
+                                    </form>
                                 @else
                                     <a href="{{ route('login') }}" class="btn btn-outline-primary">Login</a>
                                     @if (Route::has('register'))
@@ -49,7 +62,7 @@
                         @endif
                     </div>
                     <div class="col-md-5">
-                        <img class="featurette-image img-fluid mx-auto" alt="Gear image" style="width: 500px; height: 500px;" src="{{ asset('storage/root_page_images/gear.png') }}" data-holder-rendered="true">
+                        <i class="bi bi-person-gear" style="font-size:250px;"></i>
                     </div>
                 </div>
         
@@ -65,6 +78,10 @@
                             <div class="mt-4">
                                 @auth
                                     <a href="{{ route('user.home') }}" class="btn btn-outline-primary ml-2">Profile</a>
+                                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-secondary ml-2">Logout</button>
+                                    </form>
                                 @else
                                     <a href="{{ route('login') }}" class="btn btn-outline-primary">Login</a>
                                     @if (Route::has('register'))
@@ -75,7 +92,7 @@
                         @endif
                     </div>
                     <div class="col-md-5 order-md-1">
-                        <img class="featurette-image img-fluid mx-auto" alt="Loot image" style="width: 500px; height: 500px;" src="{{ asset('storage/root_page_images/loot.png') }}" data-holder-rendered="true">
+                        <i class="bi bi-bar-chart-line" style="font-size:250px;"></i>
                     </div>
                 </div>
         
@@ -90,6 +107,10 @@
                             <div class="mt-4">
                                 @auth
                                     <a href="{{ route('user.home') }}" class="btn btn-outline-primary ml-2">Profile</a>
+                                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-secondary ml-2">Logout</button>
+                                    </form>
                                 @else
                                     <a href="{{ route('login') }}" class="btn btn-outline-primary">Login</a>
                                     @if (Route::has('register'))
@@ -100,7 +121,7 @@
                         @endif
                     </div>
                     <div class="col-md-5">
-                        <img class="featurette-image img-fluid mx-auto" alt="Profile image" style="width: 500px; height: 500px;" src="{{ asset('storage/root_page_images/profile2.png') }}" data-holder-rendered="true">
+                        <i class="bi bi-people" style="font-size:250px;"></i>
                     </div>
                 </div>
             <hr class="featurette-divider">
