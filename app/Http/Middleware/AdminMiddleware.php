@@ -24,9 +24,9 @@ class AdminMiddleware
             ]);
 
             // Redirect non-admin users
-            return redirect('home')->with('error', 'You do not have admin access');
+            return redirect('user.home')->with('error', 'You do not have admin access');
         }
-        
+
         // Log if the user is authenticated and is an admin
         Log::debug('Admin Middleware: Authenticated Admin', [
             'user' => auth()->user(),

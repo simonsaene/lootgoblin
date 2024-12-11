@@ -13,6 +13,10 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Auth::routes([
     'verify' => true
 ]);
@@ -22,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['verified'])->group(function () {
 
         // User
-        Route::prefix('/')->group(function () {
+        Route::prefix('/home')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
             Route::post('/post', [PostController::class, 'post'])->name('comments.post');
