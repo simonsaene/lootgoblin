@@ -140,6 +140,10 @@ class GrindSessionController extends Controller
     public function playerGrindSessions($id)
     {
         try {
+            if (!auth()->check()) {
+                return redirect()->route('login')->with('error', 'You must be logged in to view grind sessions');
+            }
+            
             $user = User::findOrFail($id);
 
             $grindSpots = GrindSpot::with(['grindSpotItems.item'])->get(); // Ensure all items related to grind spots are fetched

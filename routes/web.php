@@ -13,10 +13,6 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes([
     'verify' => true
 ]);
@@ -26,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['verified'])->group(function () {
 
         // User
-        Route::prefix('/home')->group(function () {
+        Route::prefix('/')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('user.home');
             Route::get('/profile/{id}', [UserController::class, 'playerProfile'])->name('user.player.profile');
             Route::post('/post', [PostController::class, 'post'])->name('comments.post');
@@ -36,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
             Route::prefix('/search')->group(function () {
                 Route::get('/', [SearchController::class, 'index'])->name('user.search.page');
                 Route::get('/player', [SearchController::class, 'search'])->name('user.search.player');
-            });
+            }); // user home group
 
             Route::prefix('/images')->group(function () {
 
@@ -49,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/edit', [UserController::class, 'editGearImage'])->name('user.edit.gear.image');
                     Route::delete('/delete', [UserController::class, 'deleteGearImage'])->name('user.delete.gear.image');
                 });
-            });
+            }); // images group
 
             // Character routes
             Route::prefix('/characters')->group(function () {
@@ -80,65 +76,66 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/edit/{id}', [GrindSessionController::class, 'editSession'])->name('grind.session.edit');
                 Route::delete('/delete/{id}', [GrindSessionController::class, 'deleteSession'])->name('grind.session.delete');
             });
-
-        });
+        }); //grind group
 
         // Admin routes
         Route::middleware(['admin'])->group(function () {
 
-            // Dashboard
-            Route::get('/', [AdminController::class, 'index'])->name('admin.home');
+            Route::prefix('/admin')->group(function () {
+                // Dashboard
+                Route::get('/', [AdminController::class, 'index'])->name('admin.home');
 
-            // Flag
-            Route::post('/flag', [AdminController::class, 'flag'])->name('admin.flag');
-            Route::put('/unflag/session', [AdminController::class, 'unflagSession'])->name('admin.unflag.session');
-            Route::put('/unflag/post', [AdminController::class, 'unflagPost'])->name('admin.unflag.post');
+                // Flag
+                Route::post('/flag', [AdminController::class, 'flag'])->name('admin.flag');
+                Route::put('/unflag/session', [AdminController::class, 'unflagSession'])->name('admin.unflag.session');
+                Route::put('/unflag/post', [AdminController::class, 'unflagPost'])->name('admin.unflag.post');
 
-            // Verify video/images
-            Route::prefix('/verify')->group(function () {
-                Route::prefix('/video')->group(function () {
-                    Route::post('/', [AdminController::class, 'verifyVideo'])->name('admin.verify.video');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteVideo'])->name('admin.delete.video');
-                });
+                // Verify video/images
+                Route::prefix('/verify')->group(function () {
+                    Route::prefix('/video')->group(function () {
+                        Route::post('/', [AdminController::class, 'verifyVideo'])->name('admin.verify.video');
+                        Route::delete('/delete/{id}', [AdminController::class, 'deleteVideo'])->name('admin.delete.video');
+                    });
 
-                Route::prefix('/image')->group(function () {
-                    Route::post('/', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteimage'])->name('admin.delete.image');
-                });
-            });
+                    Route::prefix('/image')->group(function () {
+                        Route::post('/', [AdminController::class, 'verifyImage'])->name('admin.verify.image');
+                        Route::delete('/delete/{id}', [AdminController::class, 'deleteimage'])->name('admin.delete.image');
+                    });
+                }); // verify group
 
-            // Tables
-            Route::prefix('/tables')->group(function () {
-            
-                // Items
-                Route::prefix('/items')->group(function ()
-                {
-                    Route::get('/', [AdminController::class, 'showItemsTable'])->name('admin.items');
-                    Route::post('/add', [AdminController::class, 'addItem'])->name('admin.items.add');
-                    Route::put('/edit/{id}', [AdminController::class, 'editItem'])->name('admin.items.edit');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteItem'])->name('admin.items.delete');
-                });
+                // Tables
+                Route::prefix('/tables')->group(function () {
+                
+                    // Items
+                    Route::prefix('/items')->group(function ()
+                    {
+                        Route::get('/', [AdminController::class, 'showItemsTable'])->name('admin.items');
+                        Route::post('/add', [AdminController::class, 'addItem'])->name('admin.items.add');
+                        Route::put('/edit/{id}', [AdminController::class, 'editItem'])->name('admin.items.edit');
+                        Route::delete('/delete/{id}', [AdminController::class, 'deleteItem'])->name('admin.items.delete');
+                    });
 
-                // Grind Spot Items
-                Route::prefix('/grind-spot-items')->group(function ()
-                {
-                    Route::get('/', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grind-items');
-                    Route::post('/add', [AdminController::class, 'addGrindSpotItem'])->name('admin.grind-items.add');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpotItem'])->name('admin.grind-items.delete');
-                });
+                    // Grind Spot Items
+                    Route::prefix('/grind-spot-items')->group(function ()
+                    {
+                        Route::get('/', [AdminController::class, 'showGrindSpotItemTable'])->name('admin.grind-items');
+                        Route::post('/add', [AdminController::class, 'addGrindSpotItem'])->name('admin.grind-items.add');
+                        Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpotItem'])->name('admin.grind-items.delete');
+                    });
 
-                // Grind Spots
-                Route::prefix('/grind-spots')->group(function ()
-                {
-                    Route::get('/', [AdminController::class, 'showGrindSpotTable'])->name('admin.grind-spots');
-                    Route::post('/add', [AdminController::class, 'addGrindSpot'])->name('admin.grind-spots.add');
-                    Route::put('/edit/{id}', [AdminController::class, 'editGrindSpot'])->name('admin.grind-spots.edit');
-                    Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpot'])->name('admin.grind-spots.delete');
-                });
-            });
-        });
-    });
-});
+                    // Grind Spots
+                    Route::prefix('/grind-spots')->group(function ()
+                    {
+                        Route::get('/', [AdminController::class, 'showGrindSpotTable'])->name('admin.grind-spots');
+                        Route::post('/add', [AdminController::class, 'addGrindSpot'])->name('admin.grind-spots.add');
+                        Route::put('/edit/{id}', [AdminController::class, 'editGrindSpot'])->name('admin.grind-spots.edit');
+                        Route::delete('/delete/{id}', [AdminController::class, 'deleteGrindSpot'])->name('admin.grind-spots.delete');
+                    }); // admin grind spots table
+                }); //admin tables
+            }); // admin group
+        }); //admiin middleware group
+    }); //verified group
+}); //authenticated group
 
 Route::prefix('exceptions')->group(function () {
 
