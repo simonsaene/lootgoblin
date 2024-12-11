@@ -101,7 +101,7 @@
                                                     @include('layouts.likes.like-posts')
                                                 </div>
                                                 <div class="ml-2">
-                                                    @include('layouts.grind.spot.show-post-flags')
+                                                    @include('layouts.grind.spot.show-post-flags', ['post_id' => $post_id])
                                                 </div>
                                             </div>
                                         </div>
