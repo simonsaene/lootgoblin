@@ -48,7 +48,7 @@
 
             @if ($silverFilter === null || $totalSilver >= $silverFilter)
                 <tr>
-                    @include('layouts.grind.spot.show-session-flags')
+                    @include('layouts.grind.spot.show-session-flags', ['session_id' => $session_id])
 
                     <td>{{ $session->created_at->format('Y-m-d') }}</td>
                     <td class="text-end">{{ $session->hours }}</td>
