@@ -291,7 +291,7 @@ class GrindSessionController extends Controller
     {
         return $request->validate([
             'grind_spot_id' => 'required|integer',
-            'loot_image' => 'image|nullable',
+            'loot_image' => 'image|nullable|dimensions:max_width=350,max_height=250',
             'video_link' => 'url|nullable',
             'notes' => 'string|nullable',
             'hours' => 'nullable|numeric|min:0',

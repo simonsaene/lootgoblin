@@ -98,7 +98,7 @@ class AdminController extends Controller
                     'description' => 'required|string|max:255',
                     'market_value' => 'required|integer',
                     'vendor_value' => 'required|integer',
-                    'image' => 'image|nullable'
+                    'image' => 'image|nullable|dimensions:max_width=50,max_height=50'
                 ]);
 
             case 'flag':
